@@ -6,7 +6,7 @@
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_game_menu">GameMenu</string>
-    <string name="log_in_button">Log In</string>
+    <string name="log_in_button">Log OUT</string>
     <string name="current_crawl">Current Crawl</string>
     <string name="games">Games</string>
 
