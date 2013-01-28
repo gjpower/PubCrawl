@@ -18,3 +18,33 @@ local.properties
 # Eclipse project files
 .classpath
 .project
+
+# Binary media files
+#images
+*.jpg
+*.jpeg
+*.png
+*.bmp
+*.gif
+
+#audio
+*.ogg
+*.mp3
+*.aac
+*.mp4
+*.m4a
+*.flac
+*.wav
+*.pcm
+*.aiff
+*.wma
+*.wv
+*.m4p
+
+#video
+*.mkv
+*.avi
+*.mp4
+*.flv
+*.mov
+
