@@ -1,5 +1,4 @@
 <resources>
-
     <string name="app_name">PubCrawl</string>
     <string name="hello_world">Hello world!</string>
     <string name="enter_pin">Enter Pin</string>
@@ -9,5 +8,8 @@
     <string name="log_in_button">Join</string>
     <string name="current_crawl">Current Crawls</string>
     <string name="games">Games</string>
+    <string name="title_current_crawls">Current Crawls</string>
+    <string name="selected_crawls">Selected Crawl</string>
+
 
 </resources>
