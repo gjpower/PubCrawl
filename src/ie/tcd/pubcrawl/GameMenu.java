@@ -1,8 +1,10 @@
 package ie.tcd.pubcrawl;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.view.View;
+
 
 public class GameMenu extends Activity 
 {
@@ -15,13 +17,33 @@ public class GameMenu extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.gamemenu);
 		
-		TextView textView = (TextView) findViewById(R.id.textView1);
 		
 		PermStorage exampleVariable;
         exampleVariable = new PermStorage(getApplicationContext());
         
         name = exampleVariable.Get_User_Name();
         
-        textView.setText(name);
+
 	}
+	
+	public void Cards_Menu(View v)
+	{
+		startActivity(new Intent("ie.tcd.pubcrawl.CARDGAMES"));
+	}
+	public void Dice_Menu(View v2)
+	{
+		startActivity(new Intent("ie.tcd.pubcrawl.DICEGAMES"));
+	}
+	public void Coin_Menu(View v3)
+	{
+		startActivity(new Intent("ie.tcd.pubcrawl.COINGAMES"));
+	}
+	
+	// The spinner activity doesn't seem to work, no idea why I'll sort it annother day 
+	public void Spinner_Menu()
+	{
+		startActivity(new Intent("ie.tcd.pubcrawl.SPINNERGAMES"));
+	}
+	
+	
 }

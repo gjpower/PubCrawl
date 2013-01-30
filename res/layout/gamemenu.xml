@@ -3,11 +3,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <Button 
+        android:id="@+id/buttonCards"
+        android:layout_alignParentTop="true"
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content"
+        android:text="@string/card"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
+        android:onClick = "Cards_Menu"
+     />
+    
+    <Button 
+        android:id="@+id/buttonDice"
+        android:layout_below="@id/buttonCards"
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content"
+        android:text="@string/dice"
+        android:layout_centerHorizontal="true"
+        android:onClick="Dice_Menu"
+     />
+        
+     <Button 
+        android:id="@+id/buttonCoin"
+        android:layout_below="@id/buttonDice"
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content"
+        android:text="@string/coin"
+        android:layout_centerHorizontal="true"
+        android:onClick="Coin_Menu"
+     />
 
+     <Button
+         android:id="@+id/buttonSpinner"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="@string/spin"
+         android:layout_centerHorizontal="true"
+         android:layout_below = "@id/buttonCoin"
+         android:onClick="Spinner_Menu"
+      />
+    
+    
+    
 </RelativeLayout>

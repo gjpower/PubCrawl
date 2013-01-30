@@ -29,6 +29,57 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".CardGames"
+            android:label="@string/title_activity_card_games" >
+            <intent-filter>
+                <action android:name="ie.tcd.pubcrawl.CARDGAMES" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ie.tcd.pubcrawl.GAMEMENU" />
+        </activity>
+        <activity
+            android:name=".DiceGames"
+            android:label="@string/title_activity_dice_games" >
+            <intent-filter>
+                <action android:name="ie.tcd.pubcrawl.DICEGAMES" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ie.tcd.pubcrawl.GAMEMENU" />
+        </activity>
+        <activity
+            android:name=".CoinGames"
+            android:label="@string/title_activity_coin_games" >
+            <intent-filter>
+                <action android:name="ie.tcd.pubcrawl.COINGAMES" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ie.tcd.pubcrawl.GAMEMENU" />
+        </activity>
+        <activity
+            android:name=".SpinnerGames"
+            android:label="@string/title_activity_spinner_games" >
+           	<intent-filter>
+                <action android:name="ie.tcd.pubcrawl.SPINNERGAMES" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ie.tcd.pubcrawl.GAMEMENU" />
+        </activity>
     </application>
 
 </manifest>
