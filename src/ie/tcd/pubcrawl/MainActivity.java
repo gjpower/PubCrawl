@@ -20,6 +20,7 @@ public class MainActivity extends Activity implements OnClickListener {
         
         Button gameMenu = (Button) findViewById(R.id.bGames);
         Button currentCrawls = (Button) findViewById(R.id.bCurrentCrawls);
+        Button changeName = (Button) findViewById(R.id.bChangeName);
         
         userName = PermStorage.Get_User_Name(this);
         
@@ -28,6 +29,7 @@ public class MainActivity extends Activity implements OnClickListener {
         
         gameMenu.setOnClickListener(this);
         currentCrawls.setOnClickListener(this);
+        changeName.setOnClickListener(this);
     }
 
     @Override
@@ -45,6 +47,13 @@ public class MainActivity extends Activity implements OnClickListener {
     		break;
     	case R.id.bCurrentCrawls:
     		startActivity(new Intent("ie.tcd.pubcrawl.CURRENTCRAWLS"));
+    		break;
+    	case R.id.bChangeName:
+    		/*PermStorage.Store_User_Name("Changed", MainActivity.this);
+    		userName = PermStorage.Get_User_Name(this);
+    		TextView tvUserName = (TextView) findViewById(R.id.tvUserName);
+    		tvUserName.setText(userName);*/
+    		startActivity(new Intent("ie.tcd.pubcrawl.CHANGEUSERNAME"));
     		break;
     	}
     }    

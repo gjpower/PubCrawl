@@ -19,4 +19,5 @@
     <string name="title_current_crawls">Current Crawls</string>
     <string name="create_user_name">Create User Name</string>
     <string name="selected_crawls">Selected Crawl</string>
+    <string name="change_user_name">Change User Name</string>
 </resources>
