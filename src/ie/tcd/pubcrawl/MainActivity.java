@@ -1,4 +1,3 @@
-
 package ie.tcd.pubcrawl;
 
 import android.app.Activity;
@@ -9,8 +8,9 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.view.View.OnClickListener;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnClickListener {
 
 	public String userName;
 	public final String PREFS_NAME = "UserInfo";
@@ -30,29 +30,8 @@ public class MainActivity extends Activity {
         TextView tvUserName = (TextView) findViewById(R.id.tvUserName);
         tvUserName.setText(userName);
         
-
-        gameMenu.setOnClickListener(new View.OnClickListener() 
-        {
-			
-			public void onClick(View v) 
-			{
-		
-				startActivity(new Intent("ie.tcd.pubcrawl.GAMEMENU"));
-			}
-		});
-
-        currentCrawls.setOnClickListener(new View.OnClickListener() 
-        {
-			
-			public void onClick(View v) 
-			{
-				
-
-				startActivity(new Intent("ie.tcd.pubcrawl.CURRENTCRAWLS"));
-			}
-		});
-	
-
+        gameMenu.setOnClickListener(this);
+        currentCrawls.setOnClickListener(this);
     }
 
     @Override
@@ -61,4 +40,16 @@ public class MainActivity extends Activity {
         return true;
     }
     
+    public void onClick(View v)
+    {
+    	switch (v.getId())
+    	{
+    	case R.id.bGames:
+    		startActivity(new Intent("ie.tcd.pubcrawl.GAMEMENU"));
+    		break;
+    	case R.id.bCurrentCrawls:
+    		startActivity(new Intent("ie.tcd.pubcrawl.CURRENTCRAWLS"));
+    		break;
+    	}
+    }    
 }
