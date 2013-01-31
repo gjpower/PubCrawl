@@ -5,45 +5,30 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-
-public class GameMenu extends Activity 
-{
+public class GameMenu extends Activity {
 	String name;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) 
-	{
-		// TODO Auto-generated method stub
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.gamemenu);
 		
-		
-		PermStorage exampleVariable;
-        exampleVariable = new PermStorage(getApplicationContext());
-        
-        name = exampleVariable.Get_User_Name();
-        
-
+        name = PermStorage.Get_User_Name(this);
 	}
 	
-	public void Cards_Menu(View v)
-	{
+	public void Cards_Menu(View v) {
 		startActivity(new Intent("ie.tcd.pubcrawl.CARDGAMES"));
 	}
-	public void Dice_Menu(View v2)
-	{
+	
+	public void Dice_Menu(View v2) {
 		startActivity(new Intent("ie.tcd.pubcrawl.DICEGAMES"));
 	}
-	public void Coin_Menu(View v3)
-	{
+	
+	public void Coin_Menu(View v3) {
 		startActivity(new Intent("ie.tcd.pubcrawl.COINGAMES"));
 	}
 	
-	// The spinner activity doesn't seem to work, no idea why I'll sort it annother day 
-	public void Spinner_Menu()
-	{
+	public void Spinner_Menu() {
 		startActivity(new Intent("ie.tcd.pubcrawl.SPINNERGAMES"));
-	}
-	
-	
+	}	
 }
