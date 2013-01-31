@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">PubCrawl</string>
-    <string name="hello_world">Hello world!</string>
     <string name="enter_pin">Enter Pin</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">MainActivity</string>
@@ -17,5 +16,6 @@
     <string name="title_activity_coin_games">CoinGames</string>
     <string name="title_activity_spinner_games">SpinnerGames</string>
     <string name="title_current_crawls">Current Crawls</string>
+    <string name="create_user_name">Create User Name</string>
     <string name="selected_crawls">Selected Crawl</string>
 </resources>
