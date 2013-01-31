@@ -45,7 +45,7 @@ public class PermStorage
     public static String Get_User_Name()
 
     {
-    	return appSharedPrefs.getString("userName", "error");
+    	return appSharedPrefs.getString("userName", "NoName");
     }
 
     //Store the user's ID number.

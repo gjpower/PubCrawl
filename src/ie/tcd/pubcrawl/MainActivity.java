@@ -13,7 +13,6 @@ import android.widget.TextView;
 public class MainActivity extends Activity {
 
 	public String userName;
-	public final String PREFS_NAME = "UserInfo";
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -23,9 +22,8 @@ public class MainActivity extends Activity {
         Button gameMenu = (Button) findViewById(R.id.bGames);
         Button currentCrawls = (Button) findViewById(R.id.bCurrentCrawls);
         
-        //These save the user name. Might need to be changes if there is a central preferences.
-        SharedPreferences info = getSharedPreferences(PREFS_NAME, 0);
-        userName = info.getString("UserName", "UserName");
+       PermStorage info = new PermStorage(getApplicationContext());
+       userName = info.Get_User_Name();
         
         TextView tvUserName = (TextView) findViewById(R.id.tvUserName);
         tvUserName.setText(userName);

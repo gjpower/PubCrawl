@@ -18,4 +18,5 @@
     <string name="title_activity_spinner_games">SpinnerGames</string>
     <string name="title_current_crawls">Current Crawls</string>
     <string name="selected_crawls">Selected Crawl</string>
+    <string name="create_user_name">Create User Name</string>
 </resources>
