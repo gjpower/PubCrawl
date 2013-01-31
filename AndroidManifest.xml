@@ -91,6 +91,25 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ie.tcd.pubcrawl.GAMEMENU" />
         </activity>
+        <activity
+            android:name=".CurrentCrawls"
+            android:label="@string/title_current_crawls" >
+            <intent-filter>
+                <action android:name="ie.tcd.pubcrawl.CURRENTCRAWLS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SelectedCrawl"
+            android:label="@string/selected_crawls" >
+            <intent-filter>
+                <action android:name="ie.tcd.pubcrawl.SELECTEDCRAWL" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
     </application>
 
 </manifest>
