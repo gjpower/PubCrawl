@@ -1,40 +1,58 @@
+
 package ie.tcd.pubcrawl;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
-	String name;
 
+	public String userName;
+	public final String PREFS_NAME = "UserInfo";
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-      
-        Button gameMenu = (Button) findViewById(R.id.bGames);
         
-        gameMenu.setOnClickListener(new View.OnClickListener() {
+        Button gameMenu = (Button) findViewById(R.id.bGames);
+        Button currentCrawls = (Button) findViewById(R.id.bCurrentCrawls);
+        
+        //These save the user name. Might need to be changes if there is a central preferences.
+        SharedPreferences info = getSharedPreferences(PREFS_NAME, 0);
+        userName = info.getString("UserName", "UserName");
+        
+        TextView tvUserName = (TextView) findViewById(R.id.tvUserName);
+        tvUserName.setText(userName);
+        
+
+        gameMenu.setOnClickListener(new View.OnClickListener() 
+        {
 			
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
-				EditText editText = (EditText) findViewById(R.id.eName);
-		        
-		        name = editText.getText().toString();
-		        
-		        PermStorage exampleVariable;
-		        exampleVariable = new PermStorage(getApplicationContext());
-		        
-		        exampleVariable.Store_User_Name(name);
-				
-		        startActivity(new Intent("ie.tcd.pubcrawl.GAMEMENU"));
+			public void onClick(View v) 
+			{
+		
+				startActivity(new Intent("ie.tcd.pubcrawl.GAMEMENU"));
 			}
 		});
+
+        currentCrawls.setOnClickListener(new View.OnClickListener() 
+        {
+			
+			public void onClick(View v) 
+			{
+				
+
+				startActivity(new Intent("ie.tcd.pubcrawl.CURRENTCRAWLS"));
+			}
+		});
+	
+
     }
 
     @Override
