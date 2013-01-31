@@ -1,65 +1,46 @@
 package ie.tcd.pubcrawl;
 
-import android.app.Activity;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 
-/*
- * How to use this class:
- * 
- * Create an instance of the class: 
- * 
- * PermStorage exampleVariable;
- * exampleVariable = new PermStorage(getApplicationContext());
- * 
- * Call the desired functions:
- * 
- * exampleVariable.Some_Function();
- * 
- * More functions will be added later
- */
-
-public class PermStorage 
-{
-  private static final String APPDATA = "AppData"; // Name of the file -.xml
-	
-    private static SharedPreferences appSharedPrefs;
-    
-    private static Editor prefsEditor;
-
-	  //Constructor
-    public PermStorage(Context context)
-    {
-        this.appSharedPrefs = context.getSharedPreferences(APPDATA, Activity.MODE_PRIVATE);
-        this.prefsEditor = appSharedPrefs.edit();
-    }
-
-    //Return the user's ID number as int. Returns 0 if fails to find ID
-    public int Get_User_Id() 
-    {
-        return appSharedPrefs.getInt("userId", 0);
+public class PermStorage {
+	public static  void Store_User_Name(String name, Context c){
+    	FileOutputStream fos;
+    	String USERNAME = "userName";
+    	try {
+			fos = c.openFileOutput(USERNAME, Context.MODE_PRIVATE);
+			fos.write(name.getBytes());
+			fos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
     
-    //Return the user's chosen Name as String. Returns "error" if fails to find Name
-    public static String Get_User_Name()
-
-    {
-    	return appSharedPrefs.getString("userName", "error");
-    }
-
-    //Store the user's ID number.
-    public void Store_User_Id(int id) 
-    {
-    	prefsEditor.putInt("userId", id);
-        prefsEditor.commit();
-    }
-    
-    //Store the user's chosen Name.
-    public static void Store_User_Name(String name)
-
-    {
-    	prefsEditor.putString("userName", name);
-    	prefsEditor.commit();
+    public static String Get_User_Name(Context c){
+    	String name = null;  
+    	FileInputStream fis = null;
+    	String USERNAME = "userName";
+        try {
+			fis = c.openFileInput(USERNAME);
+			byte[] dataArray = new byte[fis.available()];
+			//when the file has been read then read() returns -1
+			while (fis.read(dataArray) != -1) {
+				name = new String(dataArray);
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally{
+			try {
+				fis.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+        return name;
     }
 }
