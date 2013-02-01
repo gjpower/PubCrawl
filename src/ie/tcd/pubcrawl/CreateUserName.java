@@ -2,6 +2,8 @@ package ie.tcd.pubcrawl;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +11,8 @@ import android.widget.EditText;
 
 public class CreateUserName extends Activity {
 
+	private static String STATUS = "Status";
+	SharedPreferences appSharedPrefs;
 	public static String userName;
 	EditText getName;
 
@@ -17,21 +21,21 @@ public class CreateUserName extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.createusername);
         
-        getName = (EditText) findViewById(R.id.etUserName);
-        Button saveName = (Button) findViewById(R.id.bSaveUserName);
+        appSharedPrefs = getSharedPreferences(STATUS, 0);
         
-        userName = PermStorage.Get_User_Name(this);
-        /*
-         *This needs to be here for the initial install
-         *since I don't have it working yet.
-         *You can delete this line after installation.
-         *I'm working on it!
-         */
-        userName = "NoName"; 
-        if(userName != "NoName"){
+        boolean isFirstRun = appSharedPrefs.getBoolean("install", true);
+        if (isFirstRun) {
+            Editor prefsEditor = appSharedPrefs.edit();
+        	prefsEditor.putBoolean("install", false);
+        	prefsEditor.commit();
+        }
+        else {
         	startActivity(new Intent("ie.tcd.pubcrawl.MAINACTIVITY"));
         	finish();
         }
+        
+        getName = (EditText) findViewById(R.id.etUserName);
+        Button saveName = (Button) findViewById(R.id.bSaveUserName);
         
         saveName.setOnClickListener(new View.OnClickListener() {			
 			public void onClick(View v) {
