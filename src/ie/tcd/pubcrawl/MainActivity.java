@@ -49,10 +49,6 @@ public class MainActivity extends Activity implements OnClickListener {
     		startActivity(new Intent("ie.tcd.pubcrawl.CURRENTCRAWLS"));
     		break;
     	case R.id.bChangeName:
-    		/*PermStorage.Store_User_Name("Changed", MainActivity.this);
-    		userName = PermStorage.Get_User_Name(this);
-    		TextView tvUserName = (TextView) findViewById(R.id.tvUserName);
-    		tvUserName.setText(userName);*/
     		startActivity(new Intent("ie.tcd.pubcrawl.CHANGEUSERNAME"));
     		break;
     	}
