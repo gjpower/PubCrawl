@@ -21,6 +21,13 @@ public class CreateUserName extends Activity {
         Button saveName = (Button) findViewById(R.id.bSaveUserName);
         
         userName = PermStorage.Get_User_Name(this);
+        /*
+         *This needs to be here for the initial install
+         *since I don't have it working yet.
+         *You can delete this line after installation.
+         *I'm working on it!
+         */
+        userName = "NoName"; 
         if(userName != "NoName"){
         	startActivity(new Intent("ie.tcd.pubcrawl.MAINACTIVITY"));
         	finish();
