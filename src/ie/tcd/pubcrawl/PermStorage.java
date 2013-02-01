@@ -1,5 +1,7 @@
 package ie.tcd.pubcrawl;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -7,13 +9,16 @@ import java.io.IOException;
 import android.content.Context;
 
 public class PermStorage {
+	static FileOutputStream fos;
+	static FileInputSteam fis = null;
+	
 	public static  void Store_User_Name(String name, Context c){
-    	FileOutputStream fos;
     	String USERNAME = "userName";
     	try {
 			fos = c.openFileOutput(USERNAME, Context.MODE_PRIVATE);
-			fos.write(name.getBytes());
-			fos.close();
+			DataOutputStream dos = new DataOutputStream(fos);
+			dos.writeChars(name);
+			dos.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -21,26 +26,48 @@ public class PermStorage {
     
     public static String Get_User_Name(Context c){
     	String name = null;  
-    	FileInputStream fis = null;
     	String USERNAME = "userName";
         try {
 			fis = c.openFileInput(USERNAME);
-			byte[] dataArray = new byte[fis.available()];
+			DataInputStream dis = new DataInputStream(fis);
+			byte[] dataArray = new byte[dis.available()];
 			//when the file has been read then read() returns -1
-			while (fis.read(dataArray) != -1) {
+			while (dis.read(dataArray) != -1) {
 				name = new String(dataArray);
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally{
-			try {
-				fis.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		} 
         return name;
+    }
+    
+    public static void Store_User_Id(int id, Context c) {
+    	String USERID = "userId";
+    	try {
+			fos = c.openFileOutput(USERID, Context.MODE_PRIVATE);
+			DataOutputStream dos = new DataOutputStream(fos);
+			dos.writeInt(id);
+	    	dos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    public static int Get_User_Id(Context c) {
+    	int id=-1;
+    	String USERID = "userId";
+        try {
+			fis = c.openFileInput(USERID);
+			DataInputStream dis = new DataInputStream(fis);
+			id= dis.readInt();
+			dis.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+        return id;
     }
 }
