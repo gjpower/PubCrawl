@@ -15,6 +15,7 @@ public class CreateUserName extends Activity {
 	SharedPreferences appSharedPrefs;
 	public static String userName;
 	EditText getName;
+	int userId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,6 +29,8 @@ public class CreateUserName extends Activity {
             Editor prefsEditor = appSharedPrefs.edit();
         	prefsEditor.putBoolean("install", false);
         	prefsEditor.commit();
+        	userId = 5746677;//get user id from server
+        	PermStorage.Store_User_Id(userId, this);
         }
         else {
         	startActivity(new Intent("ie.tcd.pubcrawl.MAINACTIVITY"));
