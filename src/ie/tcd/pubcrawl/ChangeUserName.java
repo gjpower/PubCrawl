@@ -21,10 +21,12 @@ public class ChangeUserName extends Activity {
         getName = (EditText) findViewById(R.id.etUserName);
         Button saveName = (Button) findViewById(R.id.bSaveUserName);
         
+        //Get user name and display
         userName = PermStorage.Get_User_Name(this);
         currName.setText("Current User Name is " + userName);
         
         saveName.setOnClickListener(new View.OnClickListener() {			
+			//Save new user name and go back to the main activity
 			public void onClick(View v) {
 				userName = getName.getText().toString();
         		PermStorage.Store_User_Name(userName, ChangeUserName.this);        		
