@@ -22,8 +22,17 @@ public class CreateUserName extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.createusername);
         
+        /*
+         *Test if it is the first time running the app
+         *If it is, ask to create user name
+         *If not, go straight to the main activity
+         */
         appSharedPrefs = getSharedPreferences(STATUS, 0);
-        
+        /*
+         *The search for the boolean value labelled "install" should fail
+         *on the first run and therefore "true" will be returned, the boolean
+         *value is then created and given the value false for future runs
+         */
         boolean isFirstRun = appSharedPrefs.getBoolean("install", true);
         if (isFirstRun) {
             Editor prefsEditor = appSharedPrefs.edit();
@@ -36,11 +45,13 @@ public class CreateUserName extends Activity {
         	startActivity(new Intent("ie.tcd.pubcrawl.MAINACTIVITY"));
         	finish();
         }
+        //End of test for first run
         
         getName = (EditText) findViewById(R.id.etUserName);
         Button saveName = (Button) findViewById(R.id.bSaveUserName);
         
         saveName.setOnClickListener(new View.OnClickListener() {			
+			//Save user name and go to the main activity
 			public void onClick(View v) {
 				userName = getName.getText().toString();
         		PermStorage.Store_User_Name(userName, CreateUserName.this);        		
