@@ -12,6 +12,10 @@ public class PermStorage {
 	static FileOutputStream fos;
 	static FileInputSteam fis = null;
 	
+	/*
+	 *Using Data Output Streams lets you store specific data types
+	 *rather than having to convert everything to and from strings
+	 */	
 	public static  void Store_User_Name(String name, Context c){
     	String USERNAME = "userName";
     	try {
