@@ -17,5 +17,6 @@
     <string name="title_activity_dice_games">DiceGames</string>
     <string name="title_activity_coin_games">CoinGames</string>
     <string name="title_activity_spinner_games">SpinnerGames</string>
+    <string name="flip">Swipe up to flip the coin </string>
 
 </resources>
