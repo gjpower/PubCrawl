@@ -24,9 +24,9 @@ public class PermStorage
 {
   private static final String APPDATA = "AppData"; // Name of the file -.xml
 	
-    private SharedPreferences appSharedPrefs;
+    private static SharedPreferences appSharedPrefs;
     
-    private Editor prefsEditor;
+    private static Editor prefsEditor;
 
 	  //Constructor
     public PermStorage(Context context)
@@ -42,7 +42,8 @@ public class PermStorage
     }
     
     //Return the user's chosen Name as String. Returns "error" if fails to find Name
-    public String Get_User_Name()
+    public static String Get_User_Name()
+
     {
     	return appSharedPrefs.getString("userName", "error");
     }
@@ -55,7 +56,8 @@ public class PermStorage
     }
     
     //Store the user's chosen Name.
-    public void Store_User_Name(String name)
+    public static void Store_User_Name(String name)
+
     {
     	prefsEditor.putString("userName", name);
     	prefsEditor.commit();

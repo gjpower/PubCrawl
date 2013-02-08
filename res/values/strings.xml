@@ -1,5 +1,4 @@
 <resources>
-
     <string name="app_name">PubCrawl</string>
     <string name="hello_world">Hello world!</string>
     <string name="enter_pin">Enter Pin</string>
@@ -18,5 +17,7 @@
     <string name="title_activity_coin_games">CoinGames</string>
     <string name="title_activity_spinner_games">SpinnerGames</string>
     <string name="flip">Swipe up to flip the coin </string>
-
+    <string name="title_current_crawls">Current Crawls</string>
+    <string name="selected_crawls">Selected Crawl</string>
 </resources>
+
