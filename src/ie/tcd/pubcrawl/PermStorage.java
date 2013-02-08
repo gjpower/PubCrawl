@@ -74,4 +74,36 @@ public class PermStorage {
 		} 
         return id;
     }
+    
+    public static void Store_Crawl_Data (String crawlData, Context context) {
+    	String CRAWLS = "crawls";
+    	try {
+			fos = context.openFileOutput(CRAWLS, Context.MODE_PRIVATE);
+			DataOutputStream dos = new DataOutputStream(fos);
+			dos.writeChars(crawlData);
+			dos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
+
+    public static String Get_Crawl_Data (Context context) {
+    	String crawlData = null;
+    	String USERNAME = "crawls";
+        try {
+			fis = context.openFileInput(USERNAME);
+			DataInputStream dis = new DataInputStream(fis);
+			byte[] dataArray = new byte[dis.available()];
+			//when the file has been read then read() returns -1
+			while (dis.read(dataArray) != -1) {
+				crawlData = new String(dataArray);
+			}
+			dis.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+        return crawlData;
+    }
 }
