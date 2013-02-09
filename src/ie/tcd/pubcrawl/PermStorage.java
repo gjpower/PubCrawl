@@ -131,32 +131,5 @@ public class PermStorage {
         	}
         }
         return crawlArray;
-        /*String[][] test = new String[3][4];
-		test[0][0] = "ZeroZero";
-    	test[0][1] = "ZeroOne";
-    	test[0][2] = "ZeroTwo";
-    	test[0][3] = "ZeroThree";
-    	test[1][0] = "OneZero";
-    	test[1][1] = "OneOne";
-    	test[1][2] = "OneTwo";
-    	test[1][3] = "OneThree";
-    	test[2][0] = "TwoZero";
-    	test[2][1] = "TwoOne";
-    	test[2][2] = "TwoTwo";
-    	test[2][3] = "TwoThree";
-    	int i;
-    	StringBuffer strBuffer = new StringBuffer();
-    	for (i=0;i<3;i++) {
-    		int j;
-    		for (j=0;j<4;j++) {
-        		strBuffer.append(test[i][j]); 
-        		strBuffer.append("*");    	
-    		}
-    	}
-    	String crawlData = strBuffer.toString();
-        
-        String[] tokens = crawlData.split("\\*");
-        
-        return tokens.length;*/
     }
 }
