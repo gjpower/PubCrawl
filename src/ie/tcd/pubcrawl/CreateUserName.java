@@ -40,6 +40,10 @@ public class CreateUserName extends Activity {
         	prefsEditor.commit();
         	userId = 5746677;//get user id from server
         	PermStorage.Store_User_Id(userId, this);
+        	String[][] noCrawls = new String[1][1];
+        	noCrawls[0][0] = "No Crawls";
+        	noCrawls[0][1] = "";
+        	//PermStorage.Store_Crawl_Data(noCrawls, this);
         }
         else {
         	startActivity(new Intent("ie.tcd.pubcrawl.MAINACTIVITY"));

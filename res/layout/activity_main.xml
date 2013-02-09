@@ -52,10 +52,11 @@
     
     <Button
         android:id="@+id/bChangeName"
+        android:textSize="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvUserName"
         android:layout_alignParentRight="true"
+        android:layout_below="@+id/tvUserName"
         android:text="@string/change_user_name"
         />
 
