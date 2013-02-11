@@ -1,9 +1,9 @@
 package ie.tcd.pubcrawl;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -43,7 +43,6 @@ public class CreateUserName extends Activity {
         	PermStorage.Store_User_Id(userId, this);
         	String[][] noCrawls = new String[1][1];
         	noCrawls[0][0] = "No Crawls";
-        	noCrawls[0][1] = "";
         	//PermStorage.Store_Crawl_Data(noCrawls, this);
         }
         else {
