@@ -99,6 +99,9 @@ public class PermStorage {
 			e.printStackTrace();
 		}
     }
+    
+    //Store the user's chosen Name.
+    public static void Store_User_Name(String name)
 
     public static String[][] Get_Crawl_Data (Context context) {
     	String USERNAME = "crawls";

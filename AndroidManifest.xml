@@ -110,6 +110,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+<activity
+            android:name=".SelectedCrawl"
+            android:label="@string/selected_crawls" >
+            <intent-filter>
+                <action android:name="ie.tcd.pubcrawl.SELECTEDCRAWL" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

@@ -1,9 +1,9 @@
 package ie.tcd.pubcrawl;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,13 +11,14 @@ import android.widget.EditText;
 
 public class CreateUserName extends Activity {
 
-	private static String STATUS = "Status";
+	private final static String STATUS = "Status";
 	SharedPreferences appSharedPrefs;
 	public static String userName;
 	EditText getName;
 	int userId;
 
     @Override
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.createusername);
@@ -63,5 +64,6 @@ public class CreateUserName extends Activity {
         		finish();
 			}
 		});
+
     }
 }
