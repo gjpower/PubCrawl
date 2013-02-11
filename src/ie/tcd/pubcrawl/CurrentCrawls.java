@@ -18,7 +18,7 @@ public class CurrentCrawls extends Activity{
 		
 		//Crawl Data set to "No Crawls" on install of app
 		TextView textView = (TextView) findViewById(R.id.Crawl_Data);
-		String[][] test = new String[3][4];
+		/*String[][] test = new String[3][4];
 		test[0][0] = "ZeroZero";
     	test[0][1] = "ZeroOne";
     	test[0][2] = "ZeroTwo";
@@ -31,11 +31,11 @@ public class CurrentCrawls extends Activity{
     	test[2][1] = "TwoOne";
     	test[2][2] = "TwoTwo";
     	test[2][3] = "TwoThree";
-    	PermStorage.Store_Crawl_Data(test, this);
+    	PermStorage.Store_Crawl_Data(test, this);*/
     	//numCrawls = PermStorage.Get_Crawl_Data(this);
 		crawlData = PermStorage.Get_Crawl_Data(this);
 		//textView.setText(String.valueOf(numCrawls));
-		textView.setText(crawlData[2][1]);
+		textView.setText(crawlData[0][0]);
 	}
 
 }
