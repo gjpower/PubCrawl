@@ -71,7 +71,7 @@ public class CoinView extends SurfaceView implements SurfaceHolder.Callback {
 		//float y = event.getY();
 		//float y2 = event.getY(event.getPointerCount());
 		//System.out.println(y + "   " + y2);
-		thread.flipping = true;
+		CoinThread.flipping = true;
 		thread.run();
 		return super.onTouchEvent(event);
 	}

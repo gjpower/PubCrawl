@@ -91,7 +91,7 @@ public class CoinGames extends Activity implements android.view.GestureDetector.
 	@Override
 	public void onBackPressed() {
 		coinView.thread.Set_Running(false);
-		coinView.thread.flipping = false;
+		CoinThread.flipping = false;
 		System.out.println("back pressed");
 		super.onBackPressed();
 
