@@ -1,35 +1,100 @@
 package ie.tcd.pubcrawl;
 
-import android.os.Bundle;
 import android.app.Activity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.support.v4.app.NavUtils;
+import android.gesture.GestureOverlayView;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.Window;
+import android.widget.TextView;
 
-public class CoinGames extends Activity {
+ 
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+
+public class CoinGames extends Activity implements android.view.GestureDetector.OnGestureListener {
+
+	public TextView result;
+	public Coin coin = new Coin();
+	GestureOverlayView gOV;
+	public GestureDetector gestureScanner;
+	public static boolean flip =true;
+	CoinView coinView;
+	
+	@SuppressWarnings("deprecation")
+	@Override
+    public void onCreate(Bundle savedInstanceState)
+	{
+		coinView = new CoinView(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_coin_games);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(coinView);
+        result = (TextView) findViewById(R.id.resultOfCoin);
+
+		gestureScanner = new GestureDetector(this);
+
+        
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_coin_games, menu);
-        return true;
-    }
 
-    
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+		// reads the gesture and determines what type it is 
+	public boolean onTouchEvent(MotionEvent me){
+		return gestureScanner.onTouchEvent(me);
+	}
+	
+	// function that has the swipe vector and calls the "Flip_Coin" function 
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
+	{
+		result.setText("   ");
+		if(velocityY<0)
+		{
+		 velocityY = velocityY*(-1);
+		}
+		//Toast.makeText(this, coin.Flip_Coin(pos), 0).show();
+		result.setText(coin.Flip_Coin(velocityY));
+		return true;
+	}
+	
+	
+	// useless functions but they have to be included for the ones we want to work 
+	public boolean onDown(MotionEvent arg0) {
+		// TODO Auto-generated method stub
+		
+		return false;
+	}
+
+	public void onLongPress(MotionEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public boolean onScroll(MotionEvent arg0, MotionEvent arg1, float arg2, float arg3) {
+		// TODO Auto-generated method stub
+		
+		//System.out.println(arg3);
+		//Toast.makeText(this, coin.Flip_Coin(arg3), 0).show();
+		return false;
+	}
+
+	public void onShowPress(MotionEvent arg0) {
+		// TODO Auto-generated method stub
+		
+		
+	}
+
+	public boolean onSingleTapUp(MotionEvent arg0) {
+		// TODO Auto-generated method stub
+		
+		return false;
+	}
+
+	@Override
+	public void onBackPressed() {
+		coinView.thread.Set_Running(false);
+		super.onBackPressed();
+
+	}
 
 }
