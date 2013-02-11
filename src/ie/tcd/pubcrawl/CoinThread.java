@@ -3,20 +3,22 @@ package ie.tcd.pubcrawl;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
-public class ThreadForGames extends Thread
+public class CoinThread extends Thread // created by the coinview 
 {
 
 	private boolean running;
+	public static boolean flipping;
 	private SurfaceHolder surfaceHolder;
 	private CoinView coinView;
 	Canvas canvas;
 	
 		// counstructor 
-	public ThreadForGames(SurfaceHolder surfaceHolder, CoinView coinView)
+	public CoinThread(SurfaceHolder surfaceHolder, CoinView coinView)
 	{
 		super();
 		this.surfaceHolder = surfaceHolder;
 		this.coinView = coinView;
+		flipping = false;
 	}
 	
 		// for changing the private bool
@@ -37,8 +39,16 @@ public class ThreadForGames extends Thread
 				canvas = this.surfaceHolder.lockCanvas();
 				synchronized (surfaceHolder)
 				{
-					this.coinView.Update_Bitmap();
-					this.coinView.Renderer(canvas);
+					
+					if(flipping)
+					{
+						this.coinView.Update_Bitmap(); // calls the update in coin animation
+						this.coinView.Renderer(canvas); // calls the draw in coin animation
+					}
+					else
+					{
+						this.coinView.Renderer(canvas);
+					}
 				}
 			}
 			finally 
@@ -49,6 +59,7 @@ public class ThreadForGames extends Thread
 				}
 			}
 		}
+		System.out.println("no longer runing");
 	}
 
 }

@@ -16,18 +16,21 @@ public class CoinGames extends Activity implements android.view.GestureDetector.
 	public GestureDetector gestureScanner;
 	public static boolean flip =true;
 	CoinView coinView;
+	public static String outcome;
 	
 	@SuppressWarnings("deprecation")
 	@Override
     public void onCreate(Bundle savedInstanceState)
 	{
-		coinView = new CoinView(this);
+		
         super.onCreate(savedInstanceState);
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
+        coinView = new CoinView(this);
         setContentView(coinView);
         result = (TextView) findViewById(R.id.resultOfCoin);
 
 		gestureScanner = new GestureDetector(this);
+		outcome = "tails";
 
         
     }
@@ -41,13 +44,14 @@ public class CoinGames extends Activity implements android.view.GestureDetector.
 	// function that has the swipe vector and calls the "Flip_Coin" function 
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
 	{
-		result.setText("   ");
+/*		result.setText("   ");
 		if(velocityY<0)
 		{
 		 velocityY = velocityY*(-1);
 		}
 		//Toast.makeText(this, coin.Flip_Coin(pos), 0).show();
 		result.setText(coin.Flip_Coin(velocityY));
+		*/
 		return true;
 	}
 	
@@ -83,10 +87,12 @@ public class CoinGames extends Activity implements android.view.GestureDetector.
 		
 		return false;
 	}
-
+	// added functionality to stop the threads from running
 	@Override
 	public void onBackPressed() {
 		coinView.thread.Set_Running(false);
+		coinView.thread.flipping = false;
+		System.out.println("back pressed");
 		super.onBackPressed();
 
 	}
