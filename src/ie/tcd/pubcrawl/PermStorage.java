@@ -11,9 +11,9 @@ import android.content.Context;
 public class PermStorage {
 	static FileOutputStream fos;
 	static FileInputStream fis = null;
-	final String USERNAME = "userName";
-	final String USERID = "userId";
-	final String CRAWLS = "crawls";
+	final static String USERNAME = "userName";
+	final static String USERID = "userId";
+	final static String CRAWLS = "crawls";
 	
 	/*
 	 *Using Data Output Streams lets you store specific data types
