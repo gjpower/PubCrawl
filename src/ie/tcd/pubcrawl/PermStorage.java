@@ -11,13 +11,15 @@ import android.content.Context;
 public class PermStorage {
 	static FileOutputStream fos;
 	static FileInputStream fis = null;
+	final String USERNAME = "userName";
+	final String USERID = "userId";
+	final String CRAWLS = "crawls";
 	
 	/*
 	 *Using Data Output Streams lets you store specific data types
 	 *rather than having to convert everything to and from strings
 	 */	
 	public static  void Store_User_Name(String name, Context context){
-    	String USERNAME = "userName";
     	try {
 			fos = context.openFileOutput(USERNAME, Context.MODE_PRIVATE);
 			DataOutputStream dos = new DataOutputStream(fos);
@@ -30,7 +32,6 @@ public class PermStorage {
     
     public static String Get_User_Name(Context context){
     	String name = null;  
-    	String USERNAME = "userName";
         try {
 			fis = context.openFileInput(USERNAME);
 			DataInputStream dis = new DataInputStream(fis);
@@ -49,7 +50,6 @@ public class PermStorage {
     }
     
     public static void Store_User_Id(int id, Context context) {
-    	String USERID = "userId";
     	try {
 			fos = context.openFileOutput(USERID, Context.MODE_PRIVATE);
 			DataOutputStream dos = new DataOutputStream(fos);
@@ -62,7 +62,6 @@ public class PermStorage {
     
     public static int Get_User_Id(Context context) {
     	int id=-1;
-    	String USERID = "userId";
         try {
 			fis = context.openFileInput(USERID);
 			DataInputStream dis = new DataInputStream(fis);
@@ -80,7 +79,6 @@ public class PermStorage {
     	int numCrawls = crawlArray.length;
     	int i;
     	StringBuffer strBuffer = new StringBuffer();
-    	String CRAWLS = "crawls";
     	String crawlData;
     	for (i=0;i<numCrawls;i++) {
     		int j;
@@ -101,11 +99,10 @@ public class PermStorage {
     }
 
     public static String[][] Get_Crawl_Data (Context context) {
-    	String USERNAME = "crawls";
     	String crawlData = null;
     	int numCrawls;
     	try {
-			fis = context.openFileInput(USERNAME);
+			fis = context.openFileInput(CRAWLS);
 			DataInputStream dis = new DataInputStream(fis);
 			byte[] dataArray = new byte[dis.available()];
 			//when the file has been read then read() returns -1
