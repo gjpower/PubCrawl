@@ -11,7 +11,7 @@ public class CoinAnimation
 	
 		private Bitmap bitmap;      // the animation sequence
 		
-	    public static Rect sourceRect;    // the rectangle to be drawn from the animation bitmap
+	    public Rect sourceRect;    // the rectangle to be drawn from the animation bitmap
 	    
 	    private int frameNr;        // number of frames in animation
 	    private int currentFrame;   // the current frame

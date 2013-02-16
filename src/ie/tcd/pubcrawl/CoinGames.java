@@ -2,13 +2,8 @@ package ie.tcd.pubcrawl;
 
 import android.app.Activity;
 import android.gesture.GestureOverlayView;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.GestureDetector;
-import android.view.MotionEvent;
-import android.view.Window;
 import android.widget.TextView;
 
  
@@ -23,7 +18,6 @@ public class CoinGames extends Activity {
 	CoinView coinView;
 	public static String outcome;
 	
-	@SuppressWarnings("deprecation")
 	@Override
     public void onCreate(Bundle savedInstanceState)
 	{
