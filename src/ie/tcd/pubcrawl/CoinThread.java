@@ -7,10 +7,13 @@ public class CoinThread extends Thread // created by the coinview
 {
 
 	private boolean running;
-	public static boolean flipping;
+	public static boolean heads;
+	public static boolean waiting;
 	private SurfaceHolder surfaceHolder;
 	private CoinView coinView;
-	Canvas canvas;
+	static Canvas canvas;
+	int done ;
+	public static int numRotations= 0;
 	
 		// counstructor 
 	public CoinThread(SurfaceHolder surfaceHolder, CoinView coinView)
@@ -18,7 +21,8 @@ public class CoinThread extends Thread // created by the coinview
 		super();
 		this.surfaceHolder = surfaceHolder;
 		this.coinView = coinView;
-		flipping = false;
+		heads = false;
+		waiting = true;
 	}
 	
 		// for changing the private bool
@@ -31,6 +35,7 @@ public class CoinThread extends Thread // created by the coinview
 	public void run()
 	{
 		
+		
 		while(running)
 		{
 			canvas = null;
@@ -39,15 +44,49 @@ public class CoinThread extends Thread // created by the coinview
 				canvas = this.surfaceHolder.lockCanvas();
 				synchronized (surfaceHolder)
 				{
-					
-					if(flipping)
+					if(!waiting)
 					{
-						this.coinView.Update_Bitmap(); // calls the update in coin animation
-						this.coinView.Renderer(canvas); // calls the draw in coin animation
+						if(heads)
+						{
+							if(numRotations < 4)
+							{
+								this.coinView.flipping.Update(System.currentTimeMillis());
+								this.coinView.flipping.Draw(canvas);
+								System.out.println(numRotations);
+							}
+							else
+							{
+								System.out.println("r to heads");
+								if(!coinView.flipping.Check_Heads())
+								{
+									coinView.flipping.Update_No_Fall(System.currentTimeMillis());
+									coinView.flipping.Draw(canvas);			
+								}
+								else
+								{
+									waiting = true;
+								}
+							}
+						}
+						else
+						{
+							if(numRotations < 4)
+							{
+								this.coinView.flipping.Update(System.currentTimeMillis());
+								this.coinView.flipping.Draw(canvas);
+								System.out.println(numRotations);
+							}
+							else
+							{
+								waiting = true;
+							}
+							//done = this.coinView.Flip_Twice(canvas);
+							//done = this.coinView.Value_Tails(canvas);
+						}
 					}
 					else
 					{
-						this.coinView.Renderer(canvas);
+						this.coinView.Draw_Static(canvas);
 					}
 				}
 			}
@@ -61,7 +100,12 @@ public class CoinThread extends Thread // created by the coinview
 		}
 		System.out.println("no longer runing");
 	}
-
+	
+	public boolean  Get_Running()
+	{
+		return running;
+	}
 }
+
 
 

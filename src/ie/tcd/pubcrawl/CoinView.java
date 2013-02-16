@@ -1,5 +1,7 @@
 package ie.tcd.pubcrawl;
 
+import java.util.Random;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,10 +13,12 @@ import android.view.SurfaceView;
 public class CoinView extends SurfaceView implements SurfaceHolder.Callback {
 
 	public CoinThread thread;
-	private CoinAnimation flipping;
+	public CoinAnimation flipping;
 	private Bitmap coinBitmap;
 	public int centerX, centerY;
 	boolean firstTouch = true;
+	private Random rand;
+	public static int numRotations;
 	
 	// constructors
 	public CoinView(Context context)
@@ -24,14 +28,17 @@ public class CoinView extends SurfaceView implements SurfaceHolder.Callback {
 		//
 		// need to find a way to get the view size for coin location 
 		//
-		centerX = 200;
-		centerY = 200;
+
 		
 		getHolder().addCallback(this);	// intercepts events
 		thread = new CoinThread(getHolder(), this); 	// thread for game loop
+		centerX = 200;//CoinThread.canvas.getWidth() / 2;
+		centerY = 200;//CoinThread.canvas.getHeight() / 2;
 		setFocusable(true);				// makes it able to handle events  
         coinBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.coin_anim);
 		flipping = new CoinAnimation(coinBitmap, centerX, centerY, 150, 150, 20, 24);
+		rand = new Random(System.currentTimeMillis());
+		numRotations = 0;
 	}
 
 	
@@ -68,11 +75,15 @@ public class CoinView extends SurfaceView implements SurfaceHolder.Callback {
 
 	public boolean onTouchEvent(MotionEvent event)
 	{
-		//float y = event.getY();
-		//float y2 = event.getY(event.getPointerCount());
-		//System.out.println(y + "   " + y2);
-		thread.flipping = true;
-		thread.run();
+		if(thread.waiting)
+		{
+			CoinThread.heads = Flip_Coin();
+			CoinThread.waiting = false; 
+			if(!thread.Get_Running())
+			{
+				thread.run();
+			}
+		}
 		return super.onTouchEvent(event);
 	}
 	
@@ -92,4 +103,36 @@ public class CoinView extends SurfaceView implements SurfaceHolder.Callback {
 		flipping.Draw(canvas);
 	}
 
+	public boolean Flip_Coin()
+	{
+		boolean flip = rand.nextBoolean();
+		System.out.println("from flip coin" + flip);
+		return flip;
+			
+	}
+
+
+
+
+	public void Draw_Static(Canvas canvas) 
+	{
+		flipping.Draw(canvas);
+		
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

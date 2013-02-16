@@ -11,7 +11,7 @@ public class CoinAnimation
 	
 		private Bitmap bitmap;      // the animation sequence
 		
-	    private Rect sourceRect;    // the rectangle to be drawn from the animation bitmap
+	    public static Rect sourceRect;    // the rectangle to be drawn from the animation bitmap
 	    
 	    private int frameNr;        // number of frames in animation
 	    private int currentFrame;   // the current frame
@@ -24,8 +24,8 @@ public class CoinAnimation
 	    int mod = -1;
 	    private long frameTicker;   // the time of the last frame update
 	    
-	    //private Rect destRect;
-	    private Rect heads;
+	    
+	    public static Rect heads;
 	    private Rect tails;
 
 
@@ -33,7 +33,7 @@ public class CoinAnimation
 public CoinAnimation(Bitmap bitmap, int x, int y, int width, int height, int fps, int frameCount) 
 	{
         this.bitmap = bitmap;
-        this.x = x;
+        this.x =x;
         this.y = y;
         currentFrame = 0;
         frameNr = frameCount;
@@ -44,32 +44,28 @@ public CoinAnimation(Bitmap bitmap, int x, int y, int width, int height, int fps
         frameTicker = 0l;
         slow = 10 / fps;
         heads = new Rect(1950 , 0, 2100, spriteHeight );
-        tails = new Rect(0, 0, spriteWidth, spriteHeight);
-        
+        tails = new Rect(0, 0, spriteWidth, spriteHeight);       
     }
 
 		// changes the displayed image based on elapsed time 
 public void Update(long gameTime) 
 	{
-		if(y <= 50)  // top
+
+		if (y < 50)
 		{
 			mod = 1;
-		}
-		if (y >= 550) // bottom 
-		{
-			mod=0;
-			CoinThread.flipping = false;
 		}
 		if (gameTime > frameTicker + framePeriod + slow) 
 		{
 	        frameTicker = gameTime;
 	        // increment the frame
 	        currentFrame--;
-	        y += 10*mod;
+	        y += 10*mod;	
+	        slow += 1;
 	        if (currentFrame < 0) 
 	        {
 	            currentFrame = (frameNr-1);
-	            slow += slow;
+	            CoinThread.numRotations++;
 	            Log.i("", "360");
 	        }
 	    }
@@ -81,83 +77,34 @@ public void Update(long gameTime)
 	// these 3 are fairly self explanatory 
 public void Draw(Canvas canvas)
 	{
-		if(!CoinThread.flipping)
-		{
-			if (CoinGames.outcome == "heads")
-			{
-				canvas.drawColor(Color.GREEN);
-				while(!(sourceRect.equals(heads)))
-				{
-					Rotate_To_Heads(System.currentTimeMillis(), canvas);
-				}
-				Rect destRect = new Rect(Get_X(), Get_Y(), Get_X() + spriteWidth, Get_Y() + spriteHeight);
-				canvas.drawBitmap(bitmap, heads, destRect, null);
-			}
-			else
-			{
-				
-				canvas.drawColor(Color.GREEN);
-				while(!(sourceRect.equals(tails)))
-				{
-					Rotate_To_Tails(System.currentTimeMillis(), canvas);
-				}
-				Rect destRect = new Rect(Get_X(), Get_Y(), Get_X() + spriteWidth, Get_Y() + spriteHeight);
-				canvas.drawBitmap(bitmap, tails, destRect, null);
-			}
-		}
-		else // if it is flipping
-		{
 	        // where to draw the sprite
-			canvas.drawColor(Color.GREEN); 
+			canvas.drawColor(Color.GREEN); // resets the back ground
 	        Rect destRect = new Rect(Get_X(), Get_Y(), Get_X() + spriteWidth, Get_Y() + spriteHeight);
 	        canvas.drawBitmap(bitmap, sourceRect, destRect, null);
-		}
+		
 		
     }
 
- 
+// changes the displayed image based on elapsed time 
+public void Update_No_Fall(long gameTime) 
+{
 
-public void Rotate_To_Heads(long gameTime, Canvas canvas)
+	if (gameTime > frameTicker + framePeriod + slow) 
 	{
-		if (gameTime > frameTicker + framePeriod) 
-		{
-	        frameTicker = gameTime;
-	        // increment the frame
-	        currentFrame--;
-	        if (currentFrame < 0) 
-	        {
-	            currentFrame = (frameNr-1);
-	        }
+	    frameTicker = gameTime;
+	    // increment the frame
+	    currentFrame--;	
+	    slow += 5;
+	    if (currentFrame < 0) 
+	    {
+	        currentFrame = (frameNr-1);
+	        Log.i("", "360");
 	    }
-	    this.sourceRect.left = currentFrame * spriteWidth;
-	    this.sourceRect.right = this.sourceRect.left + spriteWidth;
-		canvas.drawColor(Color.GREEN); 
-        Rect destRect = new Rect(Get_X(), Get_Y(), Get_X() + spriteWidth, Get_Y() + spriteHeight);
-        canvas.drawBitmap(bitmap, sourceRect, destRect, null);
 	}
-
-public void Rotate_To_Tails(long gameTime, Canvas canvas)
-	{
-		System.out.println("roatating to tails");
-		if (gameTime > frameTicker + framePeriod + slow) 
-		{
-	        frameTicker = gameTime;
-	        // increment the frame
-	        currentFrame--;
-	        if (currentFrame < 0) 
-	        {
-	            currentFrame = (frameNr-1);
-	        }
-	    }
-	    this.sourceRect.left = currentFrame * spriteWidth;
-	    this.sourceRect.right = this.sourceRect.left + spriteWidth;
-		canvas.drawColor(Color.GREEN); 
-	    Rect destRect = new Rect(Get_X(), Get_Y(), Get_X() + spriteWidth, Get_Y() + spriteHeight);
-	    canvas.drawBitmap(bitmap, sourceRect, destRect, null);
-	
-		return;
-	}
-
+	// define the rectangle to cut out sprite
+	this.sourceRect.left = currentFrame * spriteWidth;
+	this.sourceRect.right = this.sourceRect.left + spriteWidth;
+}
 
 private int Get_Y() 
 	{
@@ -171,5 +118,13 @@ private int Get_X()
 		return x;
 	}
 
+public boolean Check_Heads()
+{
+	if(sourceRect.equals(heads))
+	{
+		return true;
+	}
+		return false;
+}
 }
 
