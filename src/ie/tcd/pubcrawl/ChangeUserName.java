@@ -11,19 +11,22 @@ import android.widget.TextView;
 public class ChangeUserName extends Activity {
 	public static String userName;
 	EditText getName;
+	TextView currName;
+	Button saveName;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_name);
         
-        TextView currName = (TextView) findViewById(R.id.tvCurrentName);
+        currName = (TextView) findViewById(R.id.tvCurrentName);
         getName = (EditText) findViewById(R.id.etUserName);
-        Button saveName = (Button) findViewById(R.id.bSaveUserName);
+        saveName = (Button) findViewById(R.id.bSaveUserName);
         
         //Get user name and display
         userName = PermStorage.Get_User_Name(this);
         currName.setText("Current User Name is " + userName);
+        getName.setText(userName);
         
         saveName.setOnClickListener(new View.OnClickListener() {			
 			//Save new user name and go back to the main activity
