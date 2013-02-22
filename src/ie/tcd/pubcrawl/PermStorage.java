@@ -161,11 +161,7 @@ public class PermStorage {
         return (parts.length)/3;
     }
     
-    public static String[][] Get_Current_Crawl (Context context) {
-    	String currCrawlData[][] = new String[1][3];
-    	/*currCrawlData[0][0] = "2";
-    	currCrawlData[0][1] = "String";
-    	currCrawlData[0][2] = "String";*/
+    public static int Get_Current_Crawl (Context context) {
     	int id=-1;
         try {
 			fis = context.openFileInput(CURRCRAWL);
@@ -177,20 +173,6 @@ public class PermStorage {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
-        int numCrawls = Num_Crawls(context);
-        String allCrawlsData[][] = new String[numCrawls][3];
-        allCrawlsData = Get_Crawl_Data(context);
-        int i;
-        for (i=0;i<numCrawls;i++) {
-            String testString = allCrawlsData[i][0];
-        	if (testString == String.valueOf(id)) {
-        		break;
-        	}
-        }
-        int j;
-        for (j=0;j<3;j++) {
-        	currCrawlData[0][j] = allCrawlsData[i][j];
-        }
-    	return currCrawlData;
+        return id;
     }
 }
