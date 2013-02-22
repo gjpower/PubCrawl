@@ -18,7 +18,6 @@ public class CreateUserName extends Activity {
 	int userId;
 
     @Override
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.createusername);
@@ -37,7 +36,6 @@ public class CreateUserName extends Activity {
         		finish();
 			}
 		});
-
     }
     
     /*

@@ -14,6 +14,7 @@ public class PermStorage {
 	final static String USERNAME = "userName";
 	final static String USERID = "userId";
 	final static String CRAWLS = "crawls";
+	final static String CURRCRAWL = "currcrawl";
 	
 	/*
 	 *Using Data Output Streams lets you store specific data types
@@ -82,7 +83,7 @@ public class PermStorage {
     	String crawlData;
     	for (i=0;i<numCrawls;i++) {
     		int j;
-    		for (j=0;j<4;j++) {
+    		for (j=0;j<3;j++) {
         		strBuffer.append(crawlArray[i][j]); 
         		strBuffer.append("*");    	
     		}
@@ -100,7 +101,6 @@ public class PermStorage {
 
     public static String[][] Get_Crawl_Data (Context context) {
     	String crawlData = null;
-    	int numCrawls;
     	try {
 			fis = context.openFileInput(CRAWLS);
 			DataInputStream dis = new DataInputStream(fis);
@@ -116,17 +116,81 @@ public class PermStorage {
 			e.printStackTrace();
 		}     	 
         String[] parts = crawlData.split("\\*");
-        numCrawls = (parts.length)/4;
+        int numCrawls = (parts.length)/3;
         String crawlArray[][] = new String[numCrawls][4];
         int i;
         int partNum;
         for (i=0;i<numCrawls;i++) {
         	int j;
-        	for (j=0;j<4;j++) {
-        		partNum = 4*i + j;
+        	for (j=0;j<3;j++) {
+        		partNum = 3*i + j;
         		crawlArray[i][j] = parts[partNum];
         	}
         }
         return crawlArray;
+    }
+
+    public static void Indicate_Current_Crawl (int id, Context context) {
+    	try {
+			fos = context.openFileOutput(CURRCRAWL, Context.MODE_PRIVATE);
+			DataOutputStream dos = new DataOutputStream(fos);
+			dos.writeInt(id);
+	    	dos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
+
+    public static int Num_Crawls(Context context) {
+    	String crawlData = null;
+    	try {
+			fis = context.openFileInput(CRAWLS);
+			DataInputStream dis = new DataInputStream(fis);
+			byte[] dataArray = new byte[dis.available()];
+			//when the file has been read then read() returns -1
+			while (dis.read(dataArray) != -1) {
+				crawlData = new String(dataArray);
+			}
+			dis.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}     	 
+        String[] parts = crawlData.split("\\*");
+        return (parts.length)/3;
+    }
+    
+    public static String[][] Get_Current_Crawl (Context context) {
+    	String currCrawlData[][] = new String[1][3];
+    	/*currCrawlData[0][0] = "2";
+    	currCrawlData[0][1] = "String";
+    	currCrawlData[0][2] = "String";*/
+    	int id=-1;
+        try {
+			fis = context.openFileInput(CURRCRAWL);
+			DataInputStream dis = new DataInputStream(fis);
+			id= dis.readInt();
+			dis.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+        int numCrawls = Num_Crawls(context);
+        String allCrawlsData[][] = new String[numCrawls][3];
+        allCrawlsData = Get_Crawl_Data(context);
+        int i;
+        for (i=0;i<numCrawls;i++) {
+            String testString = allCrawlsData[i][0];
+        	if (testString == String.valueOf(id)) {
+        		break;
+        	}
+        }
+        int j;
+        for (j=0;j<3;j++) {
+        	currCrawlData[0][j] = allCrawlsData[i][j];
+        }
+    	return currCrawlData;
     }
 }
