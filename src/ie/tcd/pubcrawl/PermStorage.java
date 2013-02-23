@@ -1,65 +1,135 @@
 package ie.tcd.pubcrawl;
 
-import android.app.Activity;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 
-/*
- * How to use this class:
- * 
- * Create an instance of the class: 
- * 
- * PermStorage exampleVariable;
- * exampleVariable = new PermStorage(getApplicationContext());
- * 
- * Call the desired functions:
- * 
- * exampleVariable.Some_Function();
- * 
- * More functions will be added later
- */
-
-public class PermStorage 
-{
-  private static final String APPDATA = "AppData"; // Name of the file -.xml
+public class PermStorage {
+	static FileOutputStream fos;
+	static FileInputStream fis = null;
 	
-    private static SharedPreferences appSharedPrefs;
-    
-    private static Editor prefsEditor;
-
-	  //Constructor
-    public PermStorage(Context context)
-    {
-        this.appSharedPrefs = context.getSharedPreferences(APPDATA, Activity.MODE_PRIVATE);
-        this.prefsEditor = appSharedPrefs.edit();
-    }
-
-    //Return the user's ID number as int. Returns 0 if fails to find ID
-    public int Get_User_Id() 
-    {
-        return appSharedPrefs.getInt("userId", 0);
-    }
-    
-    //Return the user's chosen Name as String. Returns "error" if fails to find Name
-    public static String Get_User_Name()
-
-    {
-    	return appSharedPrefs.getString("userName", "error");
-    }
-
-    //Store the user's ID number.
-    public void Store_User_Id(int id) 
-    {
-    	prefsEditor.putInt("userId", id);
-        prefsEditor.commit();
+	/*
+	 *Using Data Output Streams lets you store specific data types
+	 *rather than having to convert everything to and from strings
+	 */	
+	public static  void Store_User_Name(String name, Context context){
+    	String USERNAME = "userName";
+    	try {
+			fos = context.openFileOutput(USERNAME, Context.MODE_PRIVATE);
+			DataOutputStream dos = new DataOutputStream(fos);
+			dos.writeChars(name);
+			dos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
     
-    //Store the user's chosen Name.
-    public static void Store_User_Name(String name)
+    public static String Get_User_Name(Context context){
+    	String name = null;  
+    	String USERNAME = "userName";
+        try {
+			fis = context.openFileInput(USERNAME);
+			DataInputStream dis = new DataInputStream(fis);
+			byte[] dataArray = new byte[dis.available()];
+			//when the file has been read then read() returns -1
+			while (dis.read(dataArray) != -1) {
+				name = new String(dataArray);
+			}
+			dis.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+        return name;
+    }
+    
+    public static void Store_User_Id(int id, Context context) {
+    	String USERID = "userId";
+    	try {
+			fos = context.openFileOutput(USERID, Context.MODE_PRIVATE);
+			DataOutputStream dos = new DataOutputStream(fos);
+			dos.writeInt(id);
+	    	dos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    public static int Get_User_Id(Context context) {
+    	int id=-1;
+    	String USERID = "userId";
+        try {
+			fis = context.openFileInput(USERID);
+			DataInputStream dis = new DataInputStream(fis);
+			id= dis.readInt();
+			dis.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+        return id;
+    }
+    
+    public static void Store_Crawl_Data (String[][] crawlArray, Context context) {
+    	int numCrawls = crawlArray.length;
+    	int i;
+    	StringBuffer strBuffer = new StringBuffer();
+    	String CRAWLS = "crawls";
+    	String crawlData;
+    	for (i=0;i<numCrawls;i++) {
+    		int j;
+    		for (j=0;j<4;j++) {
+        		strBuffer.append(crawlArray[i][j]); 
+        		strBuffer.append("*");    	
+    		}
+    	}
+    	crawlData = strBuffer.toString();
+    	try {
+			fos = context.openFileOutput(CRAWLS, Context.MODE_PRIVATE);
+			DataOutputStream dos = new DataOutputStream(fos);
+			dos.writeChars(crawlData);
+			dos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
 
-    {
-    	prefsEditor.putString("userName", name);
-    	prefsEditor.commit();
+    public static String[][] Get_Crawl_Data (Context context) {
+    	String USERNAME = "crawls";
+    	String crawlData = null;
+    	int numCrawls;
+    	try {
+			fis = context.openFileInput(USERNAME);
+			DataInputStream dis = new DataInputStream(fis);
+			byte[] dataArray = new byte[dis.available()];
+			//when the file has been read then read() returns -1
+			while (dis.read(dataArray) != -1) {
+				crawlData = new String(dataArray);
+			}
+			dis.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}     	 
+        String[] parts = crawlData.split("\\*");
+        numCrawls = (parts.length)/4;
+        String crawlArray[][] = new String[numCrawls][4];
+        int i;
+        int partNum;
+        for (i=0;i<numCrawls;i++) {
+        	int j;
+        	for (j=0;j<4;j++) {
+        		partNum = 4*i + j;
+        		crawlArray[i][j] = parts[partNum];
+        	}
+        }
+        return crawlArray;
     }
 }

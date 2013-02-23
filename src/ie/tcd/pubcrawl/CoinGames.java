@@ -6,14 +6,10 @@ import android.os.Bundle;
 import android.view.GestureDetector;
 import android.widget.TextView;
 
- 
-
 
 public class CoinGames extends Activity {
 
 	public TextView result;
-	GestureOverlayView gOV;
-	public GestureDetector gestureScanner;
 	public static boolean flip = true;
 	CoinView coinView;
 	public static String outcome;
@@ -31,12 +27,11 @@ public class CoinGames extends Activity {
 
         
     }
-	
-	@Override
-	public void onBackPressed() 
+@Override
+public void onBackPressed() 
 	{
-		this.coinView.thread.Set_Running(false);
-		System.out.println("Back pressed");
+	
+		coinView.thread.Set_Running(false);
 		super.onBackPressed();
 	}
 

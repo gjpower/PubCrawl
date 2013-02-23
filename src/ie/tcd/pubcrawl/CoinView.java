@@ -75,6 +75,7 @@ public class CoinView extends SurfaceView implements SurfaceHolder.Callback {
 
 	public boolean onTouchEvent(MotionEvent event)
 	{
+
 		if(CoinThread.waiting)
 		{
 			CoinThread.heads = Flip_Coin();
@@ -84,6 +85,7 @@ public class CoinView extends SurfaceView implements SurfaceHolder.Callback {
 				thread.run();
 			}
 		}
+
 		return super.onTouchEvent(event);
 	}
 	
