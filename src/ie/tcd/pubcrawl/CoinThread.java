@@ -14,6 +14,7 @@ public class CoinThread extends Thread // created by the coinview
 	static Canvas canvas;
 	int done ;
 	public static int numRotations= 0;
+	public static int toHeads = 0;
 	
 		// counstructor 
 	public CoinThread(SurfaceHolder surfaceHolder, CoinView coinView)
@@ -56,9 +57,9 @@ public class CoinThread extends Thread // created by the coinview
 							}
 							else
 							{
-								System.out.println("r to heads");
-								if(!coinView.flipping.Check_Heads())
+								if(toHeads < 12)
 								{
+									System.out.println("r to heads");
 									coinView.flipping.Update_No_Fall(System.currentTimeMillis());
 									coinView.flipping.Draw(canvas);			
 								}
@@ -104,6 +105,14 @@ public class CoinThread extends Thread // created by the coinview
 	public boolean  Get_Running()
 	{
 		return running;
+	}
+
+	public void Reset()
+	{
+		numRotations = 0;
+		toHeads = 0;
+		CoinAnimation.Set_Mod(-1);
+		CoinAnimation.Set_Slow(2);
 	}
 }
 

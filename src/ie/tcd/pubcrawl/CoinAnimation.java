@@ -20,8 +20,8 @@ public class CoinAnimation
 	    private int spriteHeight;   // the height of the sprite
 	    private int x;              // the X coordinate of the object (top left of the image)
 	    private int y;              // the Y coordinate of the object (top left of the image)
-	    private int slow;			// for slowing down the rotations
-	    int mod = -1;
+	    private static int slow;			// for slowing down the rotations
+	    static int mod = -1;
 	    private long frameTicker;   // the time of the last frame update
 	    
 	    
@@ -85,7 +85,7 @@ public void Draw(Canvas canvas)
 		
     }
 
-// changes the displayed image based on elapsed time 
+// changes the displayed image based on elapsed time but stops it from falling
 public void Update_No_Fall(long gameTime) 
 {
 
@@ -94,6 +94,7 @@ public void Update_No_Fall(long gameTime)
 	    frameTicker = gameTime;
 	    // increment the frame
 	    currentFrame--;	
+	    CoinThread.toHeads +=1 ;
 	    slow += 5;
 	    if (currentFrame < 0) 
 	    {
@@ -118,13 +119,13 @@ private int Get_X()
 		return x;
 	}
 
-public boolean Check_Heads()
-{
-	if(sourceRect.equals(heads))
+public static void Set_Mod(int reset)
 	{
-		return true;
+		mod = reset;
 	}
-		return false;
-}
+public static void Set_Slow(int reset)
+	{
+		slow = reset;
+	}
 }
 

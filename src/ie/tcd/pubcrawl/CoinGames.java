@@ -1,9 +1,7 @@
 package ie.tcd.pubcrawl;
 
 import android.app.Activity;
-import android.gesture.GestureOverlayView;
 import android.os.Bundle;
-import android.view.GestureDetector;
 import android.widget.TextView;
 
 
@@ -32,6 +30,7 @@ public void onBackPressed()
 	{
 	
 		coinView.thread.Set_Running(false);
+		coinView.thread.Reset();
 		super.onBackPressed();
 	}
 

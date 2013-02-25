@@ -75,16 +75,18 @@ public class CoinView extends SurfaceView implements SurfaceHolder.Callback {
 
 	public boolean onTouchEvent(MotionEvent event)
 	{
-
-		if(CoinThread.waiting)
+		if(!thread.Get_Running())
 		{
+			thread.run();
 			CoinThread.heads = Flip_Coin();
-			CoinThread.waiting = false; 
-			if(!thread.Get_Running())
-			{
-				thread.run();
-			}
+			CoinThread.waiting = false;
 		}
+		if (CoinThread.waiting)
+		{
+			thread.Reset();
+			CoinThread.heads = Flip_Coin();
+			CoinThread.waiting = false;	
+		}	
 
 		return super.onTouchEvent(event);
 	}
@@ -99,12 +101,7 @@ public class CoinView extends SurfaceView implements SurfaceHolder.Callback {
 		flipping.Update(System.currentTimeMillis());
 	}
 
-
-	public void Renderer(Canvas canvas)
-	{
-		flipping.Draw(canvas);
-	}
-
+	// part that actually does the flipping
 	public boolean Flip_Coin()
 	{
 		boolean flip = rand.nextBoolean();
@@ -112,10 +109,7 @@ public class CoinView extends SurfaceView implements SurfaceHolder.Callback {
 		return flip;
 			
 	}
-
-
-
-
+	//
 	public void Draw_Static(Canvas canvas) 
 	{
 		flipping.Draw(canvas);
