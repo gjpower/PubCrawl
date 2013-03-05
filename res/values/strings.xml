@@ -22,4 +22,7 @@
     <string name="enter_user_name">Enter User Name</string>
     <string name="selected_crawls">Selected Crawl</string>
     <string name="change_user_name">Change User Name</string>
+    <string name="title_activity_info">Info</string>
+    <string name="title_activity_row_layout">RowLayout</string>
+    <string name="title_activity_crawls_list_page">CrawlsListPage</string>
 </resources>
