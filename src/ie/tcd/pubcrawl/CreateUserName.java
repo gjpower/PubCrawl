@@ -31,7 +31,10 @@ public class CreateUserName extends Activity {
 			//Save user name and go to the main activity
 			public void onClick(View v) {
 				userName = getName.getText().toString();
-        		PermStorage.Store_User_Name(userName, CreateUserName.this);        		
+				PermStorage entry = new PermStorage(CreateUserName.this);
+				entry.open();
+        		entry.Store_User_Name(userName);
+        		entry.close();    		
         		startActivity(new Intent("ie.tcd.pubcrawl.MAINACTIVITY"));
         		finish();
 			}
@@ -56,13 +59,16 @@ public class CreateUserName extends Activity {
         	prefsEditor.putBoolean("install", false);
         	prefsEditor.commit();
         	userId = 5746677;//get user id from server
-        	PermStorage.Store_User_Id(userId, this);
+        	PermStorage entry = new PermStorage(CreateUserName.this);
+			entry.open();
+    		entry.Store_User_Id(userId);
         	String[][] noCrawls = new String[1][4];	//Needs to be 4 to be compatible with Store_Crawl_Data
         	noCrawls[0][0] = "No Crawls";
         	noCrawls[0][1] = "";
         	noCrawls[0][2] = "";
         	noCrawls[0][3] = "";
-        	PermStorage.Store_Crawl_Data(noCrawls, this);
+        	entry.Store_Crawl_Data(noCrawls);
+        	entry.close();
         }
         else {
         	startActivity(new Intent("ie.tcd.pubcrawl.MAINACTIVITY"));

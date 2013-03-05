@@ -23,7 +23,10 @@ public class MainActivity extends Activity implements OnClickListener {
         Button currentCrawls = (Button) findViewById(R.id.bCurrentCrawls);
         Button changeName = (Button) findViewById(R.id.bChangeName);
         
-        userName = PermStorage.Get_User_Name(this);
+        PermStorage request = new PermStorage(this);
+        request.open();
+        userName = request.Get_User_Name();
+        request.close();
         
         TextView tvUserName = (TextView) findViewById(R.id.tvUserName);
         tvUserName.setText(userName);

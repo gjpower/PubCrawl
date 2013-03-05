@@ -24,7 +24,10 @@ public class ChangeUserName extends Activity {
         saveName = (Button) findViewById(R.id.bSaveUserName);
         
         //Get user name and display
-        userName = PermStorage.Get_User_Name(this);
+        PermStorage request = new PermStorage(this);
+        request.open();
+        userName = request.Get_User_Name();
+        request.close();
         currName.setText("Current User Name is " + userName);
         getName.setText(userName);
         
@@ -32,7 +35,10 @@ public class ChangeUserName extends Activity {
 			//Save new user name and go back to the main activity
 			public void onClick(View v) {
 				userName = getName.getText().toString();
-        		PermStorage.Store_User_Name(userName, ChangeUserName.this);        		
+				PermStorage entry = new PermStorage(ChangeUserName.this);
+				entry.open();
+        		entry.Store_User_Name(userName);
+        		entry.close();
         		startActivity(new Intent("ie.tcd.pubcrawl.MAINACTIVITY"));
         		finish();
 			}
