@@ -11,25 +11,34 @@ import android.widget.TextView;
 public class ChangeUserName extends Activity {
 	public static String userName;
 	EditText getName;
+	TextView currName;
+	Button saveName;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_name);
         
-        TextView currName = (TextView) findViewById(R.id.tvCurrentName);
+        currName = (TextView) findViewById(R.id.tvCurrentName);
         getName = (EditText) findViewById(R.id.etUserName);
-        Button saveName = (Button) findViewById(R.id.bSaveUserName);
+        saveName = (Button) findViewById(R.id.bSaveUserName);
         
         //Get user name and display
-        userName = PermStorage.Get_User_Name(this);
+        PermStorage request = new PermStorage(this);
+        request.open();
+        userName = request.Get_User_Name();
+        request.close();
         currName.setText("Current User Name is " + userName);
+        getName.setText(userName);
         
         saveName.setOnClickListener(new View.OnClickListener() {			
 			//Save new user name and go back to the main activity
 			public void onClick(View v) {
 				userName = getName.getText().toString();
-        		PermStorage.Store_User_Name(userName, ChangeUserName.this);        		
+				PermStorage entry = new PermStorage(ChangeUserName.this);
+				entry.open();
+        		entry.Store_User_Name(userName);
+        		entry.close();
         		startActivity(new Intent("ie.tcd.pubcrawl.MAINACTIVITY"));
         		finish();
 			}
