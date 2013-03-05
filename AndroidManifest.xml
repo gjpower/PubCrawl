@@ -48,7 +48,7 @@
             android:name=".CrawlsListPage"
             android:label="@string/title_activity_crawls_list_page" >
             <intent-filter>
-                <action android:name="com.example.tabview.CRAWLLISTPAGE" />
+                <action android:name="ie.tcd.pubcrawl.tabview.CRAWLLISTPAGE" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
