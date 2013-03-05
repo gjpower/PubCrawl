@@ -23,7 +23,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_alignParentTop="true"
-        android:src="@drawable/event_photo" />
+        android:src="@drawable/ic_launcher" />
 
     <TextView
         android:id="@+id/eventName"

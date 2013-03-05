@@ -50,7 +50,7 @@ public class MainActivity extends Activity implements OnClickListener {
     		startActivity(new Intent("ie.tcd.pubcrawl.GAMEMENU"));
     		break;
     	case R.id.bCurrentCrawls:
-    		startActivity(new Intent("ie.tcd.pubcrawl.CURRENTCRAWLS"));
+    		startActivity(new Intent("ie.tcd.pubcrawl.tabview.CRAWLLISTPAGE"));
     		break;
     	case R.id.bChangeName:
     		startActivity(new Intent("ie.tcd.pubcrawl.CHANGEUSERNAME"));
