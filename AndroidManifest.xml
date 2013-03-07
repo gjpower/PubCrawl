@@ -11,13 +11,70 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        
+        <!-- com.example -->
         <activity
-            android:name=".MainActivity"
+            android:name=".TabView"
+            android:label="new tabV activity"
+             >
+             <intent-filter>
+                <action android:name="com.example.tabview.TABVIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+         
+        </activity>
+        <activity
+            android:name=".FirstActivity"
             android:label="@string/title_activity_main" >
+        </activity>
+        <activity
+            android:name=".SecondActivity"
+            android:label="@string/title_activity_main" >
+        </activity>
+        <activity
+            android:name=".ThirdActivity"
+            android:label="@string/title_activity_main" >
+        </activity>
+         <activity
+            android:name=".Info"
+            android:label="@string/title_activity_info" >
+        </activity>
+         <activity
+            android:name="RowLayout"
+            android:label="@string/title_activity_row_layout" >
+        </activity>
+        <activity
+            android:name=".CrawlsListPage"
+            android:label="@string/title_activity_crawls_list_page" >
+            <intent-filter>
+                <action android:name="ie.tcd.pubcrawl.tabview.CRAWLLISTPAGE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        
+        <!-- com.example -->
+        
+        
+        
+        <activity
+            android:name=".CreateUserName"
+            android:label="@string/create_user_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main" >
+            <intent-filter>
+                <action android:name="ie.tcd.pubcrawl.MAINACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
@@ -79,6 +136,36 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ie.tcd.pubcrawl.GAMEMENU" />
+        </activity>
+        <activity
+            android:name=".CurrentCrawls"
+            android:label="@string/title_current_crawls" >
+           	<intent-filter>
+                <action android:name="ie.tcd.pubcrawl.CURRENTCRAWLS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ie.tcd.pubcrawl.GAMEMENU" />
+        </activity>
+        <activity
+            android:name=".ChangeUserName"
+            android:label="@string/change_user_name" >
+           	<intent-filter>
+                <action android:name="ie.tcd.pubcrawl.CHANGEUSERNAME" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+<activity
+            android:name=".SelectedCrawl"
+            android:label="@string/selected_crawls" >
+            <intent-filter>
+                <action android:name="ie.tcd.pubcrawl.SELECTEDCRAWL" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
     </application>
 

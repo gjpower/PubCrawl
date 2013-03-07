@@ -23,7 +23,7 @@ import android.support.v4.app.NavUtils;
 public class CardGames extends Activity implements OnTouchListener{
 	draw ourSurfaceView;
 	int x, y, next;
-
+ 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         next=0;

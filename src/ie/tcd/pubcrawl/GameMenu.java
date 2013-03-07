@@ -13,17 +13,8 @@ public class GameMenu extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.gamemenu);
-		
-		
-		PermStorage exampleVariable;
-        exampleVariable = new PermStorage(getApplicationContext());
-        
-        name = exampleVariable.Get_User_Name();
-        
-
 	}
 	
 	public void Cards_Menu(View v)
@@ -38,9 +29,7 @@ public class GameMenu extends Activity
 	{
 		startActivity(new Intent("ie.tcd.pubcrawl.COINGAMES"));
 	}
-	
-	// The spinner activity doesn't seem to work, no idea why I'll sort it annother day 
-	public void Spinner_Menu()
+	public void Spinner_Menu(View v4)
 	{
 		startActivity(new Intent("ie.tcd.pubcrawl.SPINNERGAMES"));
 	}

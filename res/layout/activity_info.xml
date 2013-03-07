@@ -1,0 +1,63 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Info" >
+
+    <TextView
+        android:id="@+id/listPubs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="38dp" />
+
+    <ListView
+        android:id="@+id/listOfPubs"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_alignParentBottom = "true">
+
+    </ListView>
+
+    <ImageView
+        android:id="@+id/eventPhoto"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_launcher" />
+
+    <TextView
+        android:id="@+id/eventName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="23dp"
+        android:layout_toRightOf="@+id/eventPhoto"
+        android:text="Name" />
+
+    <TextView
+        android:id="@+id/eventOrganiser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/eventName"
+        android:layout_below="@+id/listPubs"
+        android:text="Organiser" />
+
+    <TextView
+        android:id="@+id/eventTimeDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/eventOrganiser"
+        android:layout_below="@+id/eventPhoto"
+        android:text="Time and Date" />
+
+    <TextView
+        android:id="@+id/eventDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/eventTimeDate"
+        android:layout_below="@+id/eventTimeDate"
+        android:layout_marginTop="59dp"
+        android:text="Description" />
+
+</RelativeLayout>
