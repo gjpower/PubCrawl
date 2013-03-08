@@ -20,8 +20,6 @@ public class DiceGames extends Activity {
         getMenuInflater().inflate(R.menu.activity_dice_games, menu);
         return true;
     }
-
-    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
