@@ -2,6 +2,7 @@ package ie.tcd.pubcrawl;
 
 import java.util.Random;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,33 +11,28 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+@TargetApi(13)
 public class CoinView extends SurfaceView implements SurfaceHolder.Callback {
 
 	public CoinThread thread;
 	public CoinAnimation flipping;
 	private Bitmap coinBitmap;
 	public int centerX, centerY;
-	boolean firstTouch = true;
 	private Random rand;
 	public static int numRotations;
+
 	
 	// constructors
 	public CoinView(Context context)
 	{
 		super(context);
-		
-		//
-		// need to find a way to get the view size for coin location 
-		//
-
-		
 		getHolder().addCallback(this);	// intercepts events
 		thread = new CoinThread(getHolder(), this); 	// thread for game loop
-		centerX = 200;//CoinThread.canvas.getWidth() / 2;
-		centerY = 200;//CoinThread.canvas.getHeight() / 2;
+		centerX = CoinGames.Width / 3;
+		centerY = CoinGames.Height / 2;
 		setFocusable(true);				// makes it able to handle events  
         coinBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.coin_anim);
-		flipping = new CoinAnimation(coinBitmap, centerX, centerY, 150, 150, 20, 24);
+		flipping = new CoinAnimation(coinBitmap, centerX, centerY, 150, 150, 30, 24);
 		rand = new Random(System.currentTimeMillis());
 		numRotations = 0;
 	}

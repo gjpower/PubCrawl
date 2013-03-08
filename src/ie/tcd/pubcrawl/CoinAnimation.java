@@ -9,10 +9,8 @@ import android.util.Log;
 public class CoinAnimation 
 {
 	
-		private Bitmap bitmap;      // the animation sequence
-		
-	    public Rect sourceRect;    // the rectangle to be drawn from the animation bitmap
-	    
+		private Bitmap bitmap;      // the animation sequence		
+	    public Rect sourceRect;    // the rectangle to be drawn from the animation bitmap	    
 	    private int frameNr;        // number of frames in animation
 	    private int currentFrame;   // the current frame
 	    public int framePeriod;    // milliseconds between each frame (1000/fps)
@@ -23,6 +21,7 @@ public class CoinAnimation
 	    private static int slow;			// for slowing down the rotations
 	    static int mod = -1;
 	    private long frameTicker;   // the time of the last frame update
+	    private int dy;
 	    
 	    
 	    public static Rect heads;
@@ -44,7 +43,8 @@ public CoinAnimation(Bitmap bitmap, int x, int y, int width, int height, int fps
         frameTicker = 0l;
         slow = 10 / fps;
         heads = new Rect(1950 , 0, 2100, spriteHeight );
-        tails = new Rect(0, 0, spriteWidth, spriteHeight);       
+        tails = new Rect(0, 0, spriteWidth, spriteHeight); 
+        dy = CoinGames.Height / (6 * fps) ;
     }
 
 		// changes the displayed image based on elapsed time 
@@ -60,10 +60,11 @@ public void Update(long gameTime)
 	        frameTicker = gameTime;
 	        // increment the frame
 	        currentFrame--;
-	        y += 10*mod;	
-	        slow += 1;
+	        y += dy*mod;	
+	        
 	        if (currentFrame < 0) 
 	        {
+	        	slow += 1;
 	            currentFrame = (frameNr-1);
 	            CoinThread.numRotations++;
 	            Log.i("", "360");
@@ -80,9 +81,7 @@ public void Draw(Canvas canvas)
 	        // where to draw the sprite
 			canvas.drawColor(Color.GREEN); // resets the back ground
 	        Rect destRect = new Rect(Get_X(), Get_Y(), Get_X() + spriteWidth, Get_Y() + spriteHeight);
-	        canvas.drawBitmap(bitmap, sourceRect, destRect, null);
-		
-		
+	        canvas.drawBitmap(bitmap, sourceRect, destRect, null);	
     }
 
 // changes the displayed image based on elapsed time but stops it from falling

@@ -49,7 +49,7 @@ public class CoinThread extends Thread // created by the coinview
 					{
 						if(heads)
 						{
-							if(numRotations < 4)
+							if(numRotations < 8)
 							{
 								this.coinView.flipping.Update(System.currentTimeMillis());
 								this.coinView.flipping.Draw(canvas);
@@ -71,7 +71,7 @@ public class CoinThread extends Thread // created by the coinview
 						}
 						else
 						{
-							if(numRotations < 4)
+							if(numRotations < 8)
 							{
 								this.coinView.flipping.Update(System.currentTimeMillis());
 								this.coinView.flipping.Draw(canvas);
