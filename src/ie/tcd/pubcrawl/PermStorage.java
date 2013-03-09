@@ -21,17 +21,18 @@ public class PermStorage {
 	static FileInputStream fis = null;
 	final static String USERNAME = "userName";
 	final static String USERID = "userId";
-	final static String CRAWLS = "crawls";
 	final static String CURRCRAWL = "currcrawl";
 	
 	//Database Variables
 	public static final String KEY_ROWID = "_id";
 	public static final String KEY_PREVCRAWLS = "prevCrawls";
 	public static final String KEY_ADMIN = "admin";
+	public static final String KEY_CRAWLS = "crawls";
 	
 	private static final String DATABASE_NAME = "PermanentStorage";
 	private static final String PREVCRAWLS_TABLE = "prevCrawlsTable";
 	private static final String ADMIN_TABLE = "adminTable";
+	private static final String CRAWLS_TABLE = "crawlsTable";
 	private static final int DATABASE_VERSION = 1;
 	
 	private DbHelper ourHelper;
@@ -53,12 +54,17 @@ public class PermStorage {
 					KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 					KEY_ADMIN + " INTEGER);"
 			);
+			db.execSQL("CREATE TABLE " + CRAWLS_TABLE + " (" +
+					KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+					KEY_CRAWLS + " TEXT NOT NULL);"					
+			);
 		}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			db.execSQL("DROP TABLE IF EXISTS " + PREVCRAWLS_TABLE);
 			db.execSQL("DROP TABLE IF EXISTS " + ADMIN_TABLE);
+			db.execSQL("DROP TABLE IF EXISTS " + CRAWLS_TABLE);
 			onCreate(db);
 		}	
 	}
@@ -129,60 +135,6 @@ public class PermStorage {
 		} 
         return id;
     }
-    
-    public void Store_Crawl_Data(String[][] crawlArray) {
-    	int numCrawls = crawlArray.length;
-    	int i;
-    	StringBuffer strBuffer = new StringBuffer();
-    	String crawlData;
-    	for (i=0;i<numCrawls;i++) {
-    		int j;
-    		for (j=0;j<3;j++) {
-        		strBuffer.append(crawlArray[i][j]); 
-        		strBuffer.append("*");    	
-    		}
-    	}
-    	crawlData = strBuffer.toString();
-    	try {
-			fos = ourContext.openFileOutput(CRAWLS, Context.MODE_PRIVATE);
-			DataOutputStream dos = new DataOutputStream(fos);
-			dos.writeChars(crawlData);
-			dos.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-    }
-
-    public String[][] Get_Crawl_Data() {
-    	String crawlData = null;
-    	try {
-			fis = ourContext.openFileInput(CRAWLS);
-			DataInputStream dis = new DataInputStream(fis);
-			byte[] dataArray = new byte[dis.available()];
-			//when the file has been read then read() returns -1
-			while (dis.read(dataArray) != -1) {
-				crawlData = new String(dataArray);
-			}
-			dis.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}     	 
-        String[] parts = crawlData.split("\\*");
-        int numCrawls = (parts.length)/3;
-        String crawlArray[][] = new String[numCrawls][4];
-        int i;
-        int partNum;
-        for (i=0;i<numCrawls;i++) {
-        	int j;
-        	for (j=0;j<3;j++) {
-        		partNum = 3*i + j;
-        		crawlArray[i][j] = parts[partNum];
-        	}
-        }
-        return crawlArray;
-    }
 
     public void Indicate_Current_Crawl (int id) {
     	try {
@@ -211,6 +163,56 @@ public class PermStorage {
     }
     
     //Database Storage
+	public void Store_Crawl_Data(String[][] crawlArray) {
+    	ourDatabase.delete(CRAWLS_TABLE, null, null);
+    	int numCrawls = crawlArray.length;
+    	int numData = crawlArray[0].length;
+		ContentValues cv = new ContentValues();
+    	for (int i=0;i<numCrawls;i++) {
+    		for (int j=0;j<numData;j++) {
+    			cv.put(KEY_CRAWLS, crawlArray[i][j]);
+    			ourDatabase.insert(CRAWLS_TABLE, null, cv);
+    		}
+    		cv.put(KEY_CRAWLS, "EndOfCrawlData");
+			ourDatabase.insert(CRAWLS_TABLE, null, cv);
+    	}
+    }
+    
+    public String[][] Get_Crawl_Data() {
+    	String [] columns = new String[] { KEY_ROWID, KEY_CRAWLS};
+		Cursor c = ourDatabase.query(CRAWLS_TABLE, columns, null, null, null, null, null);
+		int numCrawls=0;
+		int curr=0, numData=0;
+		int index = c.getColumnIndex(KEY_CRAWLS);
+		//Analyse column to find the number of crawls and the amount of data for each crawl
+		for (c.moveToFirst();!c.isAfterLast();c.moveToNext()) {
+			if (c.getString(index).equals("EndOfCrawlData")) {
+				numCrawls++; 
+				if (numData == 0) {
+					numData = curr;
+				}
+			} else {
+				curr++;
+			}
+		}
+		String[][] result = new String[numCrawls][numData];	
+		String temp = "";
+		c.moveToFirst();
+		for (int i=0;i<numCrawls;i++) {
+        	int j;
+        	for (j=0;j<numData;j++) {
+        		temp = c.getString(index);
+        		//Skip over "EndOfCrawlData"
+        		if (temp.equals("EndOfCrawlData")) {
+            		c.moveToNext();
+        		}
+    			result[i][j] = temp;
+        		c.moveToNext();
+        	}
+        }
+		return result;
+    }
+	
     public void Store_Prev_Crawls(List<String> l) {
 		ourDatabase.delete(PREVCRAWLS_TABLE, null, null);
 		for (int i=0;i<l.size();i++) {
@@ -218,6 +220,17 @@ public class PermStorage {
 			cv.put(KEY_PREVCRAWLS, l.get(i));
 			ourDatabase.insert(PREVCRAWLS_TABLE, null, cv);
 		}
+	}
+
+	public List<String> Get_Prev_Crawls() {
+		String [] columns = new String[] { KEY_ROWID, KEY_PREVCRAWLS};
+		Cursor c = ourDatabase.query(PREVCRAWLS_TABLE, columns, null, null, null, null, null);
+		List<String> result = new ArrayList<String>();
+		int index = c.getColumnIndex(KEY_PREVCRAWLS);		
+		for (c.moveToFirst();!c.isAfterLast();c.moveToNext()) {
+			result.add(c.getString(index));
+		}
+		return result;
 	}
     
     public void Store_Admin_Info(List<Boolean> l) {
@@ -231,17 +244,6 @@ public class PermStorage {
 			cv.put(KEY_ADMIN, bool);
 			ourDatabase.insert(ADMIN_TABLE, null, cv);
 		}
-	}
-
-	public List<Integer> Get_Prev_Crawls() {
-		String [] columns = new String[] { KEY_ROWID, KEY_PREVCRAWLS};
-		Cursor c = ourDatabase.query(PREVCRAWLS_TABLE, columns, null, null, null, null, null);
-		List<Integer> result = new ArrayList<Integer>();
-		int index = c.getColumnIndex(KEY_PREVCRAWLS);		
-		for (c.moveToFirst();!c.isAfterLast();c.moveToNext()) {
-			result.add(c.getInt(index));
-		}
-		return result;
 	}
 	
 	public List<Boolean> Get_Admin_Info() {
