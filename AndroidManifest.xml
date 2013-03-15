@@ -13,7 +13,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-
+        
         <!-- com.example -->
         <activity
             android:name="ie.tcd.pubcrawl.TabView"
@@ -23,6 +23,7 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+         
         </activity>
         <activity
             android:name="ie.tcd.pubcrawl.FirstActivity"
@@ -53,9 +54,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
+        
+        
         <!-- com.example -->
-
+        
+        
+        
         <activity
             android:name="ie.tcd.pubcrawl.CreateUserName"
             android:label="@string/create_user_name" >
@@ -130,7 +134,6 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ie.tcd.pubcrawl.GAMEMENU" />
@@ -138,12 +141,11 @@
         <activity
             android:name="ie.tcd.pubcrawl.CurrentCrawls"
             android:label="@string/title_current_crawls" >
-            <intent-filter>
+           	<intent-filter>
                 <action android:name="ie.tcd.pubcrawl.CURRENTCRAWLS" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ie.tcd.pubcrawl.GAMEMENU" />
@@ -151,7 +153,7 @@
         <activity
             android:name="ie.tcd.pubcrawl.ChangeUserName"
             android:label="@string/change_user_name" >
-            <intent-filter>
+           	<intent-filter>
                 <action android:name="ie.tcd.pubcrawl.CHANGEUSERNAME" />
 
                 <category android:name="android.intent.category.DEFAULT" />
