@@ -1,4 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">PubCrawl</string>
     <string name="hello_world">Hello world!</string>
     <string name="enter_pin">Enter Pin</string>
@@ -26,5 +28,6 @@
     <string name="title_activity_info">Info</string>
     <string name="title_activity_row_layout">RowLayout</string>
     <string name="title_activity_crawls_list_page">CrawlsListPage</string>
+    <string name="title_activity_view_feed">ViewFeed</string>
 
 </resources>

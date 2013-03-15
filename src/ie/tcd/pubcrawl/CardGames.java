@@ -76,7 +76,7 @@ public class CardGames extends Activity implements OnTouchListener{
 		Random rc;
 		String Rules[]= new String[13];
 		int crds[] = new int[52];
-		Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.screenshot);
+		Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
 		Paint rule = new Paint();
 		Rect src = new Rect();
 		Rect dst = new Rect();

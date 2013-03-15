@@ -9,18 +9,18 @@ public class SpinnerThread extends Thread {
 	private SurfaceHolder surfaceHolder;
 	private SpinnerView spinnerView;
 	static Canvas canvas;
-	public boolean waiting, started;
+	public boolean waiting;
 	public int numTurns, numPos, reqNumTurns;
 	
 	public SpinnerThread(SurfaceHolder surfaceHolder, SpinnerView spinnerView) 
 	{
 		super();
-		this.spinnerView = spinnerView;
+		this.surfaceHolder = surfaceHolder;
 		this.spinnerView = spinnerView;
 		running = false;
 		numPos = 12;
 		numTurns = 0;
-		reqNumTurns = (numPos / 24) + (numPos * ((numPos/24)* 24));
+		reqNumTurns = 0;
 		waiting = true;
 	}
 
@@ -41,15 +41,19 @@ public class SpinnerThread extends Thread {
 				{
 					if(!waiting)
 					{
-						if(numTurns > reqNumTurns)
-						{
-							spinnerView.spinning.Update(System.currentTimeMillis(), numPos);
-							spinnerView.spinning .Draw(canvas);
-						}
 						if(numTurns < reqNumTurns)
 						{
+							spinnerView.spinning.Update(System.currentTimeMillis(), numPos);
+							spinnerView.spinning.Draw(canvas);
+						}
+						else
+						{
 							waiting = true;
-						}					
+						}						
+					}
+					else
+					{
+						spinnerView.spinning.Draw(canvas);
 					}
 				}
 			}
