@@ -61,69 +61,82 @@ public class ViewFeed extends Activity {
 			Log.w("ERRORRRRR", "Exception Caught");
 			e1.printStackTrace();
 		}
-        
-        
-        int num_rows = _array.length;
-        int j = 0;
-        
-         
-        setContentView(R.layout.activity_view_feed);
-        
-        for(int i = 0; i < num_rows; i++) {
-        	Log.w("FOR", "ON CLICK");
+        /** the following code was causing a null pointer exception.
+         * 	I solved it with a simple check if the array is never filled by return comments
+         * 	if so i just make a textview reporting an error and adding it to the listview.
+         * 	this only prevents it crashing if nothing is received from the server
+         * 	- Graeme Power
+         */
         	
-        	if(_array[i][1] != "null" || !_array[i][2].equals("")){
-        	
-        	TextView userId = new TextView(this);
-        	userId.setText("User Id: " + _array[i][0]);
-        	userId.setTextSize(10);
-            ll.addView(userId);
-        	
-        	if(_array[i][1] != "null"){ 
-	        	TextView comment = new TextView(this);        
-	            comment.setText(_array[i][1]);
-	            comment.setTextSize(15);
-	            comment.setTextColor(0xFF00FF00);
-	            ll.addView(comment);            
-        	}
-        	
-        	final String x = "http://164.138.29.169/" + _array[i][2];
-        	
-        	
-        	if(!_array[i][2].equals("")){            
-                Button btn = new Button(this);
-                btn.setId(j+1);
-                btn.setText("View Photo "+(j+1));
-                final int index = j;
-                btn.setOnClickListener(new OnClickListener() {
-                    public void onClick(View v) {
-                    	Display_Photo(x);
-                        Log.i("TAG", "The index is " + index);
-                    }
-                });
-                ll.addView(btn);
-                
-                j++;
-                
-        	}
-        	
-        	TextView time = new TextView(this);
-        	TextView border = new TextView(this);
-        	
-        	time.setText("Time: " + _array[i][3]);
-        	if (_array[i][3] == "null"){
-        		time.setText("Time not Available");
-        	}
-            border.setText("---------------------------------------");
-            time.setTextSize(10);
-            time.setGravity(Gravity.RIGHT);
-            ll.addView(time);
-            border.setGravity(Gravity.CENTER);
-            ll.addView(border);
-            
+        if (_array!=null) {
+	        int num_rows = _array.length;
+	        int j = 0;
+	        
+	         
+	        setContentView(R.layout.activity_view_feed);
+	        
+	        for(int i = 0; i < num_rows; i++) {
+	        	Log.w("FOR", "ON CLICK");
+	        	
+	        	if(_array[i][1] != "null" || !_array[i][2].equals("")){
+		        	
+		        	TextView userId = new TextView(this);
+		        	userId.setText("Name: " + _array[i][0]);
+		        	userId.setTextSize(10);
+		            ll.addView(userId);
+		        	
+		        	if(_array[i][1] != "null"){ 
+			        	TextView comment = new TextView(this);        
+			            comment.setText(_array[i][1]);
+			            comment.setTextSize(15);
+			            comment.setTextColor(0xFF000088);	//changed to dark blue as i couldn't read it before
+			            ll.addView(comment);            
+		        	}
+		        	
+		        	final String x = "http://164.138.29.169/" + _array[i][2];
+		        	
+		        	
+		        	if(!_array[i][2].equals("")){            
+		                Button btn = new Button(this);
+		                btn.setId(j+1);
+		                btn.setText("View Photo "+(j+1));
+		                final int index = j;
+		                btn.setOnClickListener(new OnClickListener() {
+		                    public void onClick(View v) {
+		                    	Display_Photo(x);
+		                        Log.i("TAG", "The index is " + index);
+		                    }
+		                });
+		                ll.addView(btn);
+		                
+		                j++;
+		                
+		        	}
+		        	
+		        	TextView time = new TextView(this);
+		        	TextView border = new TextView(this);
+		        	
+		        	time.setText("Time: " + _array[i][3]);
+		        	if (_array[i][3] == "null"){
+		        		time.setText("Time not Available");
+		        	}
+		            border.setText("---------------------------------------");
+		            time.setTextSize(10);
+		            time.setGravity(Gravity.RIGHT);
+		            ll.addView(time);
+		            border.setGravity(Gravity.CENTER);
+		            ll.addView(border);
+		            
+	        	}
+	        }		
         }
-        		
-	}
+        else {
+        	TextView error = new TextView(this);
+        	error.setText("Error unable to connect to server");
+        	ll.addView(error);
+        }
+        
+        
         this.setContentView(sv);
 	}
 
@@ -136,8 +149,13 @@ public class ViewFeed extends Activity {
 	}*/
 	public void Display_Photo(String _url){
 
-		 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(_url));
-	     startActivity(browserIntent);
+//		 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(_url));
+//	     startActivity(browserIntent);
+	     
+	     Intent imageIntent = new Intent(this, WebImage.class);
+	     imageIntent.putExtra("url", _url);
+	     startActivity(imageIntent);
+	     
 		
 	}
 	
@@ -168,7 +186,7 @@ public class ViewFeed extends Activity {
 		           for(int i=0;i<N;i++){
 		                   JSONObject json_data = jArray.getJSONObject(i);		                   
 		                   
-		                   comment[i][0] = json_data.getString("id_user");
+		                   comment[i][0] = json_data.getString("user_name");	//changed from id_user as names make more sense
 		                   comment[i][1] = json_data.getString("comment_body");
 		                   comment[i][2] = json_data.getString("image");
 		                   comment[i][3] = json_data.getString("comment_time");
