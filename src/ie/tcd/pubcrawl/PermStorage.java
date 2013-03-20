@@ -28,11 +28,13 @@ public class PermStorage {
 	public static final String KEY_PREVCRAWLS = "prevCrawls";
 	public static final String KEY_ADMIN = "admin";
 	public static final String KEY_CRAWLS = "crawls";
+	public static final String KEY_RULES = "rules";
 	
 	private static final String DATABASE_NAME = "PermanentStorage";
 	private static final String PREVCRAWLS_TABLE = "prevCrawlsTable";
 	private static final String ADMIN_TABLE = "adminTable";
 	private static final String CRAWLS_TABLE = "crawlsTable";
+	private static final String RULES_TABLE = "rulesTable";
 	private static final int DATABASE_VERSION = 1;
 	
 	private DbHelper ourHelper;
@@ -58,6 +60,10 @@ public class PermStorage {
 					KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 					KEY_CRAWLS + " TEXT NOT NULL);"					
 			);
+			db.execSQL("CREATE TABLE " + RULES_TABLE + " (" +
+					KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+					KEY_RULES + " TEXT NOT NULL);"					
+			);
 		}
 
 		@Override
@@ -65,6 +71,7 @@ public class PermStorage {
 			db.execSQL("DROP TABLE IF EXISTS " + PREVCRAWLS_TABLE);
 			db.execSQL("DROP TABLE IF EXISTS " + ADMIN_TABLE);
 			db.execSQL("DROP TABLE IF EXISTS " + CRAWLS_TABLE);
+			db.execSQL("DROP TABLE IF EXISTS " + RULES_TABLE);
 			onCreate(db);
 		}	
 	}
@@ -259,6 +266,28 @@ public class PermStorage {
 		return result;
 	}
 	
+	public void Store_Kings_Rules(String[] rulesArray) {
+		ourDatabase.delete(RULES_TABLE, null, null);
+		ContentValues cv = new ContentValues();
+    	for (int i=0;i<15;i++) {
+			cv.put(KEY_RULES, rulesArray[i]);
+			ourDatabase.insert(RULES_TABLE, null, cv);
+		}
+	}
+	
+	public String[] Get_Kings_Rules() {
+		String [] columns = new String[] { KEY_ROWID, KEY_RULES};
+		Cursor c = ourDatabase.query(RULES_TABLE, columns, null, null, null, null, null);
+		String[] result = new String[15];
+		int index = c.getColumnIndex(KEY_RULES);
+		int i = 0;
+		for (c.moveToFirst();c.isAfterLast();c.moveToNext()) {
+        	result[i] = c.getString(index);
+        	i++;
+        }
+		return result;
+	}
+
 	public void close() {
 		ourHelper.close();
 	}
