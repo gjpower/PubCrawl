@@ -281,7 +281,7 @@ public class PermStorage {
 		String[] result = new String[15];
 		int index = c.getColumnIndex(KEY_RULES);
 		int i = 0;
-		for (c.moveToFirst();c.isAfterLast();c.moveToNext()) {
+		for (c.moveToFirst();!c.isAfterLast();c.moveToNext()) {
         	result[i] = c.getString(index);
         	i++;
         }
