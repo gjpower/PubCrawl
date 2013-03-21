@@ -79,7 +79,6 @@ public class WebImage extends Activity {
 	    }
 	}
 	
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void saveImage() {
 		
 		File root = android.os.Environment.getExternalStorageDirectory();       	//get our sd card directory        
