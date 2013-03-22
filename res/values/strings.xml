@@ -1,4 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">PubCrawl</string>
     <string name="hello_world">Hello world!</string>
     <string name="enter_pin">Enter Pin</string>
@@ -16,6 +18,8 @@
     <string name="title_activity_dice_games">DiceGames</string>
     <string name="title_activity_coin_games">CoinGames</string>
     <string name="title_activity_spinner_games">SpinnerGames</string>
+    <string name="title_activity_photo_cap">PhotoCap</string>
+    <string name="title_activity_web_image">Image</string>
     <string name="flip">Swipe up to flip the coin </string>
     <string name="title_current_crawls">Current Crawls</string>
     <string name="Draw">Draw</string>
@@ -26,5 +30,7 @@
     <string name="title_activity_info">Info</string>
     <string name="title_activity_row_layout">RowLayout</string>
     <string name="title_activity_crawls_list_page">CrawlsListPage</string>
+    <string name="title_activity_view_feed">ViewFeed</string>
+    <string name="save">save image</string>
 
 </resources>

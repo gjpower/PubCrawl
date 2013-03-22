@@ -1,0 +1,51 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent" 
+    android:layout_height="match_parent" 
+    tools:context=".Photo_Cap">
+ 
+    <ImageView 
+        android:id="@+id/IVRP" 
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="13dp"
+        android:src="@drawable/ic_launcher"/>
+  
+       <EditText 
+        android:id="@+id/commentEditText" 
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/IVRP" 
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:hint = "Enter Status"
+        />
+       
+         <Button 
+        android:id="@+id/submitComment" 
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:layout_below="@+id/commentEditText" 
+        android:layout_centerHorizontal="true" 
+        android:text="Submit Comment"/>
+    
+    
+    <ImageButton 
+        android:id="@+id/takepic" 
+        android:layout_width="125dp" 
+        android:layout_height="wrap_content" 
+        android:layout_below="@+id/uploadButton" 
+        android:layout_centerHorizontal="true" 
+        android:src="@drawable/ic_launcher"/>
+    
+    <Button 
+        android:id="@+id/uploadButton" 
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:layout_below="@+id/submitComment" 
+        android:layout_centerHorizontal="true" 
+        android:text="Upload From File"/>
+      
+
+</RelativeLayout>

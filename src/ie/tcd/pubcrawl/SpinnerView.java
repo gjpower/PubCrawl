@@ -26,7 +26,7 @@ public class SpinnerView extends SurfaceView implements SurfaceHolder.Callback{
 		centerX = SpinnerGames.Width / 3;
 		centerY = SpinnerGames.Height / 3;
 		setFocusable(true);				// makes it able to handle events 
-		bottle = BitmapFactory.decodeResource(getResources(), R.drawable.bottle_anim);
+		bottle = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
 		spinning = new SpinnerAnimation(bottle, centerX, centerY, 256, 256, 30, 24);
 		rand = new Random(System.currentTimeMillis());
 		numRotations = 0; 
@@ -68,18 +68,20 @@ public class SpinnerView extends SurfaceView implements SurfaceHolder.Callback{
 		{
 			if (!thread.Get_Running())
 			{
-				numRotations = rand.nextInt() %thread.numPos;
-				thread.reqNumTurns = numRotations;
+				numRotations = rand.nextInt(thread.numPos);
+				thread.reqNumTurns = numRotations + (2* thread.numPos);
 				thread.numTurns = 0;
 				spinning.numShown = 0;
 				thread.waiting =  false;
+				//thread.Set_Running(true);
 			}
 			else
 			{
 				if(thread.waiting)
 				{
-					numRotations = rand.nextInt() %thread.numPos;
-					thread.reqNumTurns = numRotations;
+					System.out.println("re calculating");
+					numRotations = rand.nextInt(thread.numPos);
+					thread.reqNumTurns = numRotations + (2* thread.numPos);
 					thread.numTurns = 0;
 					spinning.numShown = 0;
 					thread.waiting = false;

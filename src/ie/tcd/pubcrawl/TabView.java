@@ -4,6 +4,7 @@ package ie.tcd.pubcrawl;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
@@ -12,6 +13,9 @@ public class TabView extends TabActivity {
 	TabHost mTabHost;
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+		  .detectDiskReads().detectDiskWrites().detectNetwork() // StrictMode is most commonly used to catch accidental disk or network access on the application's main thread
+		  .penaltyLog().build());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tab_main);
         mTabHost=getTabHost();
@@ -23,7 +27,7 @@ public class TabView extends TabActivity {
         
         TabSpec secondSpec = mTabHost.newTabSpec("second");
         secondSpec.setIndicator("Stream", null);
-        Intent secondIntent = new Intent(this, SecondActivity.class);
+        Intent secondIntent = new Intent(this, ViewFeed.class);
         secondSpec.setContent(secondIntent);
         
         TabSpec thirdSpec = mTabHost.newTabSpec("third");
@@ -31,9 +35,15 @@ public class TabView extends TabActivity {
         Intent thirdIntent = new Intent(this, ThirdActivity.class);
         thirdSpec.setContent(thirdIntent);
         
+        TabSpec fourthSpec = mTabHost.newTabSpec("fourth");
+        fourthSpec.setIndicator("Upload", null);
+        Intent fourthIntent = new Intent(this, Photo_Cap.class);
+        fourthSpec.setContent(fourthIntent);
+        
         mTabHost.addTab(firstSpec);
         mTabHost.addTab(secondSpec);
         mTabHost.addTab(thirdSpec);
+        mTabHost.addTab(fourthSpec);
     }
 
 }
