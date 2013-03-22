@@ -12,6 +12,7 @@
     <string name="dice">Dice Games</string>
     <string name="coin">Coin Games</string>
     <string name="spin">Spinner Games</string>
+    <string name="two_d_dice">2D Dice</string>
     <string name="title_activity_card_games">CardGames</string>
     <string name="title_activity_dice_games">DiceGames</string>
     <string name="title_activity_coin_games">CoinGames</string>

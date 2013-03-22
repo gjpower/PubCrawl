@@ -68,6 +68,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        
+        
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main" >
@@ -137,6 +140,21 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ie.tcd.pubcrawl.GAMEMENU" />
         </activity>
+        
+        <!--  this is my new activity-->
+        <activity
+            android:name=".twoDDice"
+            android:label="@string/two_d_dice" >
+            <intent-filter>
+                <action android:name="ie.tcd.pubcrawl.TWODDICE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ie.tcd.pubcrawl.GAMEMENU" />
+        </activity>
+        
         <activity
             android:name=".CurrentCrawls"
             android:label="@string/title_current_crawls" >
