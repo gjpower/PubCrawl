@@ -68,18 +68,20 @@ public class SpinnerView extends SurfaceView implements SurfaceHolder.Callback{
 		{
 			if (!thread.Get_Running())
 			{
-				numRotations = rand.nextInt() %thread.numPos;
-				thread.reqNumTurns = numRotations;
+				numRotations = rand.nextInt(thread.numPos);
+				thread.reqNumTurns = numRotations + (2* thread.numPos);
 				thread.numTurns = 0;
 				spinning.numShown = 0;
 				thread.waiting =  false;
+				//thread.Set_Running(true);
 			}
 			else
 			{
 				if(thread.waiting)
 				{
-					numRotations = rand.nextInt() %thread.numPos;
-					thread.reqNumTurns = numRotations;
+					System.out.println("re calculating");
+					numRotations = rand.nextInt(thread.numPos);
+					thread.reqNumTurns = numRotations + (2* thread.numPos);
 					thread.numTurns = 0;
 					spinning.numShown = 0;
 					thread.waiting = false;

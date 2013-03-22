@@ -10,10 +10,10 @@ import android.util.Log;
 public class SpinnerAnimation {
 	
 	private Bitmap bitmap;      // the animation sequence		
-    public Rect sourceRect;    // the rectangle to be drawn from the animation bitmap	    
+    public Rect sourceRect;     // the rectangle to be drawn from the animation bitmap	    
     private int frameNr;        // number of frames in animation
     private int currentFrame;   // the current frame
-    public int framePeriod;    // milliseconds between each frame (1000/fps)
+    public int framePeriod;     // milliseconds between each frame (1000/fps)
     private int spriteWidth;    // the width of the sprite to calculate the cut out rectangle
     private int spriteHeight;   // the height of the sprite
     private int x;              // the X coordinate of the object (top left of the image)
@@ -42,9 +42,10 @@ public class SpinnerAnimation {
 		if (gameTime > frameTicker + framePeriod) 
 		{
 			numShown ++;
-			if(numShown == numPos/24)
+			if(numShown == 24/numPos)
 			{
 				SpinnerView.thread.numTurns ++;
+				numShown = 0;
 			}
 	        frameTicker = gameTime;
 	        // increment the frame

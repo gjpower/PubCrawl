@@ -47,7 +47,7 @@ public class PermStorage {
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL("CREATE TABLE " + PREVCRAWLS_TABLE + " (" +
 					KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-					KEY_PREVCRAWLS + " INTEGER);"					
+					KEY_PREVCRAWLS + " TEXT NOT NULL);"					
 			);
 			db.execSQL("CREATE TABLE " + ADMIN_TABLE + " (" +
 					KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -211,11 +211,24 @@ public class PermStorage {
     }
     
     //Database Storage
-    public void Store_Prev_Crawls(List<Integer> l) {
+    public void Store_Prev_Crawls(List<String> l) {
 		ourDatabase.delete(PREVCRAWLS_TABLE, null, null);
 		for (int i=0;i<l.size();i++) {
-			Create_Int_Entry(l.get(i), KEY_PREVCRAWLS, PREVCRAWLS_TABLE);
+			ContentValues cv = new ContentValues();
+			cv.put(KEY_PREVCRAWLS, l.get(i));
+			ourDatabase.insert(PREVCRAWLS_TABLE, null, cv);
 		}
+	}
+
+	public List<String> Get_Prev_Crawls() {
+		String [] columns = new String[] { KEY_ROWID, KEY_PREVCRAWLS};
+		Cursor c = ourDatabase.query(PREVCRAWLS_TABLE, columns, null, null, null, null, null);
+		List<String> result = new ArrayList<String>();
+		int index = c.getColumnIndex(KEY_PREVCRAWLS);		
+		for (c.moveToFirst();!c.isAfterLast();c.moveToNext()) {
+			result.add(c.getString(index));
+		}
+		return result;
 	}
     
     public void Store_Admin_Info(List<Boolean> l) {
@@ -225,25 +238,10 @@ public class PermStorage {
 			if (l.get(i))
 				bool = 1;
 			else bool = 0;
-			Create_Int_Entry(bool, KEY_ADMIN, ADMIN_TABLE);
+			ContentValues cv = new ContentValues();
+			cv.put(KEY_ADMIN, bool);
+			ourDatabase.insert(ADMIN_TABLE, null, cv);
 		}
-	}
-    
-    public long Create_Int_Entry(int i, String key, String table) {
-		ContentValues cv = new ContentValues();
-		cv.put(key, i);
-		return ourDatabase.insert(table, null, cv);
-	}
-
-	public List<Integer> Get_Prev_Crawls() {
-		String [] columns = new String[] { KEY_ROWID, KEY_PREVCRAWLS};
-		Cursor c = ourDatabase.query(PREVCRAWLS_TABLE, columns, null, null, null, null, null);
-		List<Integer> result = new ArrayList<Integer>();
-		int index = c.getColumnIndex(KEY_PREVCRAWLS);		
-		for (c.moveToFirst();!c.isAfterLast();c.moveToNext()) {
-			result.add(c.getInt(index));
-		}
-		return result;
 	}
 	
 	public List<Boolean> Get_Admin_Info() {
