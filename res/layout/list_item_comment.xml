@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Individual Row of the List Layout -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+	    
+	        <TextView
+	            android:id="@+id/commentUserName"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@+id/userName"
+	            android:textAppearance="?android:attr/textAppearanceSmall" />
+	       
+	        <TextView
+	            android:id="@+id/commentBody"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@+id/commentBody"
+	            android:textAppearance="?android:attr/textAppearanceSmall" />
+	        
+	        <TextView
+	            android:id="@+id/commentDateTime"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="right"
+	            android:text="@+id/commentDateTime"
+	            android:textAppearance="?android:attr/textAppearanceSmall" />
+	        
+	        <TextView
+	            android:id="@+id/commentHasImage"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="left"
+	            android:text=""
+	            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+</LinearLayout> 
