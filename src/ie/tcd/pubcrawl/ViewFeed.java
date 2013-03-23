@@ -26,8 +26,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 public class ViewFeed extends Activity {
 	
@@ -77,6 +81,28 @@ public class ViewFeed extends Activity {
             int[] to = { R.id.commentUserName, R.id.commentBody, R.id.commentDateTime, R.id.commentHasImage }; //identifies row layout to use
             SimpleAdapter adapter = new SimpleAdapter(this, commentsList, R.layout.list_item_comment, from, to);
             commentView.setAdapter(adapter);
+            
+            commentView.setOnItemClickListener(new OnItemClickListener()
+            {
+
+
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+                        {
+                                // TODO Auto-generated method stub
+        //                      Intent myIntent = new Intent(CrawlsListPage.this, com.example.);
+        //                      myIntent.putExtra("ID", idstring);
+        //                      startActivity(myIntent);
+        //                      Intent myIntent = new Intent("MAINACTIVITY");
+                                //Intent myIntent = new Intent(this,com.example.crawllist.MainActivity.class);
+        //                      startActivity(myIntent);
+                        	
+                        	String imagePath = commentsList.get(position).get("image");
+                        	
+                        	if (imagePath!="null")
+                        		Display_Photo("http://164.138.29.169/" + imagePath);
+
+                        }
+                });
 		}
 		
 		
@@ -277,10 +303,8 @@ public class ViewFeed extends Activity {
 		item.put("username", userName);
 		item.put("commentbody", commentBody);
 		
-		if(commentBody=="")
-			item.put("hasimage", "");
-		else
-			item.put("hasimage", "Touch for attached image");
+		if(image!="null")
+			item.put("hasimage", "Touch for attached image");			
 		
 		item.put("datetime", dateTime);
 		item.put("image", image);
