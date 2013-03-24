@@ -24,14 +24,15 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.TextView;
 
 public class ViewFeed extends Activity {
 	
@@ -39,6 +40,7 @@ public class ViewFeed extends Activity {
 
 
 	public static String[][] _array;
+	PermStorage dbAccess;
 	HttpEntity resEntity;
 	
 	public static final int HTTP_TIMEOUT = 30 * 1000; // milliseconds
@@ -52,133 +54,43 @@ public class ViewFeed extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view_feed);
 		
+		commentsList = new ArrayList<Map<String, String>>();
+		
 		ListView commentView = (ListView) findViewById(R.id.commentsView);
 		
-		/*
-		ScrollView sv = new ScrollView(this);
-		LinearLayout ll = new LinearLayout(this);
-		ll.setOrientation(LinearLayout.VERTICAL);
-		sv.addView(ll);
-		*/
+		//String[] from = { "username", "commentbody", "datetime", "hasimage" };
+        //int[] to = { R.id.commentUserName, R.id.commentBody, R.id.commentDateTime, R.id.commentHasImage }; //identifies row layout to use
+        //SimpleAdapter adapter = new SimpleAdapter(this, commentsList, R.layout.list_item_comment, from, to);
+		dbAccess = new PermStorage(this);
+		dbAccess.open();
 		
-		try {
-			_array = Return_Comments(CrawlID);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			Log.w("ERRORRRRR", "Exception Caught");
-			e1.printStackTrace();
-		}
-		/** the following code was causing a null pointer exception.
-		* 	I solved it with a simple check if the array is never filled by return comments
-		* 	if so i just make a textview reporting an error and adding it to the listview.
-		* 	this only prevents it crashing if nothing is received from the server
-		* 	- Graeme Power
-		*/
-		
-		if(_array!=null) {
-			commentsList = buildData(_array);
-			String[] from = { "username", "commentbody", "datetime", "hasimage" };
-            int[] to = { R.id.commentUserName, R.id.commentBody, R.id.commentDateTime, R.id.commentHasImage }; //identifies row layout to use
-            SimpleAdapter adapter = new SimpleAdapter(this, commentsList, R.layout.list_item_comment, from, to);
-            commentView.setAdapter(adapter);
-            
-            commentView.setOnItemClickListener(new OnItemClickListener()
-            {
+		Cursor c = dbAccess.Get_Comment_Data("2pe8t");
+		String[] from = { "username", "comment_body", "time", "image" };
+        int[] to = { R.id.commentUserName, R.id.commentBody, R.id.commentDateTime, R.id.commentHasImage }; //identifies row layout to use
+		ListAdapter adapter = new SimpleCursorAdapter(this, R.layout.list_item_comment, c, from, to,  SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+		commentView.setAdapter(adapter);
+        
+        commentView.setOnItemClickListener(new OnItemClickListener()
+        {
 
 
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-                        {
-                                // TODO Auto-generated method stub
-        //                      Intent myIntent = new Intent(CrawlsListPage.this, com.example.);
-        //                      myIntent.putExtra("ID", idstring);
-        //                      startActivity(myIntent);
-        //                      Intent myIntent = new Intent("MAINACTIVITY");
-                                //Intent myIntent = new Intent(this,com.example.crawllist.MainActivity.class);
-        //                      startActivity(myIntent);
-                        	
-                        	String imagePath = commentsList.get(position).get("image");
-                        	
-                        	if (imagePath!="null")
-                        		Display_Photo("http://164.138.29.169/" + imagePath);
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+                    {                    	
+                    	String imagePath = commentsList.get(position).get("image");
+                    	
+                    	if (imagePath!="null")
+                    		Display_Photo("http://164.138.29.169/" + imagePath);
 
-                        }
-                });
-		}
+                    }
+            });
 		
+		Thread loadContent = new Thread() {
+			public void run() {
+				getListViewComments();
+			}
+		};
 		
-		/*
-		if (_array!=null) {
-			int num_rows = _array.length;
-			int j = 0;
-			
-			
-			setContentView(R.layout.activity_view_feed);
-			
-			for(int i = 0; i < num_rows; i++) {
-				Log.w("FOR", "ON CLICK");
-				
-				if(_array[i][1] != "null" || !_array[i][2].equals("")){
-					
-					TextView userId = new TextView(this);
-					userId.setText("Name: " + _array[i][0]);
-					userId.setTextSize(10);
-					ll.addView(userId);
-					
-					if(_array[i][1] != "null"){ 
-						TextView comment = new TextView(this);        
-						comment.setText(_array[i][1]);
-						comment.setTextSize(15);
-						comment.setTextColor(0xFF000088);	//changed to dark blue as i couldn't read it before
-						ll.addView(comment);            
-					}
-					
-					final String x = "http://164.138.29.169/" + _array[i][2];
-					
-					
-					if(!_array[i][2].equals("")){            
-						Button btn = new Button(this);
-						btn.setId(j+1);
-						btn.setText("View Photo "+(j+1));
-						final int index = j;
-						btn.setOnClickListener(new OnClickListener() {
-							public void onClick(View v) {
-								Display_Photo(x);
-								Log.i("TAG", "The index is " + index);
-							}
-						});
-						ll.addView(btn);
-						
-						j++;
-						
-					}
-					
-					TextView time = new TextView(this);
-					TextView border = new TextView(this);
-					
-					time.setText("Time: " + _array[i][3]);
-					if (_array[i][3] == "null"){
-						time.setText("Time not Available");
-					}
-					border.setText("---------------------------------------");
-					time.setTextSize(10);
-					time.setGravity(Gravity.RIGHT);
-					ll.addView(time);
-					border.setGravity(Gravity.CENTER);
-					ll.addView(border);
-					
-				}
-			}		
-		}
-		else {
-			TextView error = new TextView(this);
-			error.setText("Error unable to connect to server");
-			ll.addView(error);
-		}
-		
-		
-		this.setContentView(sv);
-		*/
-		
+		loadContent.start();
 		
 	}
 
@@ -197,8 +109,28 @@ public class ViewFeed extends Activity {
 		Intent imageIntent = new Intent(this, WebImage.class);
 		imageIntent.putExtra("url", _url);
 		startActivity(imageIntent);
+	}
+	
+	public void getListViewComments() {
 		
+		try {
+			_array = Return_Comments(CrawlID);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			Log.w("ERRORRRRR", "Exception Caught");
+			e1.printStackTrace();
+		}
+		/** the following code was causing a null pointer exception.
+		* 	I solved it with a simple check if the array is never filled by return comments
+		* 	if so i just make a textview reporting an error and adding it to the listview.
+		* 	this only prevents it crashing if nothing is received from the server
+		* 	- Graeme Power
+		*/
 		
+		if(_array!=null) {
+			commentsList = buildData(_array);
+			dbAccess.Store_Comment_Data(_array, "2pe8t");
+		}
 	}
 	
 	public static String[][] Return_Comments(int _crawlID) throws Exception{
