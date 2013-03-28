@@ -33,6 +33,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class ViewFeed extends Activity {
 	
@@ -40,7 +41,7 @@ public class ViewFeed extends Activity {
 
 
 	public static String[][] _array;
-	PermStorage dbAccess;
+	public static PermStorage dbAccess;
 	HttpEntity resEntity;
 	
 	public static final int HTTP_TIMEOUT = 30 * 1000; // milliseconds
@@ -75,10 +76,16 @@ public class ViewFeed extends Activity {
 
 
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-                    {                    	
-                    	String imagePath = commentsList.get(position).get("image");
+                    {
+                    	Cursor cursor = ((SimpleCursorAdapter) parent.getAdapter()).getCursor();
+                    	cursor.moveToPosition(position);
+                    	String imagePath = cursor.getString(4);
+                    	//String imagePath = commentsList.get(position).get("image");
+                    	Toast.makeText(getApplicationContext(), "[" + imagePath + "]", Toast.LENGTH_LONG).show();
                     	
                     	if (imagePath!="null")
+                    		Log.e("imagepath", imagePath);
+                    		System.out.println(imagePath);
                     		Display_Photo("http://164.138.29.169/" + imagePath);
 
                     }
