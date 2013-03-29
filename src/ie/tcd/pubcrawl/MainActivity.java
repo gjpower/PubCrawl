@@ -99,13 +99,16 @@ public class MainActivity extends Activity implements OnClickListener {
     	   
     	   List<String> list = new ArrayList<String>();
     	   // store the result returned by PHP script that runs MySQL query
+    	   PermStorage entry = new PermStorage(MainActivity.this);
+    	   list = entry.Get_Prev_Crawls();
+    	   
     	   String result = response.toString();  
-    	   list.add(result);
+    	   list.add(0, result);
     	  
     	   
     	   if(result != "Login Fail")
     	   {
-    		   	PermStorage entry = new PermStorage(MainActivity.this);
+    		   	
    				entry.open();
    				entry.Store_Prev_Crawls(list);
     	   }

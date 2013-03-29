@@ -11,6 +11,7 @@ import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -158,30 +159,18 @@ public class PermStorage {
         return id;
     }
 
-    public void Indicate_Current_Crawl (int id) {
-    	try {
-			fos = ourContext.openFileOutput(CURRCRAWL, Context.MODE_PRIVATE);
-			DataOutputStream dos = new DataOutputStream(fos);
-			dos.writeInt(id);
-	    	dos.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+ 
+    public void Indicate_Current_Crawl (Context context, String id) {
+    	SharedPreferences currentCrawl = context.getSharedPreferences("crawlIndicator",0);
+    	SharedPreferences.Editor editor =currentCrawl.edit();
+    	
+    	editor.putString("currentCrawlID", id);
+    	editor.commit();
     }
 
-    public int Get_Current_Crawl () {
-    	int id=-1;
-        try {
-			fis = ourContext.openFileInput(CURRCRAWL);
-			DataInputStream dis = new DataInputStream(fis);
-			id= dis.readInt();
-			dis.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
-        return id;
+    public String Get_Current_Crawl (Context context) {
+    	SharedPreferences currentCrawl = context.getSharedPreferences("crawlIndicator",0);
+    	return currentCrawl.getString("currentCrawlID", "ERROR");
     }
     
     //Database Storage

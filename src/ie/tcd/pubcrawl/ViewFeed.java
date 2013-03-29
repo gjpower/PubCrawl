@@ -56,11 +56,10 @@ public class ViewFeed extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view_feed);
-		 List<String> dataList = new ArrayList<String>();
-		   	PermStorage entry = new PermStorage(ViewFeed.this);
-			entry.open();
-			dataList = entry.Get_Prev_Crawls();
-			CrawlID = dataList.get(0);
+		PermStorage entry = new PermStorage(ViewFeed.this);
+
+		CrawlID = entry.Get_Current_Crawl(ViewFeed.this);
+	
 			
 		databaseUpdate = new Handler(new Handler.Callback() {
 			

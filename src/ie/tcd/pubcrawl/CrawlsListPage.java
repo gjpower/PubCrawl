@@ -141,8 +141,10 @@ public class CrawlsListPage extends Activity {
                 //                      Intent myIntent = new Intent("MAINACTIVITY");
                                         //Intent myIntent = new Intent(this,com.example.crawllist.MainActivity.class);
                 //                      startActivity(myIntent);
-
-                                        Intent myIntent = new Intent("com.example.tabview.TABVIEW");
+                        		   		PermStorage entry = new PermStorage(CrawlsListPage.this);
+                        		   		entry.open();
+                                        entry.Indicate_Current_Crawl(CrawlsListPage.this, "36");
+                        		   		Intent myIntent = new Intent("com.example.tabview.TABVIEW");
                                         startActivity(myIntent);
 
                                 }

@@ -87,12 +87,11 @@ public class Photo_Cap extends Activity implements View.OnClickListener {
 		PermStorage stored = new PermStorage(Photo_Cap.this); //getting ID from perm storage
 		UserID = stored.Get_User_Id();
 		
-		 List<String> dataList = new ArrayList<String>();
-		   	PermStorage entry = new PermStorage(Photo_Cap.this);
-			entry.open();
-			dataList = entry.Get_Prev_Crawls();
-			CrawlID = dataList.get(0);
-			
+		 
+		PermStorage entry = new PermStorage(Photo_Cap.this);
+
+		CrawlID = entry.Get_Current_Crawl(Photo_Cap.this);
+
 		
 		initialize();
 		InputStream is = getResources().openRawResource(R.drawable.ic_launcher);
