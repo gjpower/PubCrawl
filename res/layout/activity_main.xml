@@ -18,7 +18,7 @@
 
     <Button
         android:id="@+id/bLogIn"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/editText1"
         android:layout_alignRight="@+id/bCurrentCrawls"

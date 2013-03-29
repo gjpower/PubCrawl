@@ -71,9 +71,8 @@ public class ChangeUserName extends Activity {
     boolean ChangeName(String username){
     	PermStorage entry = new PermStorage(ChangeUserName.this);
 		entry.open();
-		String user_id = Integer.toString(entry.Get_User_Id());
+		String user_id = entry.Get_User_Id();
 		entry.Store_User_Name(userName);
-		entry.close();
     	
  		ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
  		postParameters.add(new BasicNameValuePair("UserName",username));
@@ -101,7 +100,6 @@ public class ChangeUserName extends Activity {
   		entry.Store_User_Name(username);
       	String[][] noCrawls = new String[1][4];	//Needs to be 4 to be compatible with Store_Crawl_Data
       	entry.Store_Crawl_Data(noCrawls);
-      	entry.close();
  		 
  		return true;
  	}

@@ -56,7 +56,7 @@ public class Photo_Cap extends Activity implements View.OnClickListener {
 	Uri captured_image_uri;
 	
 	//Global Varibles for Test
-	int UserID = 1;
+	String UserID;
  	int CrawlID = 11;
  	String gps1 = "00.123";
  	String gps2 = "00.456";
@@ -86,6 +86,8 @@ public class Photo_Cap extends Activity implements View.OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_photo__cap);
 		
+    	PermStorage stored = new PermStorage(Photo_Cap.this);						//getting ID from perm storage
+ 		UserID = stored.Get_User_Id();
 
 		initialize();
 		InputStream is = getResources().openRawResource(R.drawable.ic_launcher);
@@ -146,7 +148,7 @@ protected void postComment (){
     
     // define the parameter
     postParameters.add(new BasicNameValuePair("comment",commentEditText.getText().toString()));
-    postParameters.add(new BasicNameValuePair("userID", Integer.toString(UserID)));
+    postParameters.add(new BasicNameValuePair("userID", UserID));
     postParameters.add(new BasicNameValuePair("crawlID", Integer.toString(CrawlID)));
     postParameters.add(new BasicNameValuePair("gps1", gps1));
     postParameters.add(new BasicNameValuePair("gps2", gps2));
@@ -296,7 +298,7 @@ private void doFileUpload(){
          FileBody bin1 = new FileBody(file1);
          MultipartEntity reqEntity = new MultipartEntity();
          reqEntity.addPart("uploadedfile1", bin1);
-         reqEntity.addPart("userID", new StringBody(Integer.toString(UserID)));
+         reqEntity.addPart("userID", new StringBody(UserID));
          reqEntity.addPart("crawlID", new StringBody(Integer.toString(CrawlID)));
          reqEntity.addPart("type", new StringBody(Integer.toString(2)));
          reqEntity.addPart("gps1", new StringBody(gps1));
