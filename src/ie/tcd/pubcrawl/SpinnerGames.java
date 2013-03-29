@@ -1,12 +1,12 @@
 package ie.tcd.pubcrawl;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
-import android.support.v4.app.NavUtils;
+import android.view.View;
 
 public class SpinnerGames extends Activity {
 
@@ -24,8 +24,7 @@ public class SpinnerGames extends Activity {
         final int height = (display.getHeight());
         Width = width;
         Height = height;
-        spinnerView = new SpinnerView(this);
-        setContentView(spinnerView);
+        
     }
 
     @Override
@@ -46,9 +45,40 @@ public class SpinnerGames extends Activity {
         return super.onOptionsItemSelected(item);
     }
     
+    public void numPos(View view)
+    {
+    	switch(view.getId()) 
+    	{
+        case R.id.radioButton1:
+        	spinnerView = new SpinnerView(this, 4);
+        	break;
+        case R.id.radioButton2:
+        	spinnerView = new SpinnerView(this, 6);
+            break;
+        case R.id.radioButton3:
+        	spinnerView = new SpinnerView(this, 8);
+            break;
+        case R.id.radioButton4:
+        	spinnerView = new SpinnerView(this, 12);
+            break;
+    	}
+    }
+    
+    
+    public void start(View view)
+    {
+    	if(spinnerView == null)
+    	{
+    		spinnerView = new SpinnerView(this, 12);
+    	}
+    	setContentView(spinnerView);
+    	return;
+    }
+    
     public void onBackPressed()
     {
     	spinnerView.thread.Set_Running(false);
+    	this.finish();
     }
 
 }

@@ -14,20 +14,37 @@ public class SpinnerView extends SurfaceView implements SurfaceHolder.Callback{
 	public static SpinnerThread thread;
 	private int centerX, centerY;
 	public SpinnerAnimation spinning;
-	private Bitmap bottle;
+	private Bitmap bottle, background;
 	private Random rand;
 	public int numRotations;
 	
-	public SpinnerView(Context context)
+	public SpinnerView(Context context, int num)
 	{
 		super(context);
 		getHolder().addCallback(this);	// intercepts events
 		thread = new SpinnerThread(getHolder(), this); 	// thread for game loop
-		centerX = SpinnerGames.Width / 3;
-		centerY = SpinnerGames.Height / 3;
+		thread.numPos = num;
+		centerX = SpinnerGames.Width / 2;
+		centerY = SpinnerGames.Height / 2;
 		setFocusable(true);				// makes it able to handle events 
-		bottle = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
-		spinning = new SpinnerAnimation(bottle, centerX, centerY, 256, 256, 30, 24);
+		bottle = BitmapFactory.decodeResource(getResources(), R.drawable.bottle_anim);
+		if(thread.numPos == 4)
+		{
+			background = BitmapFactory.decodeResource(getResources(),R.drawable.sbg4);
+		}
+		else if (thread.numPos == 6 )
+		{
+			background = BitmapFactory.decodeResource(getResources(),R.drawable.sbg6);
+		}
+		else if (thread.numPos == 8 )
+		{
+			background = BitmapFactory.decodeResource(getResources(),R.drawable.sbg8);
+		}
+		else if (thread.numPos == 12 )
+		{
+			background = BitmapFactory.decodeResource(getResources(),R.drawable.sbg12);
+		}
+		spinning = new SpinnerAnimation(bottle,background, centerX, centerY, 256, 256, 30, 24);
 		rand = new Random(System.currentTimeMillis());
 		numRotations = 0; 
 				
