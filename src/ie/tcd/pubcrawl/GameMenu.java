@@ -33,6 +33,10 @@ public class GameMenu extends Activity
 	{
 		startActivity(new Intent("ie.tcd.pubcrawl.SPINNERGAMES"));
 	}
+	public void TwoDDice_Menu(View v5)
+	{
+		startActivity(new Intent("ie.tcd.pubcrawl.TWODDICE"));
+	}
 	
 	
 }
