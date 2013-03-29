@@ -38,7 +38,9 @@ public class PermStorage {
 	private static final String COMMENTS_TABLE = "commentsTable";
 	private static final int DATABASE_VERSION = 1;
 	
-	private DbHelper ourHelper;
+	//below is static so only one connection to database ever exists
+	// this avoids a lot of problems
+	private static DbHelper ourHelper;
 	private final Context ourContext;
 	private SQLiteDatabase ourDatabase;
 	
@@ -92,7 +94,9 @@ public class PermStorage {
 	}
 	
 	public PermStorage open() {
-		ourHelper = new DbHelper(ourContext);
+		if (ourHelper == null) {
+			ourHelper = new DbHelper(ourContext);
+		}
 		ourDatabase = ourHelper.getWritableDatabase();
 		return this;
 	}
@@ -325,7 +329,8 @@ public class PermStorage {
 		}
 		
 	}
-
+	
+	//this method should never be used
 	public void close() {
 		ourHelper.close();
 	}

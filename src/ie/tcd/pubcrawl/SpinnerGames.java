@@ -1,12 +1,11 @@
 package ie.tcd.pubcrawl;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
-import android.support.v4.app.NavUtils;
 
 public class SpinnerGames extends Activity {
 

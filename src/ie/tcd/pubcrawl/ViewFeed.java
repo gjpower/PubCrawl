@@ -5,8 +5,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -26,21 +24,23 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class ViewFeed extends Activity {
 	
 	int CrawlID = 11;
-
-
-	public static String[][] _array;
+	
 	public static PermStorage dbAccess;
 	HttpEntity resEntity;
 	
@@ -48,48 +48,90 @@ public class ViewFeed extends Activity {
 	/** Single instance of our HttpClient */
 	private static HttpClient mHttpClient;
 	
-	private static ArrayList<Map<String, String>> commentsList;
+	private static SimpleCursorAdapter adapter;
+	
+	private Handler databaseUpdate;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view_feed);
 		
-		commentsList = new ArrayList<Map<String, String>>();
+		databaseUpdate = new Handler(new Handler.Callback() {
+			
+			public boolean handleMessage(Message msg) {
+				adapter.changeCursor((Cursor) msg.obj);
+				Toast.makeText(getApplicationContext(), "Comments Updated", Toast.LENGTH_SHORT).show();
+				return true;
+			}
+		});
 		
 		ListView commentView = (ListView) findViewById(R.id.commentsView);
 		
-		//String[] from = { "username", "commentbody", "datetime", "hasimage" };
-        //int[] to = { R.id.commentUserName, R.id.commentBody, R.id.commentDateTime, R.id.commentHasImage }; //identifies row layout to use
-        //SimpleAdapter adapter = new SimpleAdapter(this, commentsList, R.layout.list_item_comment, from, to);
 		dbAccess = new PermStorage(this);
 		dbAccess.open();
-		
 		Cursor c = dbAccess.Get_Comment_Data("2pe8t");
+		
 		String[] from = { "username", "comment_body", "time", "image" };
         int[] to = { R.id.commentUserName, R.id.commentBody, R.id.commentDateTime, R.id.commentHasImage }; //identifies row layout to use
-		ListAdapter adapter = new SimpleCursorAdapter(this, R.layout.list_item_comment, c, from, to,  SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
-		commentView.setAdapter(adapter);
+		adapter = new SimpleCursorAdapter(this, R.layout.list_item_comment, c, from, to,  SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+		
+		
+		// the following block handles display attached image link or not
+		adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+
+			public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+				if (view.getId()==R.id.commentHasImage) {	// if it's for the has image field
+					final String hasImage = cursor.getString(4);
+					
+					if (!hasImage.equals("null")) {
+						((TextView) view).setText("Click for attached Image");
+					}
+					else {
+						((TextView) view).setText("");
+					}
+					
+					return true;	//we handled it
+					
+				}
+				
+				return false;	//we didn't handle it get default to
+			}
+			
+		});
+		
+		commentView.setAdapter((ListAdapter) adapter);
         
         commentView.setOnItemClickListener(new OnItemClickListener()
         {
-
-
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id)
                     {
                     	Cursor cursor = ((SimpleCursorAdapter) parent.getAdapter()).getCursor();
                     	cursor.moveToPosition(position);
                     	String imagePath = cursor.getString(4);
-                    	//String imagePath = commentsList.get(position).get("image");
-                    	Toast.makeText(getApplicationContext(), "[" + imagePath + "]", Toast.LENGTH_LONG).show();
                     	
-                    	if (imagePath!="null")
-                    		Log.e("imagepath", imagePath);
-                    		System.out.println(imagePath);
+                    	if (!imagePath.equals("null")) {	//if not null image name show the image
                     		Display_Photo("http://164.138.29.169/" + imagePath);
+                    	}
 
                     }
             });
+        
+        commentView.setOnItemLongClickListener(new OnItemLongClickListener() {	//reload content on long-click
+
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				Thread loadContent = new Thread() {
+					public void run() {
+						getListViewComments();
+					}
+				};
+				
+				loadContent.start();				
+				return true;
+			}
+        	
+        });
 		
 		Thread loadContent = new Thread() {
 			public void run() {
@@ -101,24 +143,16 @@ public class ViewFeed extends Activity {
 		
 	}
 
-	/*
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.dynamic_comments, menu);
-		return true;
-	}*/
 	public void Display_Photo(String _url){
-
-		//		 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(_url));
-		//	     startActivity(browserIntent);
 		
 		Intent imageIntent = new Intent(this, WebImage.class);
 		imageIntent.putExtra("url", _url);
 		startActivity(imageIntent);
+		
 	}
 	
 	public void getListViewComments() {
+		String[][] _array = null;
 		
 		try {
 			_array = Return_Comments(CrawlID);
@@ -127,16 +161,12 @@ public class ViewFeed extends Activity {
 			Log.w("ERRORRRRR", "Exception Caught");
 			e1.printStackTrace();
 		}
-		/** the following code was causing a null pointer exception.
-		* 	I solved it with a simple check if the array is never filled by return comments
-		* 	if so i just make a textview reporting an error and adding it to the listview.
-		* 	this only prevents it crashing if nothing is received from the server
-		* 	- Graeme Power
-		*/
 		
-		if(_array!=null) {
-			commentsList = buildData(_array);
-			dbAccess.Store_Comment_Data(_array, "2pe8t");
+		if(_array!=null) {	//if the array isn't empty
+			//commentsList = buildData(_array);
+			dbAccess.Store_Comment_Data(_array, "2pe8t");	//hardcode
+			Cursor cursor = dbAccess.Get_Comment_Data("2pe8t");
+			databaseUpdate.sendMessage(Message.obtain(databaseUpdate, 0, 0, 0, cursor));
 		}
 	}
 	
@@ -177,6 +207,7 @@ public class ViewFeed extends Activity {
 		}
 		return comment;
 	}
+	
 	public static String executeHttpPost(String url,
 	ArrayList<NameValuePair> postParameters) throws Exception {
 		BufferedReader in = null;
@@ -210,7 +241,6 @@ public class ViewFeed extends Activity {
 		}
 	}
 	
-	
 	private static HttpClient getHttpClient() {
 		if (mHttpClient == null) {
 			mHttpClient = new DefaultHttpClient();
@@ -221,34 +251,5 @@ public class ViewFeed extends Activity {
 		}
 		return mHttpClient;
 	}
-
-	//Adds each pub crawl in the array to the map
-	private ArrayList<Map<String, String>> buildData(String commentInfo[][])
-	{
-		int num_rows = _array.length;
-		ArrayList<Map<String, String>> list = new ArrayList<Map<String, String>>();
-		
-		for (int i=0; i<num_rows; i++)
-		{
-			list.add(putData(commentInfo[i][0], commentInfo[i][1], commentInfo[i][2], commentInfo[i][3]));
-		}
-		return list;
-	}
-
-	//hashmap created
-	private HashMap<String, String> putData(String userName, String commentBody, String image, String dateTime)
-	{
-		HashMap<String, String> item = new HashMap<String, String>();
-		item.put("username", userName);
-		item.put("commentbody", commentBody);
-		
-		if(image!="null")
-			item.put("hasimage", "Touch for attached image");			
-		
-		item.put("datetime", dateTime);
-		item.put("image", image);
-		return item;
-	}
-
-
+	
 }

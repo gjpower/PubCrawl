@@ -27,6 +27,7 @@ public class WebImage extends Activity {
 
 		
 		Intent prevIntent = getIntent();
+		//get the url passed in
 		urlString = prevIntent.getStringExtra("url");
 		
 		webArea = (WebView) findViewById(R.id.webArea);
