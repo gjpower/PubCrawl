@@ -12,7 +12,7 @@
     <string name="games">Games</string>
     <string name="card">Card Games</string>
     <string name="dice">Dice Games</string>
-	<string name="two_d_dice">2D Dice</string>
+    <string name="two_d_dice">2D Dice</string>
     <string name="coin">Coin Games</string>
     <string name="spin">Spinner Games</string>
     <string name="title_activity_card_games">CardGames</string>
@@ -33,6 +33,10 @@
     <string name="title_activity_crawls_list_page">CrawlsListPage</string>
     <string name="title_activity_view_feed">ViewFeed</string>
     <string name="save">save image</string>
+
     <color name="commentexistscolour">#77F</color>
+
+    <string name="title_activity_crawl_map_overview">CrawlMapOverview</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
