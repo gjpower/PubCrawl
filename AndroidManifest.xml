@@ -189,6 +189,11 @@
 
         </activity>
         <activity
+            android:name="ie.tcd.pubcrawl.Photo_Cap"
+            android:label="@string/title_activity_photo_cap" >
+
+        </activity>
+        <activity
             android:name="ie.tcd.pubcrawl.ViewFeed"
             android:label="@string/title_activity_view_feed" >
 

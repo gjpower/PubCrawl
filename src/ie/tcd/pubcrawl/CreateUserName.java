@@ -34,7 +34,7 @@ public class CreateUserName extends Activity {
 	SharedPreferences appSharedPrefs;
 	public static String userName;
 	EditText getName;
-	int userId;
+	String userId;
 	private static HttpClient mHttpClient;
 	public static final int HTTP_TIMEOUT = 30 * 1000; // milliseconds
 
@@ -111,20 +111,19 @@ public class CreateUserName extends Activity {
      	
      	//Log.e("result", result);
      	//Log.e("length", Integer.toString(result.length()));
-     	result = result.substring(0, result.length() - 1);
-     	userId = Integer.parseInt(result, 10);//get user id from server
+     	userId = result.substring(0, result.length() - 1);
+     	
      	Toast.makeText(getApplicationContext(), "User id received: " + userId, Toast.LENGTH_LONG).show();
      	PermStorage entry = new PermStorage(CreateUserName.this);
-			entry.open();
+		entry.open();
  		entry.Store_User_Id(userId);
- 		entry.Store_User_Name(username);
+ 		entry.Store_User_Name(userName);
      	String[][] noCrawls = new String[1][4];	//Needs to be 4 to be compatible with Store_Crawl_Data
      	noCrawls[0][0] = "No Crawls";
      	noCrawls[0][1] = "";
      	noCrawls[0][2] = "";
      	noCrawls[0][3] = "";
      	entry.Store_Crawl_Data(noCrawls);
-     	entry.close();
 		 
 		return true;
 	}

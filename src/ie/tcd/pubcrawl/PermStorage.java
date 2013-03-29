@@ -18,8 +18,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class PermStorage {
 	//FileOutputStream Variables
-	static FileOutputStream fos;
-	static FileInputStream fis = null;
+	//no just no
+	
 	final static String USERNAME = "userName";
 	final static String USERID = "userId";
 	final static String CURRCRAWL = "currcrawl";
@@ -36,6 +36,7 @@ public class PermStorage {
 	private static final String ADMIN_TABLE = "adminTable";
 	private static final String CRAWLS_TABLE = "crawlsTable";
 	private static final String RULES_TABLE = "rulesTable";
+	private static final String USERID_TABLE = "userIdTable";
 	private static final String COMMENTS_TABLE = "commentsTable";
 	private static final int DATABASE_VERSION = 1;
 	
@@ -77,6 +78,13 @@ public class PermStorage {
 					"time TEXT " +
 					");"					
 			);
+			
+			db.execSQL("CREATE TABLE " + USERID_TABLE + " (" +
+					KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+					"usercode TEXT NOT NULL, " +
+					"username TEXT NOT NULL " +
+					");"
+			);
 		}
 
 		@Override
@@ -86,6 +94,7 @@ public class PermStorage {
 			db.execSQL("DROP TABLE IF EXISTS " + CRAWLS_TABLE);
 			db.execSQL("DROP TABLE IF EXISTS " + RULES_TABLE);
 			db.execSQL("DROP TABLE IF EXISTS " + COMMENTS_TABLE);
+			db.execSQL("DROP TABLE IF EXISTS " + USERID_TABLE);
 			onCreate(db);
 		}	
 	}
@@ -102,65 +111,56 @@ public class PermStorage {
 		return this;
 	}
 	
-	//FileOutputStream/DataOutputStream Storage
 	public void Store_User_Name(String name){
-    	try {
-			fos = ourContext.openFileOutput(USERNAME, Context.MODE_PRIVATE);
-			DataOutputStream dos = new DataOutputStream(fos);
-			dos.writeChars(name);
-			dos.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
+		String userID = Get_User_Id();		//get current id
+		ourDatabase.delete(USERID_TABLE, null , null);	//delete all rows
+		
+		ContentValues cv = new ContentValues();
+		
+		cv.put("username", name);	//add name to insert
+		cv.put("usercode", userID);	//add previous id to insert
+		
+		ourDatabase.insert(USERID_TABLE, null, cv);	//insert data into table
+	
     }
     
     public String Get_User_Name(){
-    	String name = null;  
-        try {
-			fis = ourContext.openFileInput(USERNAME);
-			DataInputStream dis = new DataInputStream(fis);
-			byte[] dataArray = new byte[dis.available()];
-			//when the file has been read then read() returns -1
-			while (dis.read(dataArray) != -1) {
-				name = new String(dataArray);
-			}
-			dis.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
-        return name;
+    	String[] columns = { "username" };
+    	Cursor result = ourDatabase.query(USERID_TABLE, columns, null, null, null, null, null);
+    	if (result.getCount()>0) {
+	    	result.moveToFirst();
+	    	return result.getString(result.getColumnIndex("username"));
+    	}
+    	return null;
     }
     
-    public void Store_User_Id(int id) {
-    	try {
-			fos = ourContext.openFileOutput(USERID, Context.MODE_PRIVATE);
-			DataOutputStream dos = new DataOutputStream(fos);
-			dos.writeInt(id);
-	    	dos.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+    public void Store_User_Id(String id) {
+
+		String userName = Get_User_Name();		//get current name
+		ourDatabase.delete(USERID_TABLE, null , null);	//delete all rows
+		
+		ContentValues cv = new ContentValues();
+		
+		cv.put("username", userName);	//add previous name to insert
+		cv.put("usercode", id);	//add id to insert
+		
+		ourDatabase.insert(USERID_TABLE, null, cv);	//insert data into table
+	
     }
     
-    public int Get_User_Id() {
-    	int id=-1;
-        try {
-			fis = ourContext.openFileInput(USERID);
-			DataInputStream dis = new DataInputStream(fis);
-			id= dis.readInt();
-			dis.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
-        return id;
+	public String Get_User_Id() {
+		String[] columns = { "username" };
+    	Cursor result = ourDatabase.query(USERID_TABLE, columns, null, null, null, null, null);
+    	
+    	if (result.getCount()>0) {
+	    	result.moveToFirst();
+	    	return result.getString(result.getColumnIndex("usercode"));
+    	}
+    	return null;
     }
 
- 
-    public void Indicate_Current_Crawl (Context context, String id) {
+	public void Indicate_Current_Crawl (Context context, String id) {
     	SharedPreferences currentCrawl = context.getSharedPreferences("crawlIndicator",0);
     	SharedPreferences.Editor editor =currentCrawl.edit();
     	
