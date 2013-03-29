@@ -35,9 +35,12 @@ public class PermStorage {
 	private static final String ADMIN_TABLE = "adminTable";
 	private static final String CRAWLS_TABLE = "crawlsTable";
 	private static final String RULES_TABLE = "rulesTable";
+	private static final String COMMENTS_TABLE = "commentsTable";
 	private static final int DATABASE_VERSION = 1;
 	
-	private DbHelper ourHelper;
+	//below is static so only one connection to database ever exists
+	// this avoids a lot of problems
+	private static DbHelper ourHelper;
 	private final Context ourContext;
 	private SQLiteDatabase ourDatabase;
 	
@@ -64,6 +67,15 @@ public class PermStorage {
 					KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 					KEY_RULES + " TEXT NOT NULL);"					
 			);
+			db.execSQL("CREATE TABLE " + COMMENTS_TABLE + " (" +
+					KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+					"comment_body TEXT, " +
+					"image TEXT, " +
+					"crawlkey TEXT, " +
+					"username TEXT, " +
+					"time TEXT " +
+					");"					
+			);
 		}
 
 		@Override
@@ -72,6 +84,7 @@ public class PermStorage {
 			db.execSQL("DROP TABLE IF EXISTS " + ADMIN_TABLE);
 			db.execSQL("DROP TABLE IF EXISTS " + CRAWLS_TABLE);
 			db.execSQL("DROP TABLE IF EXISTS " + RULES_TABLE);
+			db.execSQL("DROP TABLE IF EXISTS " + COMMENTS_TABLE);
 			onCreate(db);
 		}	
 	}
@@ -81,7 +94,9 @@ public class PermStorage {
 	}
 	
 	public PermStorage open() {
-		ourHelper = new DbHelper(ourContext);
+		if (ourHelper == null) {
+			ourHelper = new DbHelper(ourContext);
+		}
 		ourDatabase = ourHelper.getWritableDatabase();
 		return this;
 	}
@@ -287,7 +302,35 @@ public class PermStorage {
         }
 		return result;
 	}
-
+	
+	public Cursor Get_Comment_Data(String crawlkey) {
+		String [] columns = new String[] { KEY_ROWID,"username", "comment_body", "time", "image" };
+		Cursor result = ourDatabase.query(COMMENTS_TABLE, columns, "crawlkey = ?", new String[] { crawlkey }, null, null, "time DESC");
+		//ourDatabase.query(COMMENTS_TABLE, columns, "crawlkey = ?", new String[] { crawlkey }, null, null, "time DESC");
+		return result;
+	}
+	
+	public void Store_Comment_Data(String[][] commentData, String crawlkey) {
+		int size = commentData.length;	// will just destroy all comments with a certain key and add new ones downloaded
+										// not the cleverest way to do it but there's not a huge amount of time left for work on this
+										//	Graeme Power
+		ourDatabase.delete(COMMENTS_TABLE, "crawlkey = ?", new String[] { crawlkey });
+		
+		ContentValues cv = new ContentValues();
+		
+		for (int i=0; i<size; i++) {	// fill up our contentvalue with row of data and add to the database
+			cv.put("username", commentData[i][0]);
+			cv.put("comment_body", commentData[i][1]);
+			cv.put("image", commentData[i][2]);
+			cv.put("time", commentData[i][3]);
+			cv.put("crawlkey", crawlkey);
+			
+			ourDatabase.insert(COMMENTS_TABLE, null, cv);
+		}
+		
+	}
+	
+	//this method should never be used
 	public void close() {
 		ourHelper.close();
 	}

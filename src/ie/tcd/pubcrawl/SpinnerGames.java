@@ -1,12 +1,12 @@
 package ie.tcd.pubcrawl;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
+import android.app.Activity;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.view.Window;
+import android.support.v4.app.NavUtils;
 
 public class SpinnerGames extends Activity {
 
@@ -24,7 +24,8 @@ public class SpinnerGames extends Activity {
         final int height = (display.getHeight());
         Width = width;
         Height = height;
-        
+        spinnerView = new SpinnerView(this);
+        setContentView(spinnerView);
     }
 
     @Override

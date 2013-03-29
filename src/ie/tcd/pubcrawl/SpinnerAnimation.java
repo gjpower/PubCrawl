@@ -2,13 +2,13 @@ package ie.tcd.pubcrawl;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Rect;
-
 
 
 public class SpinnerAnimation {
 	
-	private Bitmap bitmap, background;      // the animation sequence		
+	private Bitmap bitmap;      // the animation sequence		
     public Rect sourceRect;     // the rectangle to be drawn from the animation bitmap	    
     private int frameNr;        // number of frames in animation
     private int currentFrame;   // the current frame
