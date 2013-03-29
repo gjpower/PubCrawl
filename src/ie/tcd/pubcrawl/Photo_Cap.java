@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -54,8 +55,8 @@ public class Photo_Cap extends Activity implements View.OnClickListener {
 	
 	
 	//Global Varibles for Test
-	int UserID = 1;
- 	int CrawlID = 11;
+	int UserID;
+ 	String CrawlID;
  	String gps1 = "00.123";
  	String gps2 = "00.456";
  	
@@ -83,8 +84,16 @@ public class Photo_Cap extends Activity implements View.OnClickListener {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_photo__cap);
+		PermStorage stored = new PermStorage(Photo_Cap.this); //getting ID from perm storage
+		UserID = stored.Get_User_Id();
 		
-
+		 List<String> dataList = new ArrayList<String>();
+		   	PermStorage entry = new PermStorage(Photo_Cap.this);
+			entry.open();
+			dataList = entry.Get_Prev_Crawls();
+			CrawlID = dataList.get(0);
+			
+		
 		initialize();
 		InputStream is = getResources().openRawResource(R.drawable.ic_launcher);
 		bmp = BitmapFactory.decodeStream(is);
@@ -144,7 +153,7 @@ protected void postComment (){
     // define the parameter
     postParameters.add(new BasicNameValuePair("comment",commentEditText.getText().toString()));
     postParameters.add(new BasicNameValuePair("userID", Integer.toString(UserID)));
-    postParameters.add(new BasicNameValuePair("crawlID", Integer.toString(CrawlID)));
+    postParameters.add(new BasicNameValuePair("crawlID", CrawlID));
     postParameters.add(new BasicNameValuePair("gps1", gps1));
     postParameters.add(new BasicNameValuePair("gps2", gps2));
    
@@ -280,7 +289,7 @@ private void doFileUpload(){
          MultipartEntity reqEntity = new MultipartEntity();
          reqEntity.addPart("uploadedfile1", bin1);
          reqEntity.addPart("userID", new StringBody(Integer.toString(UserID)));
-         reqEntity.addPart("crawlID", new StringBody(Integer.toString(CrawlID)));
+         reqEntity.addPart("crawlID", new StringBody (CrawlID));
          reqEntity.addPart("type", new StringBody(Integer.toString(2)));
          reqEntity.addPart("gps1", new StringBody(gps1));
          reqEntity.addPart("gps2", new StringBody(gps2));
