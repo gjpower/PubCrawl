@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import javax.xml.transform.Source;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -46,15 +48,15 @@ import android.widget.Toast;
 public class Photo_Cap extends Activity implements View.OnClickListener {
 	
 	ImageButton ib;
-	Button b;
+	//Button b;
 	ImageView iv;
 	Intent i;
 	final static int cameraData = 0;
 	Bitmap bmp;
-	
+	Uri captured_image_uri;
 	
 	//Global Varibles for Test
-	int UserID = 1;
+	String UserID;
  	int CrawlID = 11;
  	String gps1 = "00.123";
  	String gps2 = "00.456";
@@ -84,6 +86,8 @@ public class Photo_Cap extends Activity implements View.OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_photo__cap);
 		
+    	PermStorage stored = new PermStorage(Photo_Cap.this);						//getting ID from perm storage
+ 		UserID = stored.Get_User_Id();
 
 		initialize();
 		InputStream is = getResources().openRawResource(R.drawable.ic_launcher);
@@ -96,12 +100,12 @@ public class Photo_Cap extends Activity implements View.OnClickListener {
 private void initialize(){
 	iv=(ImageView) findViewById(R.id.IVRP);
 	ib=(ImageButton) findViewById(R.id.takepic);
-	b=(Button)findViewById(R.id.uploadButton);
+	//b=(Button)findViewById(R.id.uploadButton);
 	commentEditText = (EditText) findViewById(R.id.commentEditText);
     submitComment = (Button) findViewById(R.id.submitComment);
     
     
-	b.setOnClickListener(this);
+	//b.setOnClickListener(this);
 	ib.setOnClickListener(this);
 	submitComment.setOnClickListener(this);
 	
@@ -112,21 +116,20 @@ public void onClick(View v) {
 	switch (v.getId()){
 	case R.id.takepic:
 		i=new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+		//System.out.println("_______________uri_________________");
 		startActivityForResult(i, cameraData);
+		
 	break;
 	case R.id.submitComment:
 		postComment();
 	break;
 	
-	case R.id.uploadButton:
-		openGallery();
-		
-	break;
+
 	
 	}
 }
+//__________________________________________________________________________________________
 /*
-@Override
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	// TODO Auto-generated method stub
 	super.onActivityResult(requestCode, resultCode, data);
@@ -134,16 +137,18 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Bundle extras = data.getExtras();
 		bmp=(Bitmap)extras.get("data");
 		iv.setImageBitmap(bmp);
-	}
+		//captured_image_uri
+    }
 }
 */
+
 
 protected void postComment (){
 	 ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
     
     // define the parameter
     postParameters.add(new BasicNameValuePair("comment",commentEditText.getText().toString()));
-    postParameters.add(new BasicNameValuePair("userID", Integer.toString(UserID)));
+    postParameters.add(new BasicNameValuePair("userID", UserID));
     postParameters.add(new BasicNameValuePair("crawlID", Integer.toString(CrawlID)));
     postParameters.add(new BasicNameValuePair("gps1", gps1));
     postParameters.add(new BasicNameValuePair("gps2", gps2));
@@ -152,6 +157,14 @@ protected void postComment (){
     String response = null;
     //Log.e("log_tag","Got to this part 1");
     // call executeHttpPost method passing necessary parameters 
+    try {
+    	doFileUpload();	
+    }
+    catch (Exception e) {
+    	Toast.makeText(getApplicationContext(),"Connection Error, Please try again", Toast.LENGTH_LONG).show();
+    	Log.e("log_tag","Error in http connection!!" + e.toString());
+    	
+    }
     try {
 response = executeHttpPost("http://164.138.29.169/post_comment_script.php",postParameters);
 
@@ -221,28 +234,34 @@ private static HttpClient getHttpClient() {
 	return mHttpClient;
 }
 
-
+/*
 public void openGallery(){
     Intent intent = new Intent();
     intent.setType("image/*");
     intent.setAction(Intent.ACTION_GET_CONTENT);
     startActivityForResult(Intent.createChooser(intent,"Select file to upload "), 1);
-}
+}*/
 
 public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
     if (resultCode == RESULT_OK) {
-        Uri selectedImageUri = data.getData();
-        if (requestCode == SELECT_FILE1)
-        {
-            selectedPath1 = getPath(selectedImageUri);
+    	
+    	Bundle extras = data.getExtras();
+		bmp=(Bitmap)extras.get("data");
+		iv.setImageBitmap(bmp);
+		captured_image_uri = data.getData();
+		System.out.println(captured_image_uri);
+        //Uri selectedImageUri = data.getData();
+  //      if (requestCode == SELECT_FILE1)
+  //      {
+	
+            selectedPath1 = getPath(captured_image_uri);
             System.out.println("selectedPath1 : " + selectedPath1);
-        }
+   //     }
       if(!(selectedPath1.trim().equalsIgnoreCase("NONE"))) {
-          progressDialog = ProgressDialog.show(Photo_Cap.this, "", "Uploading files to server.....", false);
+          progressDialog = ProgressDialog.show(Photo_Cap.this, "", "Selecting Photo.....", false);
            Thread thread=new Thread(new Runnable(){
                   public void run(){
-                      doFileUpload();
                       runOnUiThread(new Runnable(){
                           public void run() {
                               if(progressDialog.isShowing())
@@ -279,7 +298,7 @@ private void doFileUpload(){
          FileBody bin1 = new FileBody(file1);
          MultipartEntity reqEntity = new MultipartEntity();
          reqEntity.addPart("uploadedfile1", bin1);
-         reqEntity.addPart("userID", new StringBody(Integer.toString(UserID)));
+         reqEntity.addPart("userID", new StringBody(UserID));
          reqEntity.addPart("crawlID", new StringBody(Integer.toString(CrawlID)));
          reqEntity.addPart("type", new StringBody(Integer.toString(2)));
          reqEntity.addPart("gps1", new StringBody(gps1));
@@ -307,7 +326,6 @@ private void doFileUpload(){
   }
 
 }
-
 
 
 
