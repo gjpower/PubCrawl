@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -39,7 +40,7 @@ import android.widget.Toast;
 
 public class ViewFeed extends Activity {
 	
-	int CrawlID = 11;
+	String CrawlID;
 	
 	public static PermStorage dbAccess;
 	HttpEntity resEntity;
@@ -49,14 +50,17 @@ public class ViewFeed extends Activity {
 	private static HttpClient mHttpClient;
 	
 	private static SimpleCursorAdapter adapter;
-	
 	private Handler databaseUpdate;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view_feed);
-		
+		PermStorage entry = new PermStorage(ViewFeed.this);
+
+		CrawlID = entry.Get_Current_Crawl(ViewFeed.this);
+	
+			
 		databaseUpdate = new Handler(new Handler.Callback() {
 			
 			public boolean handleMessage(Message msg) {
@@ -170,13 +174,13 @@ public class ViewFeed extends Activity {
 		}
 	}
 	
-	public static String[][] Return_Comments(int _crawlID) throws Exception{
+	public static String[][] Return_Comments(String _crawlID) throws Exception{
 		
 		// declare parameters that are passed to PHP script 
 		ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
 		
 		// define the parameter
-		postParameters.add(new BasicNameValuePair("CrawlID",Integer.toString(_crawlID)));
+		postParameters.add(new BasicNameValuePair("CrawlID",_crawlID));
 		//Log.w("PostParameters: ", postParameters.toString());
 		String response = null;
 		

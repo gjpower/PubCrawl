@@ -89,6 +89,9 @@ public class Photo_Cap extends Activity implements View.OnClickListener {
     	PermStorage stored = new PermStorage(Photo_Cap.this);						//getting ID from perm storage
  		UserID = stored.Get_User_Id();
 
+		CrawlID = stored.Get_Current_Crawl(Photo_Cap.this);
+
+		
 		initialize();
 		InputStream is = getResources().openRawResource(R.drawable.ic_launcher);
 		bmp = BitmapFactory.decodeStream(is);
@@ -130,6 +133,7 @@ public void onClick(View v) {
 }
 //__________________________________________________________________________________________
 /*
+@Override
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	// TODO Auto-generated method stub
 	super.onActivityResult(requestCode, resultCode, data);
@@ -148,7 +152,7 @@ protected void postComment (){
     
     // define the parameter
     postParameters.add(new BasicNameValuePair("comment",commentEditText.getText().toString()));
-    postParameters.add(new BasicNameValuePair("userID", UserID));
+    postParameters.add(new BasicNameValuePair("userID", Integer.toString(UserID)));
     postParameters.add(new BasicNameValuePair("crawlID", Integer.toString(CrawlID)));
     postParameters.add(new BasicNameValuePair("gps1", gps1));
     postParameters.add(new BasicNameValuePair("gps2", gps2));
@@ -262,6 +266,7 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
           progressDialog = ProgressDialog.show(Photo_Cap.this, "", "Selecting Photo.....", false);
            Thread thread=new Thread(new Runnable(){
                   public void run(){
+                      doFileUpload();
                       runOnUiThread(new Runnable(){
                           public void run() {
                               if(progressDialog.isShowing())
@@ -298,7 +303,7 @@ private void doFileUpload(){
          FileBody bin1 = new FileBody(file1);
          MultipartEntity reqEntity = new MultipartEntity();
          reqEntity.addPart("uploadedfile1", bin1);
-         reqEntity.addPart("userID", new StringBody(UserID));
+         reqEntity.addPart("userID", new StringBody(Integer.toString(UserID)));
          reqEntity.addPart("crawlID", new StringBody(Integer.toString(CrawlID)));
          reqEntity.addPart("type", new StringBody(Integer.toString(2)));
          reqEntity.addPart("gps1", new StringBody(gps1));
@@ -326,6 +331,7 @@ private void doFileUpload(){
   }
 
 }
+
 
 
 

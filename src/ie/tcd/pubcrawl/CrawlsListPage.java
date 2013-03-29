@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpResponse;
@@ -65,9 +66,15 @@ public class CrawlsListPage extends Activity {
                 infoArray[2][1] = "";
 				*/
                 
-
-
-                int aCrawlID = 11;
+                List<String> dataList = new ArrayList<String>();
+    		   	PermStorage entry = new PermStorage(CrawlsListPage.this);
+   				entry.open();
+   				dataList = entry.Get_Prev_Crawls();
+   				String CrawlID = dataList.get(0);
+   				
+   				
+   				
+                
                 int i = 0;	//i is which crawl on list it is
 
                 //try
@@ -76,7 +83,7 @@ public class CrawlsListPage extends Activity {
 
                        //  while(aCrawlID != 0)
                        //  {
-                                infoArray = getSchedule(aCrawlID);
+                                infoArray = getSchedule(CrawlID);
                                 //infoArray[i][0] = fromNetworkArray[0][0];
                                 //infoArray[i][1] = fromNetworkArray[0][1] + "\t\t";
                                 //infoArray[i][1] = infoArray[i][1] + fromNetworkArray[0][2];
@@ -134,8 +141,10 @@ public class CrawlsListPage extends Activity {
                 //                      Intent myIntent = new Intent("MAINACTIVITY");
                                         //Intent myIntent = new Intent(this,com.example.crawllist.MainActivity.class);
                 //                      startActivity(myIntent);
-
-                                        Intent myIntent = new Intent("com.example.tabview.TABVIEW");
+                        		   		PermStorage entry = new PermStorage(CrawlsListPage.this);
+                        		   		entry.open();
+                                        entry.Indicate_Current_Crawl(CrawlsListPage.this, "36");
+                        		   		Intent myIntent = new Intent("com.example.tabview.TABVIEW");
                                         startActivity(myIntent);
 
                                 }
@@ -250,11 +259,11 @@ public class CrawlsListPage extends Activity {
             	
             	
             	//This method takes down the needed information
-            	public static String[][] getSchedule(int id){
+            	public static String[][] getSchedule(String id){
                     String[][] info = new String[12][6];
                     
                     ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
-                    postParameters.add(new BasicNameValuePair("CrawlID",Integer.toString(id)));
+                    postParameters.add(new BasicNameValuePair("CrawlID",id));
                     String response = null;
                     
                     // call executeHttpPost method passing necessary parameters
