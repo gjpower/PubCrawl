@@ -20,6 +20,7 @@ public class SpinnerAnimation {
     private long frameTicker;
     public int numShown;
     public Rect screenRect, bRect;
+    public Bitmap background;
 
 	public SpinnerAnimation(Bitmap bitmap,Bitmap background, int x, int y, int width, int height, int fps, int frameCount) 
 	{

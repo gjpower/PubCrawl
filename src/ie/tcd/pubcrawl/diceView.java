@@ -32,7 +32,7 @@ public class diceView extends SurfaceView implements Runnable {
 		super(context);
 		rand = new Random(10);
 		rand1 = new Random(30);
-		dice = BitmapFactory.decodeResource(getResources(), R.drawable.dice);
+		//dice = BitmapFactory.decodeResource(getResources(), R.drawable.dice);
 		spriteWidth = 67;
 		spriteHeight = 67;
 		newHolder = getHolder();
