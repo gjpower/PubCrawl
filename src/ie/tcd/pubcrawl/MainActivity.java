@@ -34,7 +34,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements OnClickListener {
-
+	
+	public PermStorage request;
 	public String userName;
 	public static final int HTTP_TIMEOUT = 30 * 1000; // milliseconds
 	// Single instance of our HttpClient 
@@ -60,10 +61,9 @@ public class MainActivity extends Activity implements OnClickListener {
         Button currentCrawls = (Button) findViewById(R.id.bCurrentCrawls);
         Button changeName = (Button) findViewById(R.id.bChangeName);
         
-        PermStorage request = new PermStorage(this);
+        request = new PermStorage(this);
         request.open();
         userName = request.Get_User_Name();
-        request.close();
         
         TextView tvUserName = (TextView) findViewById(R.id.tvUserName);
         tvUserName.setText(userName);
@@ -98,9 +98,8 @@ public class MainActivity extends Activity implements OnClickListener {
     	   response = executeHttpPost("http://164.138.29.169/android_login.php",postParameters);
     	   
     	   List<String> list = new ArrayList<String>();
-    	   // store the result returned by PHP script that runs MySQL query
-    	   PermStorage entry = new PermStorage(MainActivity.this);
-    	   list = entry.Get_Prev_Crawls();
+    	   // store the result returned by PHP script that runs MySQL querys
+    	   list = request.Get_Prev_Crawls();
     	   
     	   String result = response.toString();  
     	   list.add(0, result);
@@ -108,18 +107,15 @@ public class MainActivity extends Activity implements OnClickListener {
     	   
     	   if(result != "Login Fail")
     	   {
-    		   	
-   				entry.open();
-   				entry.Store_Prev_Crawls(list);
+    				request.Store_Prev_Crawls(list);
     	   }
     	   
     	   //tv.setText(response);
     	   InputMethodManager imm = (InputMethodManager)getSystemService(
     	   Context.INPUT_METHOD_SERVICE);
-   		   imm.hideSoftInputFromWindow(guestCode.getWindowToken(), 0);
+    		   imm.hideSoftInputFromWindow(guestCode.getWindowToken(), 0);
 
-   		   Toast.makeText(getApplicationContext(),result, Toast.LENGTH_LONG).show();
-
+    		   Toast.makeText(getApplicationContext(),result, Toast.LENGTH_LONG).show();
 
 
        }
@@ -127,6 +123,7 @@ public class MainActivity extends Activity implements OnClickListener {
      	  Toast.makeText(getApplicationContext(),"Connection Error, Please try again", Toast.LENGTH_LONG).show();
      	  Log.e("log_tag","Error in http connection!!" + e.toString());     
        }
+
    }         
      
 

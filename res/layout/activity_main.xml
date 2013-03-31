@@ -21,9 +21,9 @@
         android:id="@+id/bLogIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/editText1"
+        android:layout_alignBottom="@+id/loginCodeTV"
         android:layout_alignRight="@+id/bCurrentCrawls"
-        android:layout_alignTop="@id/editText1"
+        android:layout_alignTop="@id/loginCodeTV"
         android:background="@drawable/returnbutton"
         android:textColor="#FFD400" />
 

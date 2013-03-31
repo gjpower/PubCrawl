@@ -85,6 +85,7 @@ public class ChangeUserName extends Activity {
  			    // store the result returned by PHP script that runs MySQL query
  			    result = response.toString();  
  			    
+ 			    //should check for success instead of failure
  			    if(result == "User Update Failed"){
  			    	Toast.makeText(getApplicationContext(),result, Toast.LENGTH_LONG).show();
  			    	return false;
@@ -98,8 +99,6 @@ public class ChangeUserName extends Activity {
  		
  		 
   		entry.Store_User_Name(username);
-      	String[][] noCrawls = new String[1][4];	//Needs to be 4 to be compatible with Store_Crawl_Data
-      	entry.Store_Crawl_Data(noCrawls);
  		 
  		return true;
  	}

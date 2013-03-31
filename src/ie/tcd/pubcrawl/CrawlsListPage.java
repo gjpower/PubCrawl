@@ -70,6 +70,9 @@ public class CrawlsListPage extends Activity {
     		   	PermStorage entry = new PermStorage(CrawlsListPage.this);
    				entry.open();
    				dataList = entry.Get_Prev_Crawls();
+   				
+   				//put in code here to hande dataList being null
+   				
    				String CrawlID = dataList.get(0);
    				
    				

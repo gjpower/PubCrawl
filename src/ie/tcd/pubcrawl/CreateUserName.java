@@ -118,12 +118,6 @@ public class CreateUserName extends Activity {
 		entry.open();
  		entry.Store_User_Id(userId);
  		entry.Store_User_Name(userName);
-     	String[][] noCrawls = new String[1][4];	//Needs to be 4 to be compatible with Store_Crawl_Data
-     	noCrawls[0][0] = "No Crawls";
-     	noCrawls[0][1] = "";
-     	noCrawls[0][2] = "";
-     	noCrawls[0][3] = "";
-     	entry.Store_Crawl_Data(noCrawls);
 		 
 		return true;
 	}

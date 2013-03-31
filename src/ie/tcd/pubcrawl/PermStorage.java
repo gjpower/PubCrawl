@@ -1,11 +1,5 @@
 package ie.tcd.pubcrawl;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,8 +75,8 @@ public class PermStorage {
 			
 			db.execSQL("CREATE TABLE " + USERID_TABLE + " (" +
 					KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-					"usercode TEXT NOT NULL, " +
-					"username TEXT NOT NULL " +
+					"usercode TEXT ," +
+					"username TEXT " +
 					");"
 			);
 		}
@@ -113,51 +107,65 @@ public class PermStorage {
 	
 	public void Store_User_Name(String name){
 		
-		String userID = Get_User_Id();		//get current id
-		ourDatabase.delete(USERID_TABLE, null , null);	//delete all rows
+		String userName = Get_User_Name();		//get current name
+		String userId = Get_User_Id();			//get current id
 		
-		ContentValues cv = new ContentValues();
 		
+		ContentValues cv = new ContentValues();		
 		cv.put("username", name);	//add name to insert
-		cv.put("usercode", userID);	//add previous id to insert
 		
-		ourDatabase.insert(USERID_TABLE, null, cv);	//insert data into table
-	
+		//if database is empty
+		if (userName==null && userId==null) {
+			ourDatabase.insert(USERID_TABLE, null, cv);
+		}
+		else {	//update current values
+			ourDatabase.update(USERID_TABLE, cv, null, null);
+		}
+		
     }
     
     public String Get_User_Name(){
+    	
     	String[] columns = { "username" };
     	Cursor result = ourDatabase.query(USERID_TABLE, columns, null, null, null, null, null);
     	if (result.getCount()>0) {
 	    	result.moveToFirst();
 	    	return result.getString(result.getColumnIndex("username"));
     	}
-    	return null;
+    	else {
+    		return null;
+    	}
+    	
     }
     
     public void Store_User_Id(String id) {
 
 		String userName = Get_User_Name();		//get current name
-		ourDatabase.delete(USERID_TABLE, null , null);	//delete all rows
+		String userId = Get_User_Id();			//get current id
 		
-		ContentValues cv = new ContentValues();
-		
-		cv.put("username", userName);	//add previous name to insert
+		ContentValues cv = new ContentValues();		
 		cv.put("usercode", id);	//add id to insert
 		
-		ourDatabase.insert(USERID_TABLE, null, cv);	//insert data into table
-	
+		//if database is empty
+		if (userName==null && userId==null) {
+			ourDatabase.insert(USERID_TABLE, null, cv);
+		}
+		else {	//update existing value with new value
+			ourDatabase.update(USERID_TABLE, cv, null, null);
+		}
     }
     
 	public String Get_User_Id() {
-		String[] columns = { "username" };
+		String[] columns = { "usercode" };
     	Cursor result = ourDatabase.query(USERID_TABLE, columns, null, null, null, null, null);
     	
     	if (result.getCount()>0) {
 	    	result.moveToFirst();
 	    	return result.getString(result.getColumnIndex("usercode"));
     	}
-    	return null;
+    	else {
+    		return null;
+    	}
     }
 
 	public void Indicate_Current_Crawl (Context context, String id) {
@@ -174,6 +182,7 @@ public class PermStorage {
     }
     
     //Database Storage
+    // seems an awkward way of doing databases
 	public void Store_Crawl_Data(String[][] crawlArray) {
     	ourDatabase.delete(CRAWLS_TABLE, null, null);
     	int numCrawls = crawlArray.length;
@@ -321,6 +330,6 @@ public class PermStorage {
 	
 	//this method should never be used
 	public void close() {
-		ourHelper.close();
+		//ourHelper.close();
 	}
 }
