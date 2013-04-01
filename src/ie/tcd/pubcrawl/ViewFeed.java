@@ -74,7 +74,7 @@ public class ViewFeed extends Activity {
 		
 		dbAccess = new PermStorage(this);
 		dbAccess.open();
-		Cursor c = dbAccess.Get_Comment_Data("2pe8t");
+		Cursor c = dbAccess.Get_Comment_Data(CrawlID);
 		
 		String[] from = { "username", "comment_body", "time", "image" };
         int[] to = { R.id.commentUserName, R.id.commentBody, R.id.commentDateTime, R.id.commentHasImage }; //identifies row layout to use
@@ -113,7 +113,8 @@ public class ViewFeed extends Activity {
                     	Cursor cursor = ((SimpleCursorAdapter) parent.getAdapter()).getCursor();
                     	cursor.moveToPosition(position);
                     	String imagePath = cursor.getString(4);
-                    	
+                    												
+                    		//this is not silly code. the mysql server will send "null" string for any null columns
                     	if (!imagePath.equals("null")) {	//if not null image name show the image
                     		Display_Photo("http://164.138.29.169/" + imagePath);
                     	}
@@ -168,8 +169,8 @@ public class ViewFeed extends Activity {
 		
 		if(_array!=null) {	//if the array isn't empty
 			//commentsList = buildData(_array);
-			dbAccess.Store_Comment_Data(_array, "2pe8t");	//hardcode
-			Cursor cursor = dbAccess.Get_Comment_Data("2pe8t");
+			dbAccess.Store_Comment_Data(_array, CrawlID);	//hardcode
+			Cursor cursor = dbAccess.Get_Comment_Data(CrawlID);
 			databaseUpdate.sendMessage(Message.obtain(databaseUpdate, 0, 0, 0, cursor));
 		}
 	}

@@ -125,7 +125,12 @@ public void onClick(View v) {
 		
 	break;
 	case R.id.submitComment:
-		postComment();
+		Thread commentPosting = new Thread() {
+			public void run() {
+				postComment();
+			}
+		};
+		commentPosting.start();
 	break;
 	
 
@@ -166,7 +171,10 @@ protected void postComment (){
     	doFileUpload();	
     }
     catch (Exception e) {
+    	//wrapping toasts with run on ui thread for laziness
+    	runOnUiThread(new Runnable(){ public void run() {
     	Toast.makeText(getApplicationContext(),"Connection Error, Please try again", Toast.LENGTH_LONG).show();
+    	}});
     	Log.e("log_tag","Error in http connection!!" + e.toString());
     	
     }
@@ -174,19 +182,22 @@ protected void postComment (){
 response = executeHttpPost("http://164.138.29.169/post_comment_script.php",postParameters);
 
 // store the result returned by PHP script that runs MySQL query
-String result = response.toString();  
+final String result = response.toString();  
 //tv.setText(response);
 InputMethodManager imm = (InputMethodManager)getSystemService(
 		Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(commentEditText.getWindowToken(), 0);
-
+		runOnUiThread(new Runnable(){ public void run() {
 Toast.makeText(getApplicationContext(),result, Toast.LENGTH_LONG).show();
+		}});
 
 
 
     }
     catch (Exception e) {
+    	runOnUiThread(new Runnable(){ public void run() {
   	  Toast.makeText(getApplicationContext(),"Connection Error, Please try again", Toast.LENGTH_LONG).show();
+    	}});
   	  Log.e("log_tag","Error in http connection!!" + e.toString());     
     }
 }         
