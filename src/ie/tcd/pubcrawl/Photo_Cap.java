@@ -367,17 +367,23 @@ private File downSizeImage(Bitmap image) throws IOException {
 	int oldHeight = image.getHeight();
 	int oldWidth = image.getWidth();
 	
-	if( oldHeight>oldWidth ) {
-		newHeight = maxSide;
-		newWidth = (int) (((float) maxSide/oldHeight)*oldWidth);
+	if (oldWidth < maxSide && oldHeight < maxSide) {
+		newWidth = oldWidth;
+		newHeight = oldHeight;
 	}
 	else {
-		newWidth = maxSide;
-		newHeight = (int) (((float) maxSide/oldWidth)*oldHeight);		
+		if( oldHeight>oldWidth ) {
+			newHeight = maxSide;
+			newWidth = (int) (((float) maxSide/oldHeight)*oldWidth);
+		}
+		else {
+			newWidth = maxSide;
+			newHeight = (int) (((float) maxSide/oldWidth)*oldHeight);		
+		}
 	}
 	
-	Log.e("imageresize", "newHeight" + newHeight);
-	Log.e("imageresize", "newWidth" + newWidth);
+	Log.d("imageresize", "newHeight" + newHeight);
+	Log.d("imageresize", "newWidth" + newWidth);
 	
 	// setting filtering to true as I assume it's something like lanczos 
 	// and will improve image quality after scaling
