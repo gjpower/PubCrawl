@@ -62,10 +62,10 @@ public class CrawlsListPage extends Activity {
 
 		//put in code here to hande dataList being null
 		infoArray = getSchedule(dataList);
-		
+
 		//filling the array of items to go into the list
-		ArrayList<Map<String, String>> list = buildData(infoArray);
-		
+		ArrayList<Map<String, String>> list = buildData(infoArray, dataList);
+
 		String[] from = { "name", "details" };
 		int[] to = { R.id.crawlName, R.id.crawlDetails }; //identifies row layout to use
 
@@ -102,24 +102,23 @@ public class CrawlsListPage extends Activity {
 
 
 	//Adds each pub crawl in the array to the map
-	private ArrayList<Map<String, String>> buildData(String info[][])
+	private ArrayList<Map<String, String>> buildData(String info[][], List<String> _id)
 	{
 		ArrayList<Map<String, String>> list = new ArrayList<Map<String, String>>();
 
-		for(int i =0; i< dataList.size(); i++)
+		for(int i =0; i< _id.size(); i++)
 		{
-			list.add(putData(info[i][0], info[i][1], dataList.get(i)));
+			list.add(putData(info[i][0], info[i][1]));
 		}
 		return list;
 	}
 
 	//hashmap created
-	private HashMap<String, String> putData(String name, String details, String value)
+	private HashMap<String, String> putData(String name, String details)
 	{
 		HashMap<String, String> item = new HashMap<String, String>();
 		item.put("name", name);
 		item.put("details", details);
-		item.put("guestcode", value);
 		return item;
 	}
 
@@ -201,7 +200,7 @@ public class CrawlsListPage extends Activity {
 
 	//This method takes down the needed information
 	public static String[][] getSchedule(List<String> id){
-		String[][] info = null;
+		String[][] info = new String [id.size()][6];
 		for(int i =0; i< id.size(); i++){
 			ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
 			postParameters.add(new BasicNameValuePair("CrawlID",id.get(i)));
@@ -217,17 +216,16 @@ public class CrawlsListPage extends Activity {
 				//parse json data
 				try{
 					JSONArray jArray = new JSONArray(result);
-					info = new String[jArray.length()][6];
-					for(int j=0;j<jArray.length();j++){
-						JSONObject json_data = jArray.getJSONObject(i);
-						info[j][0] = json_data.getString("crawlname");
-						info[j][1] = json_data.getString("time");
-						info[j][2] = json_data.getString("pubname");
-						info[j][3] = json_data.getString("publocation");
-						info[j][4] = json_data.getString("latitude");
-						info[j][5] = json_data.getString("longitude");
-					}
+
+					JSONObject json_data = jArray.getJSONObject(i);
+					info[i][0] = json_data.getString("crawlname");
+					info[i][1] = json_data.getString("time");
+					//info[i][2] = json_data.getString("pubname");
+					//info[i][3] = json_data.getString("publocation");
+//					info[i][4] = json_data.getString("latitude");
+//					info[i][5] = json_data.getString("longitude");
 				}
+
 				catch(JSONException e){
 					Log.e("log_tag", "Error parsing data "+e.toString());
 				}
