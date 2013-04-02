@@ -27,7 +27,7 @@ public class SpinnerView extends SurfaceView implements SurfaceHolder.Callback{
 		centerX = SpinnerGames.Width / 2;
 		centerY = SpinnerGames.Height / 2;
 		setFocusable(true);				// makes it able to handle events 
-		bottle = BitmapFactory.decodeResource(getResources(), R.drawable.bottle_anim);
+		/* bottle = BitmapFactory.decodeResource(getResources(), R.drawable.bottle_anim);
 		if(thread.numPos == 4)
 		{
 			background = BitmapFactory.decodeResource(getResources(),R.drawable.sbg4);
@@ -43,7 +43,7 @@ public class SpinnerView extends SurfaceView implements SurfaceHolder.Callback{
 		else if (thread.numPos == 12 )
 		{
 			background = BitmapFactory.decodeResource(getResources(),R.drawable.sbg12);
-		}
+		} */
 		spinning = new SpinnerAnimation(bottle,background, centerX, centerY, 256, 256, 30, 24);
 		rand = new Random(System.currentTimeMillis());
 		numRotations = 0; 

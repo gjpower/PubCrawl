@@ -1,24 +1,19 @@
 package ie.tcd.pubcrawl;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class PermStorage {
 	//FileOutputStream Variables
-	static FileOutputStream fos;
-	static FileInputStream fis = null;
+	//no just no
+	
 	final static String USERNAME = "userName";
 	final static String USERID = "userId";
 	final static String CURRCRAWL = "currcrawl";
@@ -35,9 +30,13 @@ public class PermStorage {
 	private static final String ADMIN_TABLE = "adminTable";
 	private static final String CRAWLS_TABLE = "crawlsTable";
 	private static final String RULES_TABLE = "rulesTable";
+	private static final String USERID_TABLE = "userIdTable";
+	private static final String COMMENTS_TABLE = "commentsTable";
 	private static final int DATABASE_VERSION = 1;
 	
-	private DbHelper ourHelper;
+	//below is static so only one connection to database ever exists
+	// this avoids a lot of problems
+	private static DbHelper ourHelper;
 	private final Context ourContext;
 	private SQLiteDatabase ourDatabase;
 	
@@ -64,6 +63,22 @@ public class PermStorage {
 					KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 					KEY_RULES + " TEXT NOT NULL);"					
 			);
+			db.execSQL("CREATE TABLE " + COMMENTS_TABLE + " (" +
+					KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+					"comment_body TEXT, " +
+					"image TEXT, " +
+					"crawlkey TEXT, " +
+					"username TEXT, " +
+					"time TEXT " +
+					");"					
+			);
+			
+			db.execSQL("CREATE TABLE " + USERID_TABLE + " (" +
+					KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+					"usercode TEXT ," +
+					"username TEXT " +
+					");"
+			);
 		}
 
 		@Override
@@ -72,6 +87,8 @@ public class PermStorage {
 			db.execSQL("DROP TABLE IF EXISTS " + ADMIN_TABLE);
 			db.execSQL("DROP TABLE IF EXISTS " + CRAWLS_TABLE);
 			db.execSQL("DROP TABLE IF EXISTS " + RULES_TABLE);
+			db.execSQL("DROP TABLE IF EXISTS " + COMMENTS_TABLE);
+			db.execSQL("DROP TABLE IF EXISTS " + USERID_TABLE);
 			onCreate(db);
 		}	
 	}
@@ -81,95 +98,91 @@ public class PermStorage {
 	}
 	
 	public PermStorage open() {
-		ourHelper = new DbHelper(ourContext);
+		if (ourHelper == null) {
+			ourHelper = new DbHelper(ourContext);
+		}
 		ourDatabase = ourHelper.getWritableDatabase();
 		return this;
 	}
 	
-	//FileOutputStream/DataOutputStream Storage
 	public void Store_User_Name(String name){
-    	try {
-			fos = ourContext.openFileOutput(USERNAME, Context.MODE_PRIVATE);
-			DataOutputStream dos = new DataOutputStream(fos);
-			dos.writeChars(name);
-			dos.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		
+		String userName = Get_User_Name();		//get current name
+		String userId = Get_User_Id();			//get current id
+		
+		
+		ContentValues cv = new ContentValues();		
+		cv.put("username", name);	//add name to insert
+		
+		//if database is empty
+		if (userName==null && userId==null) {
+			ourDatabase.insert(USERID_TABLE, null, cv);
 		}
+		else {	//update current values
+			ourDatabase.update(USERID_TABLE, cv, null, null);
+		}
+		
     }
     
     public String Get_User_Name(){
-    	String name = null;  
-        try {
-			fis = ourContext.openFileInput(USERNAME);
-			DataInputStream dis = new DataInputStream(fis);
-			byte[] dataArray = new byte[dis.available()];
-			//when the file has been read then read() returns -1
-			while (dis.read(dataArray) != -1) {
-				name = new String(dataArray);
-			}
-			dis.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
-        return name;
+    	
+    	String[] columns = { "username" };
+    	Cursor result = ourDatabase.query(USERID_TABLE, columns, null, null, null, null, null);
+    	if (result.getCount()>0) {
+	    	result.moveToFirst();
+	    	return result.getString(result.getColumnIndex("username"));
+    	}
+    	else {
+    		return null;
+    	}
+    	
     }
     
-    public void Store_User_Id(int id) {
-    	try {
-			fos = ourContext.openFileOutput(USERID, Context.MODE_PRIVATE);
-			DataOutputStream dos = new DataOutputStream(fos);
-			dos.writeInt(id);
-	    	dos.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+    public void Store_User_Id(String id) {
+
+		String userName = Get_User_Name();		//get current name
+		String userId = Get_User_Id();			//get current id
+		
+		ContentValues cv = new ContentValues();		
+		cv.put("usercode", id);	//add id to insert
+		
+		//if database is empty
+		if (userName==null && userId==null) {
+			ourDatabase.insert(USERID_TABLE, null, cv);
+		}
+		else {	//update existing value with new value
+			ourDatabase.update(USERID_TABLE, cv, null, null);
 		}
     }
     
-    public int Get_User_Id() {
-    	int id=-1;
-        try {
-			fis = ourContext.openFileInput(USERID);
-			DataInputStream dis = new DataInputStream(fis);
-			id= dis.readInt();
-			dis.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
-        return id;
+	public String Get_User_Id() {
+		String[] columns = { "usercode" };
+    	Cursor result = ourDatabase.query(USERID_TABLE, columns, null, null, null, null, null);
+    	
+    	if (result.getCount()>0) {
+	    	result.moveToFirst();
+	    	return result.getString(result.getColumnIndex("usercode"));
+    	}
+    	else {
+    		return null;
+    	}
     }
 
-    public void Indicate_Current_Crawl (int id) {
-    	try {
-			fos = ourContext.openFileOutput(CURRCRAWL, Context.MODE_PRIVATE);
-			DataOutputStream dos = new DataOutputStream(fos);
-			dos.writeInt(id);
-	    	dos.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public void Indicate_Current_Crawl (Context context, String id) {
+    	SharedPreferences currentCrawl = context.getSharedPreferences("crawlIndicator",0);
+    	SharedPreferences.Editor editor =currentCrawl.edit();
+    	
+    	editor.putString("currentCrawlID", id);
+    	editor.commit();
     }
 
-    public int Get_Current_Crawl () {
-    	int id=-1;
-        try {
-			fis = ourContext.openFileInput(CURRCRAWL);
-			DataInputStream dis = new DataInputStream(fis);
-			id= dis.readInt();
-			dis.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
-        return id;
+    public String Get_Current_Crawl (Context context) {
+    	SharedPreferences currentCrawl = context.getSharedPreferences("crawlIndicator",0);
+    	return currentCrawl.getString("currentCrawlID", "ERROR");
     }
     
     //Database Storage
+    // seems an awkward way of doing databases
 	public void Store_Crawl_Data(String[][] crawlArray) {
     	ourDatabase.delete(CRAWLS_TABLE, null, null);
     	int numCrawls = crawlArray.length;
@@ -287,8 +300,36 @@ public class PermStorage {
         }
 		return result;
 	}
-
+	
+	public Cursor Get_Comment_Data(String crawlkey) {
+		String [] columns = new String[] { KEY_ROWID,"username", "comment_body", "time", "image" };
+		Cursor result = ourDatabase.query(COMMENTS_TABLE, columns, "crawlkey = ?", new String[] { crawlkey }, null, null, "time DESC");
+		//ourDatabase.query(COMMENTS_TABLE, columns, "crawlkey = ?", new String[] { crawlkey }, null, null, "time DESC");
+		return result;
+	}
+	
+	public void Store_Comment_Data(String[][] commentData, String crawlkey) {
+		int size = commentData.length;	// will just destroy all comments with a certain key and add new ones downloaded
+										// not the cleverest way to do it but there's not a huge amount of time left for work on this
+										//	Graeme Power
+		ourDatabase.delete(COMMENTS_TABLE, "crawlkey = ?", new String[] { crawlkey });
+		
+		ContentValues cv = new ContentValues();
+		
+		for (int i=0; i<size; i++) {	// fill up our contentvalue with row of data and add to the database
+			cv.put("username", commentData[i][0]);
+			cv.put("comment_body", commentData[i][1]);
+			cv.put("image", commentData[i][2]);
+			cv.put("time", commentData[i][3]);
+			cv.put("crawlkey", crawlkey);
+			
+			ourDatabase.insert(COMMENTS_TABLE, null, cv);
+		}
+		
+	}
+	
+	//this method should never be used
 	public void close() {
-		ourHelper.close();
+		//ourHelper.close();
 	}
 }

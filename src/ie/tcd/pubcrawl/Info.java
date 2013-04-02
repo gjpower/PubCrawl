@@ -18,7 +18,7 @@ public class Info extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
     
-        Event event = new Event();
+        //Event event = new Event();
         
         
         /*

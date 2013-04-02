@@ -24,7 +24,8 @@ public class SpinnerGames extends Activity {
         final int height = (display.getHeight());
         Width = width;
         Height = height;
-        
+        //spinnerView = new SpinnerView(this);
+        setContentView(spinnerView);
     }
 
     @Override
