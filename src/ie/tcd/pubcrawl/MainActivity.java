@@ -124,6 +124,8 @@ public class MainActivity extends Activity implements OnClickListener {
      	  Log.e("log_tag","Error in http connection!!" + e.toString());     
        }
 
+       // changes go here
+       guestCode.setText("");
    }         
      
 

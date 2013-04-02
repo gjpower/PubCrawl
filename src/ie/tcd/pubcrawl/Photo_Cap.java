@@ -189,6 +189,9 @@ Toast.makeText(getApplicationContext(),result, Toast.LENGTH_LONG).show();
   	  Toast.makeText(getApplicationContext(),"Connection Error, Please try again", Toast.LENGTH_LONG).show();
   	  Log.e("log_tag","Error in http connection!!" + e.toString());     
     }
+    
+    // put reset thing here
+    commentEditText.setText("");
 }         
   
 
