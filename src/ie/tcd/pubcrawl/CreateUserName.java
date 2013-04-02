@@ -23,10 +23,14 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.TextView.OnEditorActionListener;
 
 public class CreateUserName extends Activity {
 
@@ -50,6 +54,19 @@ public class CreateUserName extends Activity {
         
         getName = (EditText) findViewById(R.id.etUserName);
         Button saveName = (Button) findViewById(R.id.bSaveUserName);
+        
+        getName.setOnEditorActionListener(new OnEditorActionListener() {
+            
+        	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        		userName = getName.getText().toString();
+				if(New_Member(userName)){	
+					startActivity(new Intent("ie.tcd.pubcrawl.MAINACTIVITY"));
+					finish();
+				}
+				return true;
+            }
+        	
+        });
         
         saveName.setOnClickListener(new View.OnClickListener() {			
 			//Save user name and go to the main activity

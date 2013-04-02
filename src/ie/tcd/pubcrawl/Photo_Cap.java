@@ -1,13 +1,14 @@
 package ie.tcd.pubcrawl;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-
-import javax.xml.transform.Source;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -125,7 +126,12 @@ public void onClick(View v) {
 		
 	break;
 	case R.id.submitComment:
-		postComment();
+		Thread commentPosting = new Thread() {
+			public void run() {
+				postComment();
+			}
+		};
+		commentPosting.start();
 	break;
 	
 
@@ -166,7 +172,10 @@ protected void postComment (){
     	doFileUpload();	
     }
     catch (Exception e) {
+    	//wrapping toasts with run on ui thread for laziness
+    	runOnUiThread(new Runnable(){ public void run() {
     	Toast.makeText(getApplicationContext(),"Connection Error, Please try again", Toast.LENGTH_LONG).show();
+    	}});
     	Log.e("log_tag","Error in http connection!!" + e.toString());
     	
     }
@@ -174,19 +183,22 @@ protected void postComment (){
 response = executeHttpPost("http://164.138.29.169/post_comment_script.php",postParameters);
 
 // store the result returned by PHP script that runs MySQL query
-String result = response.toString();  
+final String result = response.toString();  
 //tv.setText(response);
 InputMethodManager imm = (InputMethodManager)getSystemService(
 		Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(commentEditText.getWindowToken(), 0);
-
+		runOnUiThread(new Runnable(){ public void run() {
 Toast.makeText(getApplicationContext(),result, Toast.LENGTH_LONG).show();
+		}});
 
 
 
     }
     catch (Exception e) {
+    	runOnUiThread(new Runnable(){ public void run() {
   	  Toast.makeText(getApplicationContext(),"Connection Error, Please try again", Toast.LENGTH_LONG).show();
+    	}});
   	  Log.e("log_tag","Error in http connection!!" + e.toString());     
     }
     
@@ -299,12 +311,25 @@ public String getPath(Uri uri) {
 private void doFileUpload(){
 
     File file1 = new File(selectedPath1);
+    
+    Bitmap bigImage = BitmapFactory.decodeFile(selectedPath1);
+    
+    File file2;
+    
+	try {
+		file2 = downSizeImage(bigImage);
+	} catch (IOException e1) {
+		e1.printStackTrace();
+		Log.e("DownSizingImage", "IO error on image resizing");
+		return;
+	}
+    
     String urlString = "http://164.138.29.169/upload_photo_script.php";
     try
     {
          HttpClient client = new DefaultHttpClient();
          HttpPost post = new HttpPost(urlString);
-         FileBody bin1 = new FileBody(file1);
+         FileBody bin1 = new FileBody(file2);
          MultipartEntity reqEntity = new MultipartEntity();
          reqEntity.addPart("uploadedfile1", bin1);
          reqEntity.addPart("userID", new StringBody(UserID));
@@ -332,12 +357,67 @@ private void doFileUpload(){
     catch (Exception ex){
          Log.e("Debug", "error: " + ex.getMessage(), ex);
     }
+    finally {
+    	file2.delete();
+    }
   }
 
+private File downSizeImage(Bitmap image) throws IOException {
+	final int maxSide = 1024;	//max side size in pixels
+	
+	int newWidth, newHeight;	//the new size of our image computed below
+	
+	int oldHeight = image.getHeight();
+	int oldWidth = image.getWidth();
+	
+	if (oldWidth < maxSide && oldHeight < maxSide) {
+		newWidth = oldWidth;
+		newHeight = oldHeight;
+	}
+	else {
+		if( oldHeight>oldWidth ) {
+			newHeight = maxSide;
+			newWidth = (int) (((float) maxSide/oldHeight)*oldWidth);
+		}
+		else {
+			newWidth = maxSide;
+			newHeight = (int) (((float) maxSide/oldWidth)*oldHeight);		
+		}
+	}
+	
+	Log.d("imageresize", "newHeight" + newHeight);
+	Log.d("imageresize", "newWidth" + newWidth);
+	
+	// setting filtering to true as I assume it's something like lanczos 
+	// and will improve image quality after scaling
+	Bitmap outputImage = Bitmap.createScaledBitmap(image, newWidth, newHeight, true);
+	
+	File root = android.os.Environment.getExternalStorageDirectory();       	//get our sd card directory        
+
+		//using the directory I used for downloading images temporarily
+    File savedir = new File ( root.getAbsolutePath() + "/Pictures/PubCrawl Images"); //create our directory if it doesn't exist
+    if(savedir.exists()==false) {
+         savedir.mkdirs();
+    }
+	
+	
+	File returnFile = new File(savedir, "tempUpload.jpg");
+	
+	ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+	outputImage.compress(Bitmap.CompressFormat.JPEG, 80, byteStream);
+	
+	byte[] buffer = byteStream.toByteArray();
+	
+	FileOutputStream fileStream = new FileOutputStream(returnFile);
+	
+	fileStream.write(buffer);
+	
+	return returnFile;
 }
 
 
 
+}
 
 
 

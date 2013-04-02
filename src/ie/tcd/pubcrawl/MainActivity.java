@@ -24,13 +24,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements OnClickListener {
@@ -61,6 +64,21 @@ public class MainActivity extends Activity implements OnClickListener {
         Button currentCrawls = (Button) findViewById(R.id.bCurrentCrawls);
         Button changeName = (Button) findViewById(R.id.bChangeName);
         
+        //attaching keyboard send button listener to the joincrawl button
+        
+        guestCode.setOnEditorActionListener(new OnEditorActionListener() {
+            
+        	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_GO) {
+                    postLoginInfo();
+                    return true;
+                }
+                return false;
+            }
+        	
+        });
+        
+        
         request = new PermStorage(this);
         request.open();
         userName = request.Get_User_Name();
@@ -81,8 +99,7 @@ public class MainActivity extends Activity implements OnClickListener {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
-    }
-    
+    }    
     
     protected void postLoginInfo (){
    	 ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();

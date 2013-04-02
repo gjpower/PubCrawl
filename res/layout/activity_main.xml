@@ -64,8 +64,11 @@
         android:background="@drawable/textentry"
         android:ems="10"
         android:hint="@string/enter_pin"
-        android:textColorHint="#F0F0F0"
+        android:imeOptions="actionGo"
+        android:inputType="textVisiblePassword"
+        android:maxLength="5"
         android:textColor="#FFD400"
+        android:textColorHint="#F0F0F0"
         tools:context=".MainActivity" >
 
         <requestFocus />

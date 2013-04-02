@@ -12,8 +12,11 @@
         android:layout_centerVertical="true"
         android:background="@drawable/textentry"
         android:ems="10"
-        android:textColorHint="#F0F0F0"
-        android:textColor="#FFD400" >
+        android:imeOptions="actionGo"
+        android:inputType="textVisiblePassword"
+        android:maxLength="20"
+        android:textColor="#FFD400"
+        android:textColorHint="#F0F0F0" >
 
         <requestFocus />
     </EditText>
