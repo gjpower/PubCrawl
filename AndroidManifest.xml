@@ -180,11 +180,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-         <activity
-           
-			 android:name="ie.tcd.pubcrawl.Photo_Cap"
-	         android:label="@string/title_activity_photo_cap" >
-
+        <activity
+            android:name="ie.tcd.pubcrawl.Photo_Cap"
+            android:label="@string/title_activity_photo_cap" >
         </activity>
         <activity
             android:name="ie.tcd.pubcrawl.ViewFeed"
@@ -197,6 +195,10 @@
         <activity
             android:name="ie.tcd.pubcrawl.CrawlMapOverview"
             android:label="@string/title_activity_crawl_map_overview" >
+        </activity>
+        <activity
+            android:name="ie.tcd.pubcrawl.PubDescription"
+            android:label="@string/title_activity_pub_description" >
         </activity>
     </application>
 
