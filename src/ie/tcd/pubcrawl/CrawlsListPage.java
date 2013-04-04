@@ -43,10 +43,11 @@ import android.widget.Toast;
 public class CrawlsListPage extends Activity {
 	//public static String[][] fromNetworkArray;
 	//Network Connections
-	List<String> dataList = new ArrayList<String>();
+
 	public static final int HTTP_TIMEOUT = 30 * 1000; // milliseconds
 	private static HttpClient mHttpClient;
 	private static Context context;
+	List<String> dataList = new ArrayList<String>();
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -54,17 +55,20 @@ public class CrawlsListPage extends Activity {
 		setContentView(R.layout.activity_crawls_list_page);
 		ListView dListView = (ListView) findViewById(R.id.mylist);
 
-		String[][] infoArray;
+		String[] infoArray;
 
 		PermStorage entry = new PermStorage(CrawlsListPage.this);
 		entry.open();
 		dataList = entry.Get_Prev_Crawls();
 
-		//put in code here to hande dataList being null
-		infoArray = getSchedule(dataList);
+
+		for(int i=0; i<dataList.size();i++){
+			infoArray = getSchedule(dataList.get(i));
+			entry.Store_Crawl_Data(infoArray[0], infoArray[1], dataList.get(i));
+		}
 
 		//filling the array of items to go into the list
-		ArrayList<Map<String, String>> list = buildData(infoArray, dataList);
+		ArrayList<Map<String, String>> list = buildData(dataList);
 
 		String[] from = { "name", "details" };
 		int[] to = { R.id.crawlName, R.id.crawlDetails }; //identifies row layout to use
@@ -102,13 +106,16 @@ public class CrawlsListPage extends Activity {
 
 
 	//Adds each pub crawl in the array to the map
-	private ArrayList<Map<String, String>> buildData(String info[][], List<String> _id)
+	private ArrayList<Map<String, String>> buildData(List<String> _id)
 	{
 		ArrayList<Map<String, String>> list = new ArrayList<Map<String, String>>();
-
+		PermStorage entry = new PermStorage(CrawlsListPage.this);
+		entry.open();
+		String [] crawlInfo = new String[_id.size()]; 
 		for(int i =0; i< _id.size(); i++)
 		{
-			list.add(putData(info[i][0], info[i][1]));
+			crawlInfo = entry.Get_Crawl_Data(_id.get(i));
+			list.add(putData(crawlInfo[0], crawlInfo[1]));	
 		}
 		return list;
 	}
@@ -121,8 +128,6 @@ public class CrawlsListPage extends Activity {
 		item.put("details", details);
 		return item;
 	}
-
-
 
 	//These 3 methods are required for Network Connection
 	public static String executeHttpGet(String url) throws Exception {
@@ -199,43 +204,40 @@ public class CrawlsListPage extends Activity {
 	}          
 
 	//This method takes down the needed information
-	public static String[][] getSchedule(List<String> id){
-		String[][] info = new String [id.size()][2];
+	public static String[] getSchedule(String id){
+		String[] info = new String [2];
 		ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
-		for(int i =0; i< id.size(); i++){
-			
-			postParameters.set(0,new BasicNameValuePair("CrawlID",id.get(i)));
-			String response = null;
+		postParameters.add(new BasicNameValuePair("CrawlID",id));
+		String response = null;
 
-			// call executeHttpPost method passing necessary parameters
-			try {
-				response = executeHttpPost("http://164.138.29.169/getschedule.php",postParameters);
+		// call executeHttpPost method passing necessary parameters
+		try {
+			response = executeHttpPost("http://164.138.29.169/getschedule.php",postParameters);
 
-				// store the result returned by PHP script that runs MySQL query
-				String result = response.toString();
+			// store the result returned by PHP script that runs MySQL query
+			String result = response.toString();
 
-				//parse json data
-				try{
-					JSONArray jArray = new JSONArray(result);
-
-					JSONObject json_data = jArray.getJSONObject(i);
-					info[i][0] = json_data.getString("crawlname");
-					info[i][1] = json_data.getString("time");
-					//info[i][2] = json_data.getString("pubname");
-					//info[i][3] = json_data.getString("publocation");
-//					info[i][4] = json_data.getString("latitude");
-//					info[i][5] = json_data.getString("longitude");
-				}
-
-				catch(JSONException e){
-					Log.e("log_tag", "Error parsing data "+e.toString());
-				}
+			//parse json data
+			try{
+				JSONArray jArray = new JSONArray(result);
+				JSONObject json_data = jArray.getJSONObject(0);
+				info[0] = json_data.getString("crawlname");
+				info[1] = json_data.getString("time");
+				//info[i][2] = json_data.getString("pubname");
+				//info[i][3] = json_data.getString("publocation");
+				//					info[i][4] = json_data.getString("latitude");
+				//					info[i][5] = json_data.getString("longitude");
 			}
-			catch (Exception e) {
-				Log.e("log_tag","Error in http connection!!" + e.toString());
-				Toast.makeText(context,"Error in http connection!!", Toast.LENGTH_LONG).show();
+
+			catch(JSONException e){
+				Log.e("log_tag", "Error parsing data "+e.toString());
 			}
+		}
+		catch (Exception e) {
+			Log.e("log_tag","Error in http connection!!" + e.toString());
+			Toast.makeText(context,"Error in http connection!!", Toast.LENGTH_LONG).show();
 		}
 		return info; 
 	}
+
 }

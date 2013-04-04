@@ -213,7 +213,7 @@ public class PermStorage {
 	public void Store_Crawl_Data(String name, String date, String crawlcode) {
 		// just going to delete any data about this crawl if it exists and update with new data
 		//delete any rows where code is our provided code
-		ourDatabase.delete(COMMENTS_TABLE, "code = ?", new String[] { crawlcode });
+		ourDatabase.delete(CRAWLS_TABLE, "code = ?", new String[] { crawlcode });
 
 
 		ContentValues cv = new ContentValues();
@@ -222,16 +222,17 @@ public class PermStorage {
 		cv.put("date", date);
 		cv.put("code", crawlcode);
 
-		ourDatabase.insert(COMMENTS_TABLE, null, cv);
+		ourDatabase.insert(CRAWLS_TABLE, null, cv);
 
 	}
 
 	public String[] Get_Crawl_Data(String crawlcode) {
 		String[] result = new String [2];
 		String [] columns = new String[] { "name", "date" };
-		Cursor c = ourDatabase.query(COMMENTS_TABLE, columns, "code = ?", new String[] { crawlcode }, null, null, null);
+		Cursor c = ourDatabase.query(CRAWLS_TABLE, columns, "code = ?", new String[] { crawlcode }, null, null, null);
 
 		if (c.getCount()>0) {
+			c.moveToFirst();
 			result[0]= c.getString(c.getColumnIndex("name"));
 			result[1]= c.getString(c.getColumnIndex("date"));
 
@@ -244,7 +245,7 @@ public class PermStorage {
 
 	public Cursor Get_Crawl_Data_Cursor(String crawlcode) {
 		String [] columns = new String[] { "name", "date" };
-		Cursor result = ourDatabase.query(COMMENTS_TABLE, columns, "code = ?", new String[] { crawlcode }, null, null, null);
+		Cursor result = ourDatabase.query(CRAWLS_TABLE, columns, "code = ?", new String[] { crawlcode }, null, null, null);
 
 		return result;
 	}
@@ -331,6 +332,7 @@ public class PermStorage {
 
 		if(size>0) {
 			String[] result = new String[8];
+			c.moveToFirst();
 
 			result[0] = c.getString(c.getColumnIndex("name"));
 			result[1] = c.getString(c.getColumnIndex("address"));
