@@ -1,36 +1,32 @@
 package ie.tcd.pubcrawl;
 
-import java.util.Random;
+
 import android.os.Bundle;
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Paint.Align;
-import android.graphics.Rect;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
 import android.support.v4.app.NavUtils;
 
 public class CardGames extends Activity implements OnTouchListener{
-	draw ourSurfaceView;
-	int x, y, next;
- 
+	private Spinner spinner1;
+	EditText edittext;
+	KingsView kingSurfaceView; 
+	int bp, count;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        next=0;
-    	ourSurfaceView = new draw(this);
-    	ourSurfaceView.setOnTouchListener(this);
+        bp=0;
+    	kingSurfaceView = new KingsView(this);
+    	kingSurfaceView.setOnTouchListener(this);
         setContentView(R.layout.activity_card_games);
         //getActionBar().setDisplayHomeAsUpEnabled(true);
+        //target api level can be set so things are not used like open gl dice
     }
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_card_games, menu);
@@ -44,120 +40,67 @@ public class CardGames extends Activity implements OnTouchListener{
         }
         return super.onOptionsItemSelected(item);
     }
-    public void Draw(View v){
-    	System.out.println('d');
-    	setContentView(ourSurfaceView);
+    public void king(View v){
+    	setContentView(kingSurfaceView);
     }
-    
+    public void set(View v){
+    	setContentView(R.layout.kings_rules);
+    }
+    public void change(View v){
+    	spinner1 = (Spinner) findViewById(R.id.spinner1);
+    	edittext = (EditText) findViewById(R.id.editText2);
+    	String t = String.valueOf(edittext.getText());
+    	String c = String.valueOf(spinner1.getSelectedItem());
+    	int i = 0;
+    	if(c .equals("Jack")){i=10;}
+    	if(c .equals("Queen")){i=11;}
+    	if(c .equals("King")){i=12;}
+    	if(c .equals("2"))i=1;
+    	if(c .equals("3"))i=2;
+    	if(c .equals("4"))i=3;
+    	if(c .equals("5"))i=4;
+    	if(c .equals("6"))i=5;
+    	if(c .equals("7"))i=6;
+    	if(c .equals("8"))i=7;
+    	if(c .equals("9"))i=8;
+    	if(c .equals("10"))i=9;    	
+    	kingSurfaceView.Rules[i]=t;
+    	Toast.makeText(getApplicationContext(),"\nCard :" + c+"\nRule : "+ t ,Toast.LENGTH_SHORT).show();
+    	setContentView(R.layout.kings_rules);
+    	InputMethodManager imm = (InputMethodManager)getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getWindow().getCurrentFocus().getWindowToken(), 0);
+    }
+    public void back(View v){
+    	setContentView(R.layout.activity_card_games);
+    }
 	protected void onPause() {
 		super.onPause();
-		ourSurfaceView.pause();
+		kingSurfaceView.pause();
 	}
 	protected void onResume() {
 		super.onResume();
-		ourSurfaceView.resume();
+		kingSurfaceView.resume();
 	}
+	@Override
 	public void onBackPressed()
 	{
-		onPause();
-		super.onBackPressed();
+		bp = (bp + 1);
+	    if (bp>1) {
+	    	kingSurfaceView.bmp1.recycle();
+	    	kingSurfaceView.bmp2.recycle();
+	        this.finish();
+	    }
+	    else {Toast.makeText(getApplicationContext(), " Press Back again to Exit ", Toast.LENGTH_SHORT).show();}
 	}
 	public boolean onTouch(View v, MotionEvent event) {
-		if(next==1){
-			next=0;
+		bp=0;
+		if(!kingSurfaceView.next){
+			if(kingSurfaceView.kingrule==5){
+				bp=1;
+				onBackPressed();
+			}
+			else{kingSurfaceView.next=true;}
 		}
 		return false;
-	}
-	public class draw extends SurfaceView implements Runnable{
-		
-		SurfaceHolder ourHolder;
-		Thread ourThread;
-		boolean IsOk = false;
-		Random rc;
-		String Rules[]= new String[13];
-		int crds[] = new int[52];
-		Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.packcards);
-		Paint rule = new Paint();
-		Rect src = new Rect();
-		Rect dst = new Rect();
-		int w,h, count;
-		
-		public draw(Context context) {
-			super(context);
-			ourHolder = getHolder();
-			rc = new Random(System.currentTimeMillis());
-			x=0;y=0;
-			for(int i=0;i<52;i++){
-				crds[i]=0;
-			}
-			Rules[0]="Waterfall";
-			Rules[1]="You";
-			Rules[2]="Me";
-			Rules[3]="Floor";
-			Rules[4]="Guys";
-			Rules[5]="Chicks";
-			Rules[6]="Heaven";
-			Rules[7]="Mate";
-			Rules[8]="Bust a rhyme";
-			Rules[9]="Catagories";
-			Rules[10]="Make a Rule";
-			Rules[11]="Quiz master";
-			Rules[12]="Everyone";
-			rule.setTextSize(25);
-			rule.setColor(Color.RED);
-			rule.setTextAlign(Align.CENTER);
-			h = (bmp.getHeight()/5);
-			w = (bmp.getWidth()/13);
-			count=0;
-			
-		}
-		public void resume() {
-			IsOk=true;
-			ourThread = new Thread(this);
-			ourThread.start();
-		}
-		public void pause(){
-			IsOk=false;
-			while(true){
-				try {
-					ourThread.join();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				break;
-			}
-			ourThread=null;
-		}
-		public void run() {
-			while(IsOk){
-				if(!ourHolder.getSurface().isValid()){
-					continue;
-				}
-				if(next==0){
-					x=rc.nextInt(13);
-					y=rc.nextInt(4);
-					while(crds[(12*y)+x]==1){
-						x=rc.nextInt(13);
-						y=rc.nextInt(4);
-					}
-					crds[(12*y)+x]=1;
-					x=w*x;
-					y=h*y;
-					src.set(x, y, x+w, y+h);
-					dst.set(50, 50, 150+w, 150+h);
-					Canvas c = ourHolder.lockCanvas();
-					c.drawColor(Color.GREEN);
-					c.drawBitmap(bmp, src, dst, null);
-					c.drawText(Rules[x/w], 100, 600, rule);
-					ourHolder.unlockCanvasAndPost(c);
-					next=1;count++;
-				}
-				//if(count==52){
-				//	IsOk=false;
-				//}
-				
-			}
-		}
 	}
 }
