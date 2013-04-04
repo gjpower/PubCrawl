@@ -32,7 +32,7 @@ public class CoinView extends SurfaceView implements SurfaceHolder.Callback {
 		centerY = CoinGames.Height / 2;
 		setFocusable(true);				// makes it able to handle events  
         coinBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.coin_anim);
-        //backgroundBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.coin_background);
+        backgroundBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.coin_background);
 		flipping = new CoinAnimation(coinBitmap, backgroundBitmap, centerX, centerY, 150, 150, 35, 24);
 		rand = new Random(System.currentTimeMillis());
 		numRotations = 0;

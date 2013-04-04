@@ -21,11 +21,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.TextView.OnEditorActionListener;
 
 public class ChangeUserName extends Activity {
 	public static String userName;
@@ -51,9 +53,22 @@ public class ChangeUserName extends Activity {
         PermStorage request = new PermStorage(this);
         request.open();
         userName = request.Get_User_Name();
-        request.close();
         currName.setText("Current User Name is " + userName);
         getName.setText(userName);
+        
+        getName.setOnEditorActionListener(new OnEditorActionListener() {
+            
+        	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        		userName = getName.getText().toString();
+				
+				if(ChangeName(userName)){
+					startActivity(new Intent("ie.tcd.pubcrawl.MAINACTIVITY"));
+					finish();
+				}
+				return true;
+            }
+        	
+        });
         
         saveName.setOnClickListener(new View.OnClickListener() {			
 			//Save new user name and go back to the main activity
@@ -68,12 +83,14 @@ public class ChangeUserName extends Activity {
 		});
     }
     
+    // this needs to be fixed
     boolean ChangeName(String username){
     	PermStorage entry = new PermStorage(ChangeUserName.this);
 		entry.open();
-		String user_id = Integer.toString(entry.Get_User_Id());
-		entry.Store_User_Name(userName);
-		entry.close();
+		String user_id = entry.Get_User_Id();
+		
+		Log.e("changename user", username);
+		Log.e("changename code", user_id);
     	
  		ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
  		postParameters.add(new BasicNameValuePair("UserName",username));
@@ -85,11 +102,6 @@ public class ChangeUserName extends Activity {
  			    
  			    // store the result returned by PHP script that runs MySQL query
  			    result = response.toString();  
- 			    
- 			    if(result == "User Update Failed"){
- 			    	Toast.makeText(getApplicationContext(),result, Toast.LENGTH_LONG).show();
- 			    	return false;
- 			    }
  		 }
  		 catch (Exception e) {
  			       	  Toast.makeText(getApplicationContext(),"Connection Error, Please try again", Toast.LENGTH_LONG).show();
@@ -97,12 +109,14 @@ public class ChangeUserName extends Activity {
  			       	return false;
  		 }
  		
- 		 
-  		entry.Store_User_Name(username);
-      	String[][] noCrawls = new String[1][4];	//Needs to be 4 to be compatible with Store_Crawl_Data
-      	entry.Store_Crawl_Data(noCrawls);
-      	entry.close();
- 		 
+ 		if(result == "User Update Failed"){
+		    	Toast.makeText(getApplicationContext(),result, Toast.LENGTH_LONG).show();
+		    	return false;
+		    }
+ 		else {
+ 			entry.Store_User_Name( username );
+ 			Toast.makeText(getApplicationContext(), "Name updated successfully", Toast.LENGTH_LONG).show();
+ 		}
  		return true;
  	}
      

@@ -23,10 +23,14 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.TextView.OnEditorActionListener;
 
 public class CreateUserName extends Activity {
 
@@ -34,7 +38,7 @@ public class CreateUserName extends Activity {
 	SharedPreferences appSharedPrefs;
 	public static String userName;
 	EditText getName;
-	int userId;
+	String userId;
 	private static HttpClient mHttpClient;
 	public static final int HTTP_TIMEOUT = 30 * 1000; // milliseconds
 
@@ -50,6 +54,19 @@ public class CreateUserName extends Activity {
         
         getName = (EditText) findViewById(R.id.etUserName);
         Button saveName = (Button) findViewById(R.id.bSaveUserName);
+        
+        getName.setOnEditorActionListener(new OnEditorActionListener() {
+            
+        	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        		userName = getName.getText().toString();
+				if(New_Member(userName)){	
+					startActivity(new Intent("ie.tcd.pubcrawl.MAINACTIVITY"));
+					finish();
+				}
+				return true;
+            }
+        	
+        });
         
         saveName.setOnClickListener(new View.OnClickListener() {			
 			//Save user name and go to the main activity
@@ -111,20 +128,13 @@ public class CreateUserName extends Activity {
      	
      	//Log.e("result", result);
      	//Log.e("length", Integer.toString(result.length()));
-     	result = result.substring(0, result.length() - 1);
-     	userId = Integer.parseInt(result, 10);//get user id from server
+     	userId = result.substring(0, result.length() - 1);
+     	
      	Toast.makeText(getApplicationContext(), "User id received: " + userId, Toast.LENGTH_LONG).show();
      	PermStorage entry = new PermStorage(CreateUserName.this);
-			entry.open();
+		entry.open();
  		entry.Store_User_Id(userId);
- 		entry.Store_User_Name(username);
-     	String[][] noCrawls = new String[1][4];	//Needs to be 4 to be compatible with Store_Crawl_Data
-     	noCrawls[0][0] = "No Crawls";
-     	noCrawls[0][1] = "";
-     	noCrawls[0][2] = "";
-     	noCrawls[0][3] = "";
-     	entry.Store_Crawl_Data(noCrawls);
-     	entry.close();
+ 		entry.Store_User_Name(userName);
 		 
 		return true;
 	}

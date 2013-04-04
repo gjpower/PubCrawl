@@ -7,6 +7,7 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 
 public class SpinnerGames extends Activity {
 
@@ -18,14 +19,11 @@ public class SpinnerGames extends Activity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spinner_games);
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
         Display display = getWindowManager().getDefaultDisplay();
         final int width = (display.getWidth());
         final int height = (display.getHeight());
         Width = width;
         Height = height;
-        //spinnerView = new SpinnerView(this);
-        setContentView(spinnerView);
     }
 
     @Override

@@ -197,14 +197,25 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="ie.tcd.pubcrawl.Photo_Cap"
+            android:label="@string/title_activity_photo_cap" >
+        </activity>
+        <activity
             android:name="ie.tcd.pubcrawl.ViewFeed"
             android:label="@string/title_activity_view_feed" >
+        </activity>
+        <activity
+            android:name="ie.tcd.pubcrawl.WebImage"
+            android:label="@string/title_activity_web_image" >
         </activity>
         <activity
             android:name="ie.tcd.pubcrawl.CrawlMapOverview"
             android:label="@string/title_activity_crawl_map_overview" >
         </activity>
-        
+        <activity
+            android:name="ie.tcd.pubcrawl.PubDescription"
+            android:label="@string/title_activity_pub_description" >
+        </activity>
         <meta-data
     	android:name="com.google.android.maps.v2.API_KEY"
     	android:value="AIzaSyAPFud__083yMsARfX-7vlVYlqaE2yPNv8"/>
