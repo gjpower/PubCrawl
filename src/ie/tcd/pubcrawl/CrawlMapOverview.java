@@ -1,4 +1,4 @@
-package ie.tcd.pubcrawl;
+/* package ie.tcd.pubcrawl;
 
 import android.content.Context;
 import android.content.Intent;
@@ -140,7 +140,7 @@ public class CrawlMapOverview extends android.support.v4.app.FragmentActivity im
 					getDirections(arg0);
 					return false;
 				}
-            });*/
+            });
     }
     
     
@@ -220,3 +220,5 @@ public class CrawlMapOverview extends android.support.v4.app.FragmentActivity im
           Toast.LENGTH_SHORT).show();
     }
 }
+
+*/
