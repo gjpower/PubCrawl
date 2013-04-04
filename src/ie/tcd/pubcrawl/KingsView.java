@@ -22,7 +22,7 @@ public class KingsView extends SurfaceView implements Runnable{
 	Random rc;
 	String Rules[]= new String[13];
 	int crds[] = new int[52];
-	Bitmap bmp1 = BitmapFactory.decodeResource(getResources(), R.drawable.background);
+	Bitmap bmp1 = BitmapFactory.decodeResource(getResources(), R.drawable.background_main_small);
 	Bitmap bmp2 = BitmapFactory.decodeResource(getResources(), R.drawable.packcards);
 	Paint rule = new Paint();
 	Rect src = new Rect();
