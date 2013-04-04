@@ -32,6 +32,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class Info extends Activity {
@@ -41,37 +42,32 @@ public class Info extends Activity {
 	private static Context context;
 	String crawlCode;
 	String[][] pubArray;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_info);
 
-		
+
 		PermStorage entry = new PermStorage(Info.this);
 		entry.open();
 		crawlCode = entry.Get_Current_Crawl(Info.this);
-		
-		pubArray = getSchedule(crawlCode);
-		
+
+		//pubArray = getSchedule(crawlCode);
+
 		//Event event = new Event();
+		String [] crawlInfo = new String[2]; 
+		crawlInfo = entry.Get_Crawl_Data(crawlCode);
 
 
-		/*
-       TextView eventNameTV = (TextView) findViewById(R.id.eventName);   
-        eventNameTV.setText(event.name);
+		TextView eventNameTV = (TextView) findViewById(R.id.eventName);   
+		eventNameTV.setText(crawlInfo[0]);
 
-        TextView eventOrganiserTV = (TextView) findViewById(R.id.eventOrganiser);
-        eventOrganiserTV.setText(event.organiser);
+		TextView eventTimeDateTV = (TextView) findViewById(R.id.eventTimeDate);
+		eventTimeDateTV.setText(crawlInfo[1]);
 
-        TextView eventTimeDateTV = (TextView) findViewById(R.id.eventTimeDate);
-        eventTimeDateTV.setText(event.timeDate);
-
-        TextView eventDescriptionTV = (TextView) findViewById(R.id.eventDescription);
-        eventDescriptionTV.setText(event.description);
-
-
-		 */
+		TextView eventDescriptionTV = (TextView) findViewById(R.id.eventDescription);
+		eventDescriptionTV.setText(crawlCode);
 
 
 
@@ -109,12 +105,10 @@ public class Info extends Activity {
 
 	private ArrayList<Map<String, String>> buildData(String info[][])
 	{
-
 		ArrayList<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		for (int i=0; i<10; i++)
 		{
 			list.add(putData(info[i][0], info[i][1]));
-
 		}
 		return list;
 	}
@@ -126,121 +120,4 @@ public class Info extends Activity {
 		item.put("rating", rating);
 		return item;
 	}
-
-
-	//These 3 methods are required for Network Connection
-		public static String executeHttpGet(String url) throws Exception {
-			BufferedReader in = null;
-			try {
-				HttpClient client = getHttpClient();
-				HttpGet request = new HttpGet();
-				request.setURI(new URI(url));
-				HttpResponse response = client.execute(request);
-				in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-				StringBuffer sb = new StringBuffer("");
-				String line = "";
-				String NL = System.getProperty("line.separator");
-				while ((line = in.readLine()) != null) {
-					sb.append(line + NL);
-				}
-				in.close();
-				String result = sb.toString();
-				return result;
-			} finally {
-				if (in != null) {
-					try {
-						in.close();
-					} catch (IOException e) {
-						Log.e("log_tag", "Error converting result " + e.toString());
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-
-		public static String executeHttpPost(String url,
-				ArrayList<NameValuePair> postParameters) throws Exception {
-			BufferedReader in = null;
-			try {
-				HttpClient client = getHttpClient();
-				HttpPost request = new HttpPost(url);
-				UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(
-						postParameters);
-				request.setEntity(formEntity);
-				HttpResponse response = client.execute(request);
-				in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-				StringBuffer sb = new StringBuffer("");
-				String line = "";
-				String NL = System.getProperty("line.separator");
-
-				while ((line = in.readLine()) != null) {
-					sb.append(line + NL);
-				}
-				in.close();
-				String result = sb.toString();
-				return result;
-			} finally {
-				if (in != null) {
-					try {
-						in.close();
-					} catch (IOException e) {
-						Log.e("log_tag", "Error converting result " + e.toString());
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-
-		private static HttpClient getHttpClient() {
-			if (mHttpClient == null) {
-				mHttpClient = new DefaultHttpClient();
-				final HttpParams params = mHttpClient.getParams();
-				HttpConnectionParams.setConnectionTimeout(params, HTTP_TIMEOUT);
-				HttpConnectionParams.setSoTimeout(params, HTTP_TIMEOUT);
-				ConnManagerParams.setTimeout(params, HTTP_TIMEOUT);
-			}
-			return mHttpClient;
-		} 
-
-		//This method takes down the needed information
-		public static String[][] getSchedule(String id){
-
-				String[][] info = new String[1][2];
-				ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
-				postParameters.add(new BasicNameValuePair("CrawlID",id));
-				String response = null;
-
-				// call executeHttpPost method passing necessary parameters
-				try {
-					response = executeHttpPost("http://164.138.29.169/getscheduleREAL.php",postParameters);
-
-					//store the result returned by PHP script that runs MySQL query
-					String result = response.toString();
-					JSONArray jArray = new JSONArray(result);
-	                
-					//parse json data
-					try{
-						//for(int i=0;i<jArray.length();i++){
-							JSONObject json_data = jArray.getJSONObject(0);
-							info[0][0] = "";//json_data.getString("crawlname");
-							info[0][1] = "";//json_data.getString("time");
-							//info[i][2] = json_data.getString("pubname");
-							//info[i][3] = json_data.getString("publocation");
-	//						info[i][4] = json_data.getString("latitude");
-	//						info[i][5] = json_data.getString("longitude");
-						//}
-					}
-
-					catch(JSONException e){
-						Log.e("log_tag", "Error parsing data "+e.toString());
-					}
-				}
-				catch (Exception e) {
-					Log.e("log_tag","Error in http connection!!" + e.toString());
-					Toast.makeText(context,"Error in http connection!!", Toast.LENGTH_LONG).show();
-				}
-			
-			return info; 
-		
-		}
 }

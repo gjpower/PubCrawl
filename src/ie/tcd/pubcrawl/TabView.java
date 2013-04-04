@@ -1,24 +1,59 @@
 package ie.tcd.pubcrawl;
 
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.util.ArrayList;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.params.ConnManagerParams;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.TabActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Log;
 import android.widget.TabHost;
+import android.widget.Toast;
 import android.widget.TabHost.TabSpec;
 
 @SuppressWarnings("deprecation")
 public class TabView extends TabActivity {
 	TabHost mTabHost;
+	public static final int HTTP_TIMEOUT = 30 * 1000; // milliseconds
+	private static HttpClient mHttpClient;
+	private static Context context;
+	static PermStorage entry;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	context = this;
     	StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
 		  .detectDiskReads().detectDiskWrites().detectNetwork() // StrictMode is most commonly used to catch accidental disk or network access on the application's main thread
 		  .penaltyLog().build());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tab_main);
         mTabHost=getTabHost();
+        
+        entry = new PermStorage(TabView.this);
+		entry.open();
+		String current = entry.Get_Current_Crawl(context);
+        getPubList(current);
         
         TabSpec firstSpec = mTabHost.newTabSpec("Info");
         firstSpec.setIndicator("Info", null);
@@ -45,5 +80,119 @@ public class TabView extends TabActivity {
         mTabHost.addTab(thirdSpec);
         mTabHost.addTab(fourthSpec);
     }
+    
+	//These 3 methods are required for Network Connection
+	public static String executeHttpGet(String url) throws Exception {
+		BufferedReader in = null;
+		try {
+			HttpClient client = getHttpClient();
+			HttpGet request = new HttpGet();
+			request.setURI(new URI(url));
+			HttpResponse response = client.execute(request);
+			in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+			StringBuffer sb = new StringBuffer("");
+			String line = "";
+			String NL = System.getProperty("line.separator");
+			while ((line = in.readLine()) != null) {
+				sb.append(line + NL);
+			}
+			in.close();
+			String result = sb.toString();
+			return result;
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					Log.e("log_tag", "Error converting result " + e.toString());
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public static String executeHttpPost(String url, ArrayList<NameValuePair> postParameters) throws Exception {
+		BufferedReader in = null;
+		try {
+			HttpClient client = getHttpClient();
+			HttpPost request = new HttpPost(url);
+			UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
+			request.setEntity(formEntity);
+			HttpResponse response = client.execute(request);
+			in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+			StringBuffer sb = new StringBuffer("");
+			String line = "";
+			String NL = System.getProperty("line.separator");
+
+			while ((line = in.readLine()) != null) {
+				sb.append(line + NL);
+			}
+			in.close();
+			String result = sb.toString();
+			return result;
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					Log.e("log_tag", "Error converting result " + e.toString());
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private static HttpClient getHttpClient() {
+		if (mHttpClient == null) {
+			mHttpClient = new DefaultHttpClient();
+			final HttpParams params = mHttpClient.getParams();
+			HttpConnectionParams.setConnectionTimeout(params, HTTP_TIMEOUT);
+			HttpConnectionParams.setSoTimeout(params, HTTP_TIMEOUT);
+			ConnManagerParams.setTimeout(params, HTTP_TIMEOUT);
+		}
+		return mHttpClient;
+	}          
+
+	//This method takes down the needed information
+	public static void getPubList(String id){
+		String[][] info;
+		
+		ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+		postParameters.add(new BasicNameValuePair("CrawlID", id));
+		String response = null;
+		// call executeHttpPost method passing necessary parameters
+		try {
+			response = executeHttpPost("http://164.138.29.169/android/getschedule.php",postParameters);
+			// store the result returned by PHP script that runs MySQL query
+			String result = response.toString();
+
+			//parse json data
+			try{
+				JSONArray jArray = new JSONArray(result);
+				Log.e("jsonlength", Integer.toString(jArray.length()));
+				info = new String [jArray.length()][3];
+				for(int i=0;i<jArray.length();i++){
+				JSONObject json_data = jArray.getJSONObject(i);
+				info[i][0] = json_data.getString("pubname");
+				info[i][1] = json_data.getString("time");
+				info[i][2] = json_data.getString("pubid");
+				Log.e("name", info[i][0]);
+				Log.e("time", info[i][1]);
+				Log.e("pubid", info[i][2]);
+				}
+				entry.Store_Crawl_Pubs(info, id);
+			}
+
+			catch(JSONException e){
+				Log.e("log_tag", "Error parsing data "+e.toString());
+			}
+		}
+		catch (Exception e) {
+			Log.e("log_tag","Error in http connection!!" + e.toString());
+			Toast.makeText(context,"Error in http connection!!", Toast.LENGTH_LONG).show();
+		}
+		return; 
+	}
+
 
 }

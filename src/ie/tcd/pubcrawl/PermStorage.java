@@ -51,7 +51,7 @@ public class PermStorage {
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL("CREATE TABLE " + PREVCRAWLS_TABLE + " (" +
 					KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-					KEY_PREVCRAWLS + " TEXT NOT NULL);"					
+					KEY_PREVCRAWLS + " TEXT);"					
 					);
 			db.execSQL("CREATE TABLE " + ADMIN_TABLE + " (" +
 					KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -304,7 +304,7 @@ public class PermStorage {
 
 	public void Store_Pub(String name, String address, String description, int likes, int dislikes, String latitude, String longitude, String serverid) {
 		String[] pubdata = Get_Pub(serverid);
-		
+
 		ContentValues cv = new ContentValues();
 		cv.put("name", name);
 		cv.put("address", address);
@@ -314,7 +314,7 @@ public class PermStorage {
 		cv.put("latitude", latitude);
 		cv.put("longitude", longitude);
 		cv.put("serverid", serverid);
-		
+
 		//if pub with that id already exists update it
 		if (pubdata!=null) {
 			ourDatabase.update(PUB_TABLE, cv, "serverid = ?", new String[] {serverid});

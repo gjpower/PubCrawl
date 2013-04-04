@@ -37,7 +37,7 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements OnClickListener {
-	
+
 	public PermStorage request;
 	public String userName;
 	public static final int HTTP_TIMEOUT = 30 * 1000; // milliseconds
@@ -46,180 +46,181 @@ public class MainActivity extends Activity implements OnClickListener {
 	HttpEntity resEntity;
 	EditText guestCode;
 	Button joinCrawl;
-	
-	
+
+
 	//Global Varibles for Test
 	int UserID = 1;
 
-	
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        
-        guestCode = (EditText) findViewById(R.id.loginCodeTV);
-        joinCrawl = (Button) findViewById(R.id.bLogIn);           
-        Button gameMenu = (Button) findViewById(R.id.bGames);
-        Button currentCrawls = (Button) findViewById(R.id.bCurrentCrawls);
-        Button changeName = (Button) findViewById(R.id.bChangeName);
-        
-        //attaching keyboard send button listener to the joincrawl button
-        
-        guestCode.setOnEditorActionListener(new OnEditorActionListener() {
-            
-        	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_GO) {
-                    postLoginInfo();
-                    return true;
-                }
-                return false;
-            }
-        	
-        });
-        
-        
-        request = new PermStorage(this);
-        request.open();
-        userName = request.Get_User_Name();
-        
-        TextView tvUserName = (TextView) findViewById(R.id.tvUserName);
-        tvUserName.setText(userName);
-        
-     
-        
-        
-        joinCrawl.setOnClickListener(this);
-        gameMenu.setOnClickListener(this);
-        currentCrawls.setOnClickListener(this);
-        changeName.setOnClickListener(this);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
-        return true;
-    }    
-    
-    protected void postLoginInfo (){
-   	 ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
-       
-       // define the parameter
-       postParameters.add(new BasicNameValuePair("guest_code",guestCode.getText().toString()));
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
 
 
-       String response = null;
-       //Log.e("log_tag","Got to this part 1");
-       // call executeHttpPost method passing necessary parameters 
-       try {
-    	   response = executeHttpPost("http://164.138.29.169/android_login.php",postParameters);
-    	   
-    	   List<String> list = new ArrayList<String>();
-    	   // store the result returned by PHP script that runs MySQL querys
-    	   list = request.Get_Prev_Crawls();
-    	   
-    	   String result = response.toString();
-         boolean exists = false;
-         for(int i =0; i<list.size(); i++){
-          if(list.get(i) == result)
-            exists = true;
-         }
+		guestCode = (EditText) findViewById(R.id.loginCodeTV);
+		joinCrawl = (Button) findViewById(R.id.bLogIn);           
+		Button gameMenu = (Button) findViewById(R.id.bGames);
+		Button currentCrawls = (Button) findViewById(R.id.bCurrentCrawls);
+		Button changeName = (Button) findViewById(R.id.bChangeName);
 
-         if(exists == false){         
-    	   list.add(0, result);
-        }
-    	  
-    	   
-    	   if(result != "Login Fail")
-    	   {
-    				request.Store_Prev_Crawls(list);
-    	   }
-    	   
-    	   //tv.setText(response);
-    	   InputMethodManager imm = (InputMethodManager)getSystemService(
-    	   Context.INPUT_METHOD_SERVICE);
-    		   imm.hideSoftInputFromWindow(guestCode.getWindowToken(), 0);
+		//attaching keyboard send button listener to the joincrawl button
 
-    		   Toast.makeText(getApplicationContext(),result, Toast.LENGTH_LONG).show();
+		guestCode.setOnEditorActionListener(new OnEditorActionListener() {
+
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				if (actionId == EditorInfo.IME_ACTION_GO) {
+					postLoginInfo();
+					return true;
+				}
+				return false;
+			}
+
+		});
 
 
-       }
-       catch (Exception e) {
-     	  Toast.makeText(getApplicationContext(),"Connection Error, Please try again", Toast.LENGTH_LONG).show();
-     	  Log.e("log_tag","Error in http connection!!" + e.toString());     
-       }
+		request = new PermStorage(this);
+		request.open();
+		userName = request.Get_User_Name();
 
-       // changes go here
-       guestCode.setText("");
-   }         
-     
+		TextView tvUserName = (TextView) findViewById(R.id.tvUserName);
+		tvUserName.setText(userName);
 
 
 
-   public static String executeHttpPost(String url,
-   		ArrayList<NameValuePair> postParameters) throws Exception {
-   			BufferedReader in = null;
-   			try {
-   				HttpClient client = getHttpClient();
-   				HttpPost request = new HttpPost(url);
-   				UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(
-   				postParameters);
-   				request.setEntity(formEntity);
-   				HttpResponse response = client.execute(request);
-   				in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-   				StringBuffer sb = new StringBuffer("");
-   				String line = "";
-   				String NL = System.getProperty("line.separator");
-   				
-   				while ((line = in.readLine()) != null) {
-   					sb.append(line + NL);
-   				}
-   				in.close();
-   				String result = sb.toString();
-   				return result;
-   			} finally {
-   				if (in != null) {
-   					try {
-   						in.close();
-   					} catch (IOException e) {
-   						Log.e("log_tag", "Error converting result " + e.toString());
-   						e.printStackTrace();
-   					}
-   				}
-   			}
-   		}
+
+		joinCrawl.setOnClickListener(this);
+		gameMenu.setOnClickListener(this);
+		currentCrawls.setOnClickListener(this);
+		changeName.setOnClickListener(this);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.activity_main, menu);
+		return true;
+	}    
+
+	protected void postLoginInfo (){
+		ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+
+		// define the parameter
+		postParameters.add(new BasicNameValuePair("guest_code",guestCode.getText().toString()));
 
 
-   private static HttpClient getHttpClient() {
-   	if (mHttpClient == null) {
-   		mHttpClient = new DefaultHttpClient();
-   		final HttpParams params = mHttpClient.getParams();
-   		HttpConnectionParams.setConnectionTimeout(params, HTTP_TIMEOUT);
-   		HttpConnectionParams.setSoTimeout(params, HTTP_TIMEOUT);
-   		ConnManagerParams.setTimeout(params, HTTP_TIMEOUT);
-   	}
-   	return mHttpClient;
-   }
+		String response = null;
+		//Log.e("log_tag","Got to this part 1");
+		// call executeHttpPost method passing necessary parameters 
+		try {
+			response = executeHttpPost("http://164.138.29.169/android/login.php",postParameters);
 
-    
-    
-    
-    public void onClick(View v)
-    {
-    	switch (v.getId())
-    	{
-    	case R.id.bLogIn:
-    		postLoginInfo();
-    		break;
-    	case R.id.bGames:
-    		startActivity(new Intent("ie.tcd.pubcrawl.GAMEMENU"));
-    		break;
-    	case R.id.bCurrentCrawls:
-    		startActivity(new Intent("ie.tcd.pubcrawl.tabview.CRAWLLISTPAGE"));
-    		break;
-    	case R.id.bChangeName:
-    		startActivity(new Intent("ie.tcd.pubcrawl.CHANGEUSERNAME"));
-    		break;
-    	}
-    }    
+			List<String> list = new ArrayList<String>();
+			// store the result returned by PHP script that runs MySQL querys
+			list = request.Get_Prev_Crawls();
+
+			String temp = response.toString();
+			String result = temp.substring(0, 5);
+			boolean exists = false;
+			for(int i =0; i<list.size(); i++){
+				if(list.get(i) == result)
+					exists = true;
+			}
+
+			if(exists == false){         
+				list.add(0, result);
+			}
+
+
+			if(!result.equals("FAILL"))
+			{
+				Log.e("nicholma", "result is not equal to FAILL");
+				request.Store_Prev_Crawls(list);
+			}
+
+			//tv.setText(response);
+			InputMethodManager imm = (InputMethodManager)getSystemService(
+					Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(guestCode.getWindowToken(), 0);
+
+			Toast.makeText(getApplicationContext(),result, Toast.LENGTH_LONG).show();
+
+
+		}
+		catch (Exception e) {
+			Toast.makeText(getApplicationContext(),"Connection Error, Please try again", Toast.LENGTH_LONG).show();
+			Log.e("log_tag","Error in http connection!!" + e.toString());     
+		}
+
+		// changes go here
+		guestCode.setText("");
+	}         
+
+
+
+
+	public static String executeHttpPost(String url,
+			ArrayList<NameValuePair> postParameters) throws Exception {
+		BufferedReader in = null;
+		try {
+			HttpClient client = getHttpClient();
+			HttpPost request = new HttpPost(url);
+			UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(postParameters);
+			request.setEntity(formEntity);
+			HttpResponse response = client.execute(request);
+			in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+			StringBuffer sb = new StringBuffer("");
+			String line = "";
+			String NL = System.getProperty("line.separator");
+
+			while ((line = in.readLine()) != null) {
+				sb.append(line + NL);
+			}
+			in.close();
+			String result = sb.toString();
+			return result;
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					Log.e("log_tag", "Error converting result " + e.toString());
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+
+	private static HttpClient getHttpClient() {
+		if (mHttpClient == null) {
+			mHttpClient = new DefaultHttpClient();
+			final HttpParams params = mHttpClient.getParams();
+			HttpConnectionParams.setConnectionTimeout(params, HTTP_TIMEOUT);
+			HttpConnectionParams.setSoTimeout(params, HTTP_TIMEOUT);
+			ConnManagerParams.setTimeout(params, HTTP_TIMEOUT);
+		}
+		return mHttpClient;
+	}
+
+
+
+
+	public void onClick(View v)
+	{
+		switch (v.getId())
+		{
+		case R.id.bLogIn:
+			postLoginInfo();
+			break;
+		case R.id.bGames:
+			startActivity(new Intent("ie.tcd.pubcrawl.GAMEMENU"));
+			break;
+		case R.id.bCurrentCrawls:
+			startActivity(new Intent("ie.tcd.pubcrawl.tabview.CRAWLLISTPAGE"));
+			break;
+		case R.id.bChangeName:
+			startActivity(new Intent("ie.tcd.pubcrawl.CHANGEUSERNAME"));
+			break;
+		}
+	}    
 }

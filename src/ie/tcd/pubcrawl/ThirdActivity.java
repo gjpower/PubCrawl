@@ -10,8 +10,8 @@ public class ThirdActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.third);
+	
+	
 	}
-	
-	
 
 }
