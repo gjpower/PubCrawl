@@ -200,10 +200,11 @@ public class CrawlsListPage extends Activity {
 
 	//This method takes down the needed information
 	public static String[][] getSchedule(List<String> id){
-		String[][] info = new String [id.size()][6];
+		String[][] info = new String [id.size()][2];
+		ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
 		for(int i =0; i< id.size(); i++){
-			ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
-			postParameters.add(new BasicNameValuePair("CrawlID",id.get(i)));
+			
+			postParameters.set(0,new BasicNameValuePair("CrawlID",id.get(i)));
 			String response = null;
 
 			// call executeHttpPost method passing necessary parameters

@@ -118,8 +118,16 @@ public class MainActivity extends Activity implements OnClickListener {
     	   // store the result returned by PHP script that runs MySQL querys
     	   list = request.Get_Prev_Crawls();
     	   
-    	   String result = response.toString();  
+    	   String result = response.toString();
+         boolean exists = false;
+         for(int i =0; i<list.size(); i++){
+          if(list.get(i) == result)
+            exists = true;
+         }
+
+         if(exists == false){         
     	   list.add(0, result);
+        }
     	  
     	   
     	   if(result != "Login Fail")
