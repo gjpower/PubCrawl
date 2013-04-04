@@ -254,7 +254,7 @@ public class PermStorage {
 	public void Store_Crawl_Pubs(String[][] pubData, String crawlkey) {
 
 		//delete any thing listed with that crawl code
-		ourDatabase.delete(CRAWLS_PUBTABLE, "code = ?", new String[] { crawlkey } );
+		ourDatabase.delete(CRAWLS_PUBTABLE, "crawlcode = ?", new String[] { crawlkey } );
 		int size = pubData.length;
 
 		ContentValues cv = new ContentValues();
@@ -297,7 +297,7 @@ public class PermStorage {
 	//provides a cursor result which can be useful for listviews
 	public Cursor Get_Crawl_Pubs_Cursor(String crawlkey) {
 		String [] columns = new String[] { "name", "time", "serverid" };
-		Cursor result = ourDatabase.query(COMMENTS_TABLE, columns, "code = ?", new String[] { crawlkey }, null, null, null);
+		Cursor result = ourDatabase.query(CRAWLS_PUBTABLE, columns, "crawlcode = ?", new String[] { crawlkey }, null, null, null);
 
 		return result;
 	}

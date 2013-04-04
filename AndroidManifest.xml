@@ -199,6 +199,11 @@
         <activity
             android:name="ie.tcd.pubcrawl.PubDescription"
             android:label="@string/title_activity_pub_description" >
+            <intent-filter>
+                <action android:name="ie.tcd.pubcrawl.PUBDESCRIPTION" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
     </application>
 

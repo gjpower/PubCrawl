@@ -28,37 +28,36 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class Info extends Activity {
 
-	public static final int HTTP_TIMEOUT = 30 * 1000; // milliseconds
-	private static HttpClient mHttpClient;
-	private static Context context;
 	String crawlCode;
 	String[][] pubArray;
+	String[][] scheduleInfo;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_info);
 
-
 		PermStorage entry = new PermStorage(Info.this);
 		entry.open();
 		crawlCode = entry.Get_Current_Crawl(Info.this);
 
-		//pubArray = getSchedule(crawlCode);
-
-		//Event event = new Event();
-		String [] crawlInfo = new String[2]; 
+		//Retrieving Display Information from PermStorage
+		String [] crawlInfo; 
+		scheduleInfo = entry.Get_Crawl_Pubs(crawlCode);
 		crawlInfo = entry.Get_Crawl_Data(crawlCode);
-
 
 		TextView eventNameTV = (TextView) findViewById(R.id.eventName);   
 		eventNameTV.setText(crawlInfo[0]);
@@ -69,55 +68,46 @@ public class Info extends Activity {
 		TextView eventDescriptionTV = (TextView) findViewById(R.id.eventDescription);
 		eventDescriptionTV.setText(crawlCode);
 
-
-
-
-
 		ListView listView = (ListView) findViewById(R.id.listOfPubs);
 
-		String[][] infoArray = new String[10][2];
+			
+			
+			ArrayList<Map<String, String>> list = buildData(scheduleInfo);
+			String[] from = { "name", "time"};
+			int[] to = { R.id.pubName, R.id.time };
 
-
-		Pub[] pubArray = new Pub[10];
-		{
-			for (int i=0; i<10; i++){
-				pubArray[i] = new Pub("name".concat(String.valueOf(i+1)), i+1);
-
-				System.out.println(i);
-				System.out.println(pubArray[i].name);
-				System.out.println(pubArray[i].ratingString);		
-			}
-
-			for(int i=0; i<10; i++)
+			SimpleAdapter adapter = new SimpleAdapter(this, list, R.layout.activity_row_layout, from, to);
+			listView.setAdapter(adapter);
+			
+			listView.setOnItemClickListener(new OnItemClickListener()
 			{
-				infoArray[i][0] = pubArray[i].name;
-				infoArray[i][1] = pubArray[i].ratingString;
-			}
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+				{
+					// TODO Auto-generated method stub
+					Intent myIntent = new Intent("ie.tcd.pubcrawl.PUBDESCRIPTION");
+					myIntent.putExtra("pubID", scheduleInfo[position][2]);
+					startActivity(myIntent);
 
-			ArrayList<Map<String, String>> list = buildData(infoArray);
-			String[] from = { "name", "rating"};
-			int[] to = { R.id.pubName, R.id.pubRating };
-
-			SimpleAdapter adapter = new SimpleAdapter(this, list,
-					R.layout.activity_row_layout, from, to);
-			listView.setAdapter(adapter);}
+				}
+			});
 	}
+
 
 	private ArrayList<Map<String, String>> buildData(String info[][])
 	{
 		ArrayList<Map<String, String>> list = new ArrayList<Map<String, String>>();
-		for (int i=0; i<10; i++)
+		for (int i=0; i<info.length; i++)
 		{
 			list.add(putData(info[i][0], info[i][1]));
 		}
 		return list;
 	}
 
-	private HashMap<String, String> putData(String name, String rating)
+	private HashMap<String, String> putData(String name, String time)
 	{
 		HashMap<String, String> item = new HashMap<String, String>();
 		item.put("name", name);
-		item.put("rating", rating);
+		item.put("time", time);
 		return item;
 	}
 }

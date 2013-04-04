@@ -49,11 +49,17 @@ public class TabView extends TabActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tab_main);
         mTabHost=getTabHost();
+        String[][] Pubs;
         
         entry = new PermStorage(TabView.this);
 		entry.open();
 		String current = entry.Get_Current_Crawl(context);
         getPubList(current);
+        Pubs = entry.Get_Crawl_Pubs(current);
+        
+        for(int i=0; i<Pubs.length; i++){
+        	getPubInfo(Pubs[i][2]);
+        }
         
         TabSpec firstSpec = mTabHost.newTabSpec("Info");
         firstSpec.setIndicator("Info", null);
@@ -156,7 +162,6 @@ public class TabView extends TabActivity {
 	//This method takes down the needed information
 	public static void getPubList(String id){
 		String[][] info;
-		
 		ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
 		postParameters.add(new BasicNameValuePair("CrawlID", id));
 		String response = null;
@@ -169,16 +174,12 @@ public class TabView extends TabActivity {
 			//parse json data
 			try{
 				JSONArray jArray = new JSONArray(result);
-				Log.e("jsonlength", Integer.toString(jArray.length()));
 				info = new String [jArray.length()][3];
 				for(int i=0;i<jArray.length();i++){
 				JSONObject json_data = jArray.getJSONObject(i);
 				info[i][0] = json_data.getString("pubname");
 				info[i][1] = json_data.getString("time");
 				info[i][2] = json_data.getString("pubid");
-				Log.e("name", info[i][0]);
-				Log.e("time", info[i][1]);
-				Log.e("pubid", info[i][2]);
 				}
 				entry.Store_Crawl_Pubs(info, id);
 			}
@@ -194,5 +195,53 @@ public class TabView extends TabActivity {
 		return; 
 	}
 
+	public static void getPubInfo(String id){
+		String[] info = new String[7];
 
+		ArrayList<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+		postParameters.add(new BasicNameValuePair("PubID",id));
+		String response = null;
+
+		// call executeHttpPost method passing necessary parameters
+		try {
+			response = executeHttpPost("http://164.138.29.169/getpubinfo.php",postParameters);
+
+			// store the result returned by PHP script that runs MySQL query
+			String result = response.toString();
+
+			//parse json data
+			try{
+				JSONArray jArray = new JSONArray(result);
+
+				JSONObject json_data = jArray.getJSONObject(0);
+				info[0] = json_data.getString("name");
+				info[1] = json_data.getString("address");
+				info[2] = json_data.getString("description");
+				info[3] = json_data.getString("ups");
+				info[4] = json_data.getString("downs");
+				info[5] = json_data.getString("lat");
+				info[6] = json_data.getString("long");
+				Toast.makeText(context,"PECTRA SMASH!", Toast.LENGTH_LONG).show();
+				Log.e("name", info[0]);
+				Log.e("name", info[1]);
+				Log.e("name", info[2]);
+				Log.e("name", info[3]);
+				Log.e("name", info[4]);
+				Log.e("name", info[5]);
+				Log.e("name", info[6]);
+				entry.Store_Pub(info[0], info[1], info[2], Integer.parseInt(info[3]), Integer.parseInt(info[4]), info[5], info[6], id);
+			}
+			catch(JSONException e){
+				Log.e("log_tag", "Error parsing data "+e.toString());
+			}
+		}
+		catch (Exception e) {
+			Log.e("log_tag","Error in http connection!!" + e.toString());
+			Toast.makeText(context,"Error in http connection!!", Toast.LENGTH_LONG).show();
+		}
+		return; 
+	}
+	
+	
+	
 }

@@ -67,7 +67,7 @@ public class CrawlsListPage extends Activity {
 
 		//filling the array of items to go into the list
 		ArrayList<Map<String, String>> list = buildData(dataList);
-
+//
 		String[] from = { "name", "details" };
 		int[] to = { R.id.crawlName, R.id.crawlDetails }; //identifies row layout to use
 
