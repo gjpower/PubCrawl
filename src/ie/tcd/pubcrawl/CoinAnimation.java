@@ -10,6 +10,7 @@ public class CoinAnimation
 {
 	
 		private Bitmap bitmap;      // the animation sequence		
+		private Bitmap background; // 
 	    public Rect sourceRect;    // the rectangle to be drawn from the animation bitmap	    
 	    private int frameNr;        // number of frames in animation
 	    private int currentFrame;   // the current frame
@@ -22,6 +23,7 @@ public class CoinAnimation
 	    static int mod = -1;
 	    private long frameTicker;   // the time of the last frame update
 	    private int dy;
+	    public Rect screenRect, bRect;
 	    
 	    
 	    public static Rect heads;
@@ -29,9 +31,10 @@ public class CoinAnimation
 
 
 	    // constructor 
-public CoinAnimation(Bitmap bitmap, int x, int y, int width, int height, int fps, int frameCount) 
+public CoinAnimation(Bitmap bitmap,Bitmap background, int x, int y, int width, int height, int fps, int frameCount) 
 	{
         this.bitmap = bitmap;
+        this.background = background;
         this.x =x;
         this.y = y;
         currentFrame = 0;
@@ -39,12 +42,14 @@ public CoinAnimation(Bitmap bitmap, int x, int y, int width, int height, int fps
         spriteWidth = bitmap.getWidth() / frameCount;
         spriteHeight = bitmap.getHeight();
         sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
+        screenRect = new Rect(0,0, CoinGames.Width, CoinGames.Height);
+        bRect = new Rect(0,0, background.getWidth(), background.getHeight());
         framePeriod = 1000 / fps;
         frameTicker = 0l;
         slow = 10 / fps;
         heads = new Rect(1950 , 0, 2100, spriteHeight );
         tails = new Rect(0, 0, spriteWidth, spriteHeight); 
-        dy = CoinGames.Height / (6 * fps) ;
+        dy = CoinGames.Height / (4 * fps) ;
     }
 
 		// changes the displayed image based on elapsed time 
@@ -79,7 +84,7 @@ public void Update(long gameTime)
 public void Draw(Canvas canvas)
 	{
 	        // where to draw the sprite
-			canvas.drawColor(Color.GREEN); // resets the back ground
+			canvas.drawBitmap(background, bRect, screenRect, null);
 	        Rect destRect = new Rect(Get_X(), Get_Y(), Get_X() + spriteWidth, Get_Y() + spriteHeight);
 	        canvas.drawBitmap(bitmap, sourceRect, destRect, null);	
     }

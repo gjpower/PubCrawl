@@ -7,14 +7,16 @@
     <uses-sdk
         android:minSdkVersion="10"
         android:targetSdkVersion="15" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        
-        <!-- com.example -->
         <activity
             android:name="ie.tcd.pubcrawl.TabView"
             android:label="new tabV activity" >
@@ -23,7 +25,6 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-         
         </activity>
         <activity
             android:name="ie.tcd.pubcrawl.FirstActivity"
@@ -54,12 +55,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        
-        
-        <!-- com.example -->
-        
-        
-        
         <activity
             android:name="ie.tcd.pubcrawl.CreateUserName"
             android:label="@string/create_user_name" >
@@ -134,6 +129,22 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ie.tcd.pubcrawl.GAMEMENU" />
+        </activity>
+
+        <!-- this is my new activity -->
+        <activity
+            android:name="ie.tcd.pubcrawl.twoDDice"
+            android:label="@string/two_d_dice" >
+            <intent-filter>
+                <action android:name="ie.tcd.pubcrawl.TWODDICE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ie.tcd.pubcrawl.GAMEMENU" />
@@ -141,11 +152,12 @@
         <activity
             android:name="ie.tcd.pubcrawl.CurrentCrawls"
             android:label="@string/title_current_crawls" >
-           	<intent-filter>
+            <intent-filter>
                 <action android:name="ie.tcd.pubcrawl.CURRENTCRAWLS" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ie.tcd.pubcrawl.GAMEMENU" />
@@ -153,7 +165,7 @@
         <activity
             android:name="ie.tcd.pubcrawl.ChangeUserName"
             android:label="@string/change_user_name" >
-           	<intent-filter>
+            <intent-filter>
                 <action android:name="ie.tcd.pubcrawl.CHANGEUSERNAME" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -169,9 +181,24 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="ie.tcd.pubcrawl.Photo_Cap"
+            android:label="@string/title_activity_photo_cap" >
+        </activity>
+        <activity
             android:name="ie.tcd.pubcrawl.ViewFeed"
             android:label="@string/title_activity_view_feed" >
-
+        </activity>
+        <activity
+            android:name="ie.tcd.pubcrawl.WebImage"
+            android:label="@string/title_activity_web_image" >
+        </activity>
+        <activity
+            android:name="ie.tcd.pubcrawl.CrawlMapOverview"
+            android:label="@string/title_activity_crawl_map_overview" >
+        </activity>
+        <activity
+            android:name="ie.tcd.pubcrawl.PubDescription"
+            android:label="@string/title_activity_pub_description" >
         </activity>
     </application>
 

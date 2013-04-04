@@ -35,9 +35,15 @@ public class TabView extends TabActivity {
         Intent thirdIntent = new Intent(this, ThirdActivity.class);
         thirdSpec.setContent(thirdIntent);
         
+        TabSpec fourthSpec = mTabHost.newTabSpec("fourth");
+        fourthSpec.setIndicator("Upload", null);
+        Intent fourthIntent = new Intent(this, Photo_Cap.class);
+        fourthSpec.setContent(fourthIntent);
+        
         mTabHost.addTab(firstSpec);
         mTabHost.addTab(secondSpec);
         mTabHost.addTab(thirdSpec);
+        mTabHost.addTab(fourthSpec);
     }
 
 }

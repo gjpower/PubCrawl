@@ -12,12 +12,15 @@
     <string name="games">Games</string>
     <string name="card">Card Games</string>
     <string name="dice">Dice Games</string>
+    <string name="two_d_dice">2D Dice</string>
     <string name="coin">Coin Games</string>
     <string name="spin">Spinner Games</string>
     <string name="title_activity_card_games">CardGames</string>
     <string name="title_activity_dice_games">DiceGames</string>
     <string name="title_activity_coin_games">CoinGames</string>
     <string name="title_activity_spinner_games">SpinnerGames</string>
+    <string name="title_activity_photo_cap">PhotoCap</string>
+    <string name="title_activity_web_image">Image</string>
     <string name="flip">Swipe up to flip the coin </string>
     <string name="title_current_crawls">Current Crawls</string>
     <string name="Draw">Draw</string>
@@ -29,5 +32,12 @@
     <string name="title_activity_row_layout">RowLayout</string>
     <string name="title_activity_crawls_list_page">CrawlsListPage</string>
     <string name="title_activity_view_feed">ViewFeed</string>
+    <string name="save">save image</string>
+
+    <color name="commentexistscolour">#77F</color>
+
+    <string name="title_activity_crawl_map_overview">CrawlMapOverview</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_pub_description">PubDescription</string>
 
 </resources>

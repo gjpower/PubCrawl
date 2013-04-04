@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.util.Log;
 
 
 public class SpinnerAnimation {
@@ -20,17 +19,22 @@ public class SpinnerAnimation {
     private int y;              // the Y coordinate of the object (top left of the image
     private long frameTicker;
     public int numShown;
+    public Rect screenRect, bRect;
+    public Bitmap background;
 
-	public SpinnerAnimation(Bitmap bitmap, int x, int y, int width, int height, int fps, int frameCount) 
+	public SpinnerAnimation(Bitmap bitmap,Bitmap background, int x, int y, int width, int height, int fps, int frameCount) 
 	{
 		this.bitmap = bitmap;
-		this.x = x;
-        this.y = y;
+		this.background = background;
         currentFrame = 0;
         frameNr = frameCount;
         spriteWidth = bitmap.getWidth() / frameCount;
         spriteHeight = bitmap.getHeight();
+        this.x = x;
+        this.y = y;
         sourceRect = new Rect(0, 0, spriteWidth, spriteHeight);
+        screenRect = new Rect(0,0, SpinnerGames.Width, SpinnerGames.Height);
+        bRect = new Rect(0,0, background.getWidth(), background.getHeight());
         framePeriod = 1000 / fps;
         frameTicker = 0l;
         numShown = 0;
@@ -63,8 +67,8 @@ public class SpinnerAnimation {
 	public void Draw(Canvas canvas)
 	{
 	        // where to draw the sprite
-			canvas.drawColor(Color.GREEN); // resets the back ground
-	        Rect destRect = new Rect(x, y, x + spriteWidth, y + spriteHeight);
+			canvas.drawBitmap(background, bRect, screenRect, null);
+	        Rect destRect = new Rect(x - (spriteWidth/2), y - (spriteHeight/2), x + (spriteWidth/2), y + (spriteHeight/2));
 	        canvas.drawBitmap(bitmap, sourceRect, destRect, null);	
     }
 	

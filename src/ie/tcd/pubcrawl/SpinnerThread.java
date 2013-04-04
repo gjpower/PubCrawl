@@ -10,7 +10,9 @@ public class SpinnerThread extends Thread {
 	private SpinnerView spinnerView;
 	static Canvas canvas;
 	public boolean waiting;
-	public int numTurns, numPos, reqNumTurns;
+	public int numTurns;
+	public int numPos;
+	public int reqNumTurns;
 	
 	public SpinnerThread(SurfaceHolder surfaceHolder, SpinnerView spinnerView) 
 	{
