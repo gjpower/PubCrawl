@@ -11,7 +11,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-public class diceView extends SurfaceView implements Runnable {
+public class diceView2 extends SurfaceView implements Runnable {
 
 	SurfaceHolder newHolder;
 	public Thread animationThread;
@@ -28,7 +28,7 @@ public class diceView extends SurfaceView implements Runnable {
 	private float offSet1;
 	private Bitmap dice;
 	
-	public diceView(Context context) {
+	public diceView2(Context context) {
 		super(context);
 		rand = new Random(10);
 		rand1 = new Random(30);
