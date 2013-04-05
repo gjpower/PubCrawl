@@ -40,75 +40,75 @@ public class TabView extends TabActivity {
 	private static HttpClient mHttpClient;
 	private static Context context;
 	static PermStorage entry;
-	
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
 		context = this;
-    	Display display = getWindowManager().getDefaultDisplay(); //Design
-    	int tabWidth = (display.getWidth())/4; //Design
-    	StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-		  .detectDiskReads().detectDiskWrites().detectNetwork() // StrictMode is most commonly used to catch accidental disk or network access on the application's main thread
-		  .penaltyLog().build());
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.tab_main);
-        mTabHost=getTabHost();
-        String[][] Pubs;
-        
-        entry = new PermStorage(TabView.this);
+		Display display = getWindowManager().getDefaultDisplay(); //Design
+		int tabWidth = (display.getWidth())/4; //Design
+		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+		.detectDiskReads().detectDiskWrites().detectNetwork() // StrictMode is most commonly used to catch accidental disk or network access on the application's main thread
+		.penaltyLog().build());
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.tab_main);
+		mTabHost=getTabHost();
+		String[][] Pubs;
+
+		entry = new PermStorage(TabView.this);
 		entry.open();
 		String current = entry.Get_Current_Crawl(context);
-        getPubList(current);
-        Pubs = entry.Get_Crawl_Pubs(current);
-        
-        for(int i=0; i<Pubs.length; i++){
-        	getPubInfo(Pubs[i][2]);
-        }
-        
-        
-        TabSpec firstSpec = mTabHost.newTabSpec("Info");
-        firstSpec.setIndicator("Info", null);
-        Intent firstIntent = new Intent(this, Info.class);
-        firstSpec.setContent(firstIntent);
-        
-        TabSpec secondSpec = mTabHost.newTabSpec("second");
-        secondSpec.setIndicator("Stream", null);
-        Intent secondIntent = new Intent(this, ViewFeed.class);
-        secondSpec.setContent(secondIntent);
-        
-        TabSpec thirdSpec = mTabHost.newTabSpec("third");
-        thirdSpec.setIndicator("Maps", null);
-        Intent thirdIntent = new Intent(this, CrawlMapOverview.class);
-        thirdSpec.setContent(thirdIntent);
-        
-        TabSpec fourthSpec = mTabHost.newTabSpec("fourth");
-        fourthSpec.setIndicator("Upload", null);
-        Intent fourthIntent = new Intent(this, Photo_Cap.class);
-        fourthSpec.setContent(fourthIntent);
-        
-        mTabHost.addTab(firstSpec);
-        mTabHost.addTab(secondSpec);
-        mTabHost.addTab(thirdSpec);
-        mTabHost.addTab(fourthSpec);
-        setTabColor(mTabHost);  //Design
-        setTabWidth(mTabHost, tabWidth); //Design
-    }
-    //Design Function
-    public static void setTabWidth(TabHost tabhost, int width){
-    	for(int i=0;i<tabhost.getTabWidget().getChildCount();i++)
-        	tabhost.getTabWidget().getChildAt(i).setMinimumWidth(width);
-    }
-  //Design Function
-    public static void setTabColor(TabHost tabhost) {
-        for(int i=0;i<tabhost.getTabWidget().getChildCount();i++)
-        	tabhost.getTabWidget().getChildAt(i).setBackgroundResource(R.drawable.tabunselected); //unselected
-        	
-        tabhost.getTabWidget().getChildAt(tabhost.getCurrentTab()).setBackgroundResource(R.drawable.tabselected); // selected
-    }
-  //Design Function
+		getPubList(current);
+		Pubs = entry.Get_Crawl_Pubs(current);
+
+		for(int i=0; i<Pubs.length; i++){
+			getPubInfo(Pubs[i][2]);
+		}
+
+
+		TabSpec firstSpec = mTabHost.newTabSpec("Info");
+		firstSpec.setIndicator("Info", null);
+		Intent firstIntent = new Intent(this, Info.class);
+		firstSpec.setContent(firstIntent);
+
+		TabSpec secondSpec = mTabHost.newTabSpec("second");
+		secondSpec.setIndicator("Stream", null);
+		Intent secondIntent = new Intent(this, ViewFeed.class);
+		secondSpec.setContent(secondIntent);
+
+		TabSpec thirdSpec = mTabHost.newTabSpec("third");
+		thirdSpec.setIndicator("Maps", null);
+		Intent thirdIntent = new Intent(this, CrawlMapOverview.class);
+		thirdSpec.setContent(thirdIntent);
+
+		TabSpec fourthSpec = mTabHost.newTabSpec("fourth");
+		fourthSpec.setIndicator("Upload", null);
+		Intent fourthIntent = new Intent(this, Photo_Cap.class);
+		fourthSpec.setContent(fourthIntent);
+
+		mTabHost.addTab(firstSpec);
+		mTabHost.addTab(secondSpec);
+		mTabHost.addTab(thirdSpec);
+		mTabHost.addTab(fourthSpec);
+		setTabColor(mTabHost);  //Design
+		setTabWidth(mTabHost, tabWidth); //Design
+	}
+	//Design Function
+	public static void setTabWidth(TabHost tabhost, int width){
+		for(int i=0;i<tabhost.getTabWidget().getChildCount();i++)
+			tabhost.getTabWidget().getChildAt(i).setMinimumWidth(width);
+	}
+	//Design Function
+	public static void setTabColor(TabHost tabhost) {
+		for(int i=0;i<tabhost.getTabWidget().getChildCount();i++)
+			tabhost.getTabWidget().getChildAt(i).setBackgroundResource(R.drawable.tabunselected); //unselected
+
+		tabhost.getTabWidget().getChildAt(tabhost.getCurrentTab()).setBackgroundResource(R.drawable.tabselected); // selected
+	}
+	//Design Function
 	public void onTabChanged(String tabId) {
 		setTabColor(mTabHost);		
 	}
-//These 3 methods are required for Network Connection
+	//These 3 methods are required for Network Connection
 	public static String executeHttpGet(String url) throws Exception {
 		BufferedReader in = null;
 		try {
@@ -197,10 +197,10 @@ public class TabView extends TabActivity {
 				JSONArray jArray = new JSONArray(result);
 				info = new String [jArray.length()][3];
 				for(int i=0;i<jArray.length();i++){
-				JSONObject json_data = jArray.getJSONObject(i);
-				info[i][0] = json_data.getString("pubname");
-				info[i][1] = json_data.getString("time");
-				info[i][2] = json_data.getString("pubid");
+					JSONObject json_data = jArray.getJSONObject(i);
+					info[i][0] = json_data.getString("pubname");
+					info[i][1] = json_data.getString("time");
+					info[i][2] = json_data.getString("pubid");
 				}
 				entry.Store_Crawl_Pubs(info, id);
 			}
@@ -256,7 +256,7 @@ public class TabView extends TabActivity {
 		}
 		return; 
 	}
-	
-	
-	
+
+
+
 }
