@@ -150,7 +150,10 @@ public class CrawlMapOverview extends android.support.v4.app.FragmentActivity im
 
 			public void onInfoWindowClick(Marker arg0) {
 				// TODO Auto-generated method stub
-				getDirections(arg0);
+				//getDirections(arg0);
+//				Intent myIntent = new Intent("ie.tcd.pubcrawl.PUBDESCRIPTION");
+//				myIntent.putExtra("pubID", arg0.[position][2]);
+//				startActivity(myIntent);
 			}
 		});
 	}
