@@ -249,7 +249,7 @@ public class TabView extends TabActivity {
 				Log.e("name", info[4]);
 				Log.e("name", info[5]);
 				Log.e("name", info[6]);
-				entry.Store_Pub(info[0], info[1], info[2], Integer.parseInt(info[3]), Integer.parseInt(info[4]), info[5], info[6], id);
+				entry.Store_Pub(info[0], info[1], info[2], Integer.parseInt(info[3]), Integer.parseInt(info[4]), info[5], info[6], id); //nicholma: fix this, it is causing the catch
 			}
 			catch(JSONException e){
 				Log.e("log_tag", "Error parsing data "+e.toString());
