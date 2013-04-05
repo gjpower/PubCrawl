@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class PermStorage {
 	//FileOutputStream Variables
@@ -304,7 +305,7 @@ public class PermStorage {
 
 	public void Store_Pub(String name, String address, String description, int likes, int dislikes, String latitude, String longitude, String serverid) {
 		String[] pubdata = Get_Pub(serverid);
-
+		Log.e("database", "Entering Store_Pub");
 		ContentValues cv = new ContentValues();
 		cv.put("name", name);
 		cv.put("address", address);
@@ -318,9 +319,11 @@ public class PermStorage {
 		//if pub with that id already exists update it
 		if (pubdata!=null) {
 			ourDatabase.update(PUB_TABLE, cv, "serverid = ?", new String[] {serverid});
+			Log.e("database", "Updating" + serverid);
 		}
 		else {	//otherwise create new entry
 			ourDatabase.insert(PUB_TABLE, null, cv);
+			Log.e("database", "Adding" + serverid);
 		}
 
 	}
@@ -342,10 +345,13 @@ public class PermStorage {
 			result[5] = c.getString(c.getColumnIndex("latitude"));
 			result[6] = c.getString(c.getColumnIndex("longitude"));
 			result[7] = c.getString(c.getColumnIndex("serverid"));
-
+			
+			Log.e("database", "Pub found");
 			return result;
+			
 		}
 		else {
+			Log.e("database", "Pub not found");
 			return null;
 		}
 

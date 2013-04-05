@@ -187,7 +187,7 @@ public class ViewFeed extends Activity {
 		
 		// call executeHttpPost method passing necessary parameters 
 		
-		response = executeHttpPost("http://164.138.29.169/display_comments_script.php",postParameters);
+		response = executeHttpPost("http://164.138.29.169/android/display_comments_script.php",postParameters);
 
 		// store the result returned by PHP script that runs MySQL query
 		String result = response.toString();  
