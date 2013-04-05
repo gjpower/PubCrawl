@@ -47,6 +47,7 @@ public class CrawlMapOverview extends android.support.v4.app.FragmentActivity im
     private BitmapDescriptor icon, icon2;
     static PermStorage entry;
     private static Context context;
+    String [][] pubsStored;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,11 +63,11 @@ public class CrawlMapOverview extends android.support.v4.app.FragmentActivity im
 		
 		String [][] pubIDs;
 		pubIDs = entry.Get_Crawl_Pubs(current);
-		String [][] pubs= new String[pubIDs.length][8];
+		pubsStored= new String[pubIDs.length][8];
 		for(int i= 0; i< pubIDs.length; i++){
 			String [] pubTemp = entry.Get_Pub(pubIDs[i][2]);
 			for(int j = 0; j< 8; j++){
-				pubs[i][j] = pubTemp[i];
+				pubsStored[i][j] = pubTemp[i];
 			}
 		}
 		
@@ -83,7 +84,18 @@ public class CrawlMapOverview extends android.support.v4.app.FragmentActivity im
         
         }
     
-    
+	private void getpublocations() {
+		for(int i=0; i < pubsStored.length; i++){
+			double templat, templng;
+//			String strlat, strlng;
+//				strlat = pubsStored[5];
+//				strlng = pubsStored[6];
+			templat = Double.parseDouble(pubsStored[i][5]);
+			templng = Double.parseDouble(pubsStored[i][6]);
+			allpubs[i] = new LatLng(templat, templng);
+		}
+	}
+   
 
     private void makeMarkers() {
     	for(int i=0; i < numpub; i++){
@@ -109,25 +121,6 @@ public class CrawlMapOverview extends android.support.v4.app.FragmentActivity im
 		
 	}
 
-	private void getpublocations() {
-		for(int i=0; i < numpub; i++){
-			String strlat, strlng;
-			double templat, templng;
-			//get strings from pub management
-			Log.e("user", "for loop");
-			if(i==0){
-			strlat = "53.347001626";
-			strlng = "-6.258100569";
-			}
-			else{
-				strlat = "53.343057711";
-				strlng = "-6.258905232";
-			}
-			templat = Double.parseDouble(strlat);
-			templng = Double.parseDouble(strlng);
-			allpubs[i] = new LatLng(templat, templng);
-		}
-	}
 
 	private void init(){
         LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
