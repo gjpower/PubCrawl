@@ -8,12 +8,12 @@ import android.view.View.OnTouchListener;
 
 public class twoDDice extends Activity  {
 	
-	diceView newView;
+	DiceView2 newView;
 	
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
-		newView = new diceView(this);
+		newView = new DiceView2(this);
 		setContentView(newView);
 	}
 
