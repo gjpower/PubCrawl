@@ -77,7 +77,7 @@ public class TabView extends TabActivity {
         
         TabSpec thirdSpec = mTabHost.newTabSpec("third");
         thirdSpec.setIndicator("Maps", null);
-        Intent thirdIntent = new Intent(this, ThirdActivity.class);
+        Intent thirdIntent = new Intent(this, CrawlMapOverview.class);
         thirdSpec.setContent(thirdIntent);
         
         TabSpec fourthSpec = mTabHost.newTabSpec("fourth");

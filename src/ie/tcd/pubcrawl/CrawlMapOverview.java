@@ -1,4 +1,4 @@
-/* package ie.tcd.pubcrawl;
+ package ie.tcd.pubcrawl;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
@@ -44,31 +45,42 @@ public class CrawlMapOverview extends android.support.v4.app.FragmentActivity im
     public LatLng myloc;
     public LatLng[] allpubs = new LatLng[numpub];
     private BitmapDescriptor icon, icon2;
-    //Get crawl code
-	//Get crawl pubs from permstorage using crawlcode
-	//Count the pubs
-	//Save the ids
-	//loop using size and ids to get_pub
-	//Populate pubs array from get_pub
+    static PermStorage entry;
+    private static Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+    	context = this;
         super.onCreate(savedInstanceState);
      	setContentView(R.layout.activity_crawl_map_overview);
-     	Log.i("user", "on create");
+     	Log.e("user", "on create");
         setUpMapIfNeeded();
+        
+        entry = new PermStorage(CrawlMapOverview.this);
+		entry.open();
+		String current = entry.Get_Current_Crawl(context);
+		
+		String [][] pubIDs;
+		pubIDs = entry.Get_Crawl_Pubs(current);
+		String [][] pubs= new String[pubIDs.length][8];
+		for(int i= 0; i< pubIDs.length; i++){
+			String [] pubTemp = entry.Get_Pub(pubIDs[i][2]);
+			for(int j = 0; j< 8; j++){
+				pubs[i][j] = pubTemp[i];
+			}
+		}
+		
         icon = BitmapDescriptorFactory.fromResource(R.drawable.icon);
         icon2 = BitmapDescriptorFactory.fromResource(R.drawable.icon2);
-        Log.i("user", "map set up");
+        Log.e("user", "map set up");
         getpublocations();
-        Log.i("user", "got locations");
+        Log.e("user", "got locations");
         makeMarkers();
-        Log.i("user", "made markers");
+        Log.e("user", "made markers");
         init();
-        Log.i("user", "init");
+        Log.e("user", "init");
         //doSomething();
         
-        
-          
         }
     
     
@@ -102,7 +114,7 @@ public class CrawlMapOverview extends android.support.v4.app.FragmentActivity im
 			String strlat, strlng;
 			double templat, templng;
 			//get strings from pub management
-			Log.i("user", "for loop");
+			Log.e("user", "for loop");
 			if(i==0){
 			strlat = "53.347001626";
 			strlng = "-6.258100569";
@@ -137,13 +149,12 @@ public class CrawlMapOverview extends android.support.v4.app.FragmentActivity im
             mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(pubsnme, 500, 500, 10));
             location = locationManager.getLastKnownLocation(provider);
             onLocationChanged(location);
-           /* 
-            mMap.setOnMarkerClickListener(new OnMarkerClickListener() {
+           
+            mMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
 
-				@Override
-				public boolean onMarkerClick(Marker arg0) {
+				public void onInfoWindowClick(Marker arg0) {
+					// TODO Auto-generated method stub
 					getDirections(arg0);
-					return false;
 				}
             });
     }
@@ -165,28 +176,43 @@ public class CrawlMapOverview extends android.support.v4.app.FragmentActivity im
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
+        	Log.e("SetupMap", "is NULL");
             // Try to obtain the map from the SupportMapFragment.
-            SupportMapFragment fragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
-            mMap = fragment.getMap();
+            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
+            	Log.e("SetupMap", "isNOT NULL");
                 setUpMap(52,-6);
             }
         }
     }
-
-    public void onLocationChanged(Location location) {
+    /*
+    public void onLocationChanged(Location location) { //FROM BRIAN
     	double lat = (double) (location.getLatitude());
     	double lng = (double) (location.getLongitude());
     	myloc = new LatLng(lat, lng);
     	setUpMap(lat, lng);
-    	
+    	Log.i("user", "location changed");
+    	if(allpubs[0]!=null)
+    	mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(allpubs[0], 14));
+    	else
+    	mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myloc, 14));
+    	Log.i("user", "move camera");
+    	Toast.makeText(this, "latitude " + lat + " longditude " + lng, Toast.LENGTH_SHORT).show(); 
+    }
+    */
+    public void onLocationChanged(Location location) { //OLD?
+    	double lat = (double) (location.getLatitude());
+    	double lng = (double) (location.getLongitude());
+    	myloc = new LatLng(lat, lng);
+    	setUpMap(lat, lng);
     	LatLngBounds temp = new LatLngBounds(new LatLng(lat, lng), pubs);
     	pubsnme = temp;   
     	Log.i("user", "location changed");
     	mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(pubsnme, 500, 500, 10));
     	Log.i("user", "move camera");
-    	Toast.makeText(this, " latitude " + lat + "longditude" + lng, Toast.LENGTH_SHORT).show(); 
+    	Toast.makeText(this, " latitude " + lat + "longditude" + lng, Toast.LENGTH_SHORT).show();
+    	
     }
     
     
@@ -225,5 +251,3 @@ public class CrawlMapOverview extends android.support.v4.app.FragmentActivity im
           Toast.LENGTH_SHORT).show();
     }
 }
-
-*/
