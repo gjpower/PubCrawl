@@ -314,7 +314,6 @@ public class PermStorage {
 		cv.put("dislikes", dislikes);
 		cv.put("latitude", latitude);
 		cv.put("longitude", longitude);
-		cv.put("serverid", serverid);
 
 		//if pub with that id already exists update it
 		if (pubdata!=null) {
@@ -322,6 +321,7 @@ public class PermStorage {
 			Log.e("database", "Updating" + serverid);
 		}
 		else {	//otherwise create new entry
+			cv.put("serverid", serverid);
 			ourDatabase.insert(PUB_TABLE, null, cv);
 			Log.e("database", "Adding" + serverid);
 		}
@@ -358,7 +358,7 @@ public class PermStorage {
 	}
 
 	public Cursor Get_Pub_Cursor(String serverid) {
-		String [] columns = new String[] { "name", "address", "description", "likes", "dislikes", "latitude", "longitude" };
+		String [] columns = new String[] { "name", "address", "description", "likes", "dislikes", "latitude", "longitude", "serverid" };
 		Cursor result = ourDatabase.query(PUB_TABLE, columns, "serverid = ?", new String[] {serverid}, null, null, null);
 
 		return result;

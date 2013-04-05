@@ -3,7 +3,6 @@ package ie.tcd.pubcrawl;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -403,6 +402,8 @@ public void openGallery(){
 		FileOutputStream fileStream = new FileOutputStream(returnFile);
 
 		fileStream.write(buffer);
+		
+		fileStream.close();
 
 		return returnFile;
 	}

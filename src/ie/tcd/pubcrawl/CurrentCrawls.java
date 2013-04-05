@@ -2,7 +2,6 @@ package ie.tcd.pubcrawl;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.widget.TextView;
 
 public class CurrentCrawls extends Activity{
 	

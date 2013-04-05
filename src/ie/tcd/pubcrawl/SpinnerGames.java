@@ -7,7 +7,6 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 
 public class SpinnerGames extends Activity {
 
