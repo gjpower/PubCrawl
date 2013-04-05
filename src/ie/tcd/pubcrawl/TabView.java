@@ -241,7 +241,7 @@ public class TabView extends TabActivity {
 				info[4] = json_data.getString("downs");
 				info[5] = json_data.getString("lat");
 				info[6] = json_data.getString("long");
-				Toast.makeText(context,"PECTRA SMASH!", Toast.LENGTH_LONG).show();
+				Toast.makeText(context,"Information successfully loaded.", Toast.LENGTH_LONG).show();
 				Log.e("name", info[0]);
 				Log.e("name", info[1]);
 				Log.e("name", info[2]);
