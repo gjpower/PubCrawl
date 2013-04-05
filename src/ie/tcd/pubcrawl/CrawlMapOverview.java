@@ -44,7 +44,12 @@ public class CrawlMapOverview extends android.support.v4.app.FragmentActivity im
     public LatLng myloc;
     public LatLng[] allpubs = new LatLng[numpub];
     private BitmapDescriptor icon, icon2;
-
+    //Get crawl code
+	//Get crawl pubs from permstorage using crawlcode
+	//Count the pubs
+	//Save the ids
+	//loop using size and ids to get_pub
+	//Populate pubs array from get_pub
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

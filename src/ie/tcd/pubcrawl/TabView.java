@@ -64,6 +64,7 @@ public class TabView extends TabActivity {
         	getPubInfo(Pubs[i][2]);
         }
         
+        
         TabSpec firstSpec = mTabHost.newTabSpec("Info");
         firstSpec.setIndicator("Info", null);
         Intent firstIntent = new Intent(this, Info.class);
@@ -241,15 +242,9 @@ public class TabView extends TabActivity {
 				info[4] = json_data.getString("downs");
 				info[5] = json_data.getString("lat");
 				info[6] = json_data.getString("long");
-				Toast.makeText(context,"Information successfully loaded.", Toast.LENGTH_LONG).show();
-				Log.e("name", info[0]);
-				Log.e("name", info[1]);
-				Log.e("name", info[2]);
-				Log.e("name", info[3]);
-				Log.e("name", info[4]);
-				Log.e("name", info[5]);
-				Log.e("name", info[6]);
-				entry.Store_Pub(info[0], info[1], info[2], Integer.parseInt(info[3]), Integer.parseInt(info[4]), info[5], info[6], id);
+				int ups = Integer.parseInt(info[3]);
+				int downs = Integer.parseInt(info[4]);
+				entry.Store_Pub(info[0], info[1], info[2], ups, downs, info[5], info[6], id);
 			}
 			catch(JSONException e){
 				Log.e("log_tag", "Error parsing data "+e.toString());
