@@ -49,6 +49,7 @@ public class CreateUserName extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.createusername);
         
+        // will skip to main activity if not first use
         Test_First_Use();
         
         getName = (EditText) findViewById(R.id.etUserName);
@@ -58,7 +59,11 @@ public class CreateUserName extends Activity {
             
         	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         		userName = getName.getText().toString();
-				if(New_Member(userName)){	
+				
+        		if(New_Member(userName)){	//if setting new username is successful
+					Editor prefsEditor = appSharedPrefs.edit();
+			    	prefsEditor.putBoolean("install", false);	//update the first run value
+			    	prefsEditor.commit();
 					startActivity(new Intent("ie.tcd.pubcrawl.MAINACTIVITY"));
 					finish();
 				}
@@ -91,16 +96,11 @@ public class CreateUserName extends Activity {
          *on the first run and therefore "true" will be returned, the boolean
          *value is then created and given the value false for future runs
          */
+    	
         boolean isFirstRun = appSharedPrefs.getBoolean("install", true);
-        if (isFirstRun) {
-            Editor prefsEditor = appSharedPrefs.edit();
-        	prefsEditor.putBoolean("install", false);
-        	prefsEditor.commit();
-            
-        }
-        else {
+        if (!isFirstRun) {
         	startActivity(new Intent("ie.tcd.pubcrawl.MAINACTIVITY"));
-        	finish();
+        	finish();            
         }
     }
     
@@ -111,7 +111,7 @@ public class CreateUserName extends Activity {
 		
 		String response, result;
 		 try {
-			    response = executeHttpPost("http://164.138.29.169/new_member.php",postParameters);
+			    response = executeHttpPost("http://pubcrawl.eris.me/new_member.php",postParameters);
 			    
 			    // store the result returned by PHP script that runs MySQL query
 			    result = response;//.toString();  

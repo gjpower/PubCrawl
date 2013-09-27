@@ -112,7 +112,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		//Log.e("log_tag","Got to this part 1");
 		// call executeHttpPost method passing necessary parameters 
 		try {
-			response = executeHttpPost("http://164.138.29.169/android/login.php",postParameters);
+			response = executeHttpPost("http://pubcrawl.eris.me/android/login.php",postParameters);
 
 			List<String> list = new ArrayList<String>();
 			// store the result returned by PHP script that runs MySQL querys

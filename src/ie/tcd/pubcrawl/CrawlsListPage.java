@@ -204,7 +204,7 @@ public class CrawlsListPage extends Activity {
 		String response = null;
 		// call executeHttpPost method passing necessary parameters
 		try {
-			response = executeHttpPost("http://164.138.29.169/android/crawlinfo.php",postParameters);
+			response = executeHttpPost("http://pubcrawl.eris.me/android/crawlinfo.php",postParameters);
 			// store the result returned by PHP script that runs MySQL query
 			String result = response.toString();
 

@@ -115,7 +115,7 @@ public class ViewFeed extends Activity {
                     												
                     		//this is not silly code. the mysql server will send "null" string for any null columns
                     	if (!imagePath.equals("null")) {	//if not null image name show the image
-                    		Display_Photo("http://164.138.29.169/" + imagePath);
+                    		Display_Photo("http://pubcrawl.eris.me/" + imagePath);
                     	}
 
                     }
@@ -186,7 +186,7 @@ public class ViewFeed extends Activity {
 		
 		// call executeHttpPost method passing necessary parameters 
 		
-		response = executeHttpPost("http://164.138.29.169/android/display_comments_script.php",postParameters);
+		response = executeHttpPost("http://pubcrawl.eris.me/android/display_comments_script.php",postParameters);
 
 		// store the result returned by PHP script that runs MySQL query
 		String result = response.toString();  

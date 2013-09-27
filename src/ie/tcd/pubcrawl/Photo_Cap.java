@@ -169,7 +169,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 			//doFileUpload();	
 
 		try {
-			response = executeHttpPost("http://164.138.29.169/android/post_comment_script.php",postParameters);
+			response = executeHttpPost("http://pubcrawl.eris.me/android/post_comment_script.php",postParameters);
 
 			// store the result returned by PHP script that runs MySQL query
 			final String result = response.toString();  
@@ -315,7 +315,7 @@ public void openGallery(){
 			return;
 		}
 
-		String urlString = "http://164.138.29.169/android/upload_photo_script.php";
+		String urlString = "http://pubcrawl.eris.me/android/upload_photo_script.php";
 		try
 		{
 			HttpClient client = new DefaultHttpClient();

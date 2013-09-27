@@ -98,7 +98,7 @@ public class ChangeUserName extends Activity {
  		
  		String response, result;
  		 try {
- 			    response = executeHttpPost("http://164.138.29.169/new_member.php",postParameters);
+ 			    response = executeHttpPost("http://pubcrawl.eris.me/new_member.php",postParameters);
  			    
  			    // store the result returned by PHP script that runs MySQL query
  			    result = response.toString();  

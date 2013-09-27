@@ -188,7 +188,7 @@ public class TabView extends TabActivity {
 		String response = null;
 		// call executeHttpPost method passing necessary parameters
 		try {
-			response = executeHttpPost("http://164.138.29.169/android/getschedule.php",postParameters);
+			response = executeHttpPost("http://pubcrawl.eris.me/android/getschedule.php",postParameters);
 			// store the result returned by PHP script that runs MySQL query
 			String result = response.toString();
 
@@ -225,7 +225,7 @@ public class TabView extends TabActivity {
 
 		// call executeHttpPost method passing necessary parameters
 		try {
-			response = executeHttpPost("http://164.138.29.169/getpubinfo.php",postParameters);
+			response = executeHttpPost("http://pubcrawl.eris.me/getpubinfo.php",postParameters);
 
 			// store the result returned by PHP script that runs MySQL query
 			String result = response.toString();
