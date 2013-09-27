@@ -11,14 +11,16 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:text="@+id/userName"
-	            android:textAppearance="?android:attr/textAppearanceSmall" />
+	            android:textAppearance="?android:attr/textAppearanceSmall"
+	            android:textColor="@color/whiteText" />
 	       
 	        <TextView
 	            android:id="@+id/commentBody"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:text="@+id/commentBody"
-	            android:textAppearance="?android:attr/textAppearanceSmall" />
+	            android:textAppearance="?android:attr/textAppearanceSmall"
+	            android:textColor="@color/whiteText" />
 	        
 	        <TextView
 	            android:id="@+id/commentDateTime"
@@ -26,7 +28,8 @@
 	            android:layout_height="wrap_content"
 	            android:layout_gravity="right"
 	            android:text="@+id/commentDateTime"
-	            android:textAppearance="?android:attr/textAppearanceSmall" />
+	            android:textAppearance="?android:attr/textAppearanceSmall"
+	            android:textColor="@color/whiteText" />
 	        
 	        <TextView
 	            android:id="@+id/commentHasImage"

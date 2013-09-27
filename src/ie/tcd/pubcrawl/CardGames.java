@@ -1,8 +1,9 @@
 package ie.tcd.pubcrawl;
 
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -12,7 +13,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-import android.support.v4.app.NavUtils;
 
 public class CardGames extends Activity implements OnTouchListener{
 	private Spinner spinner1;

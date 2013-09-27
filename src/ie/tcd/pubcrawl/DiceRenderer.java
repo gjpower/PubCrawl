@@ -108,8 +108,8 @@ class DiceRenderer implements GLSurfaceView.Renderer{
 			speedX -= decelX*speedX;
 			speedY -= decelY*speedY;
 			
-			System.out.println("Speed X is " + speedX);
-			System.out.println("Speed Y is " + speedY);
+//			System.out.println("Speed X is " + speedX);
+//			System.out.println("Speed Y is " + speedY);
 			
 			if(((speedX*speedX)+(speedY*speedY))<0.01)
 			{
@@ -134,10 +134,10 @@ class DiceRenderer implements GLSurfaceView.Renderer{
 					else
 						speedY = (-90-angleOffY)/15;
 				
-				System.out.println("angleOffX is " + angleOffX);
-				System.out.println("speedX is " + speedX);
-				System.out.println("angleOffY is " + angleOffY);
-				System.out.println("speedY is " + speedY);
+//				System.out.println("angleOffX is " + angleOffX);
+//				System.out.println("speedX is " + speedX);
+//				System.out.println("angleOffY is " + angleOffY);
+//				System.out.println("speedY is " + speedY);
 			}
 		}
 		

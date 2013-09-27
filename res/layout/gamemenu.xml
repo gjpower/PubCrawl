@@ -42,7 +42,7 @@
          android:layout_below = "@id/buttonCoin"
          android:onClick="Spinner_Menu"
       />
-     
+     <!--  
      <Button
          android:id="@+id/twoddice"
          android:layout_width="wrap_content"
@@ -52,7 +52,7 @@
          android:layout_below = "@id/buttonSpinner"
          android:onClick="TwoDDice_Menu"
       />
-    
+    -->
     
     
 </RelativeLayout>
