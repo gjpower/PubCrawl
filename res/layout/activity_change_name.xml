@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/background_main_small" >
+    android:layout_height="match_parent" >
 
     <TextView
         android:id="@+id/tvCurrentName"
@@ -10,7 +9,6 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/etUserName"
         android:layout_centerHorizontal="true"
-        android:text="TextView"
         android:textColor="#FFD400" />
     
     <EditText
@@ -19,13 +17,10 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/textentry"
         android:ems="10"
         android:imeOptions="actionGo"
         android:inputType="textVisiblePassword"
-        android:maxLength="20"
-        android:textColor="#FFD400"
-        android:textColorHint="#F0F0F0" />
+        android:maxLength="20" />
 
     <Button
         android:id="@+id/bSaveUserName"
@@ -34,8 +29,6 @@
         android:layout_below="@+id/etUserName"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:background="@drawable/buttongold"
-        android:text="@string/change_user_name"
-        android:textColor="#FFD400" />
+        android:text="@string/change_user_name" />
 
 </RelativeLayout>

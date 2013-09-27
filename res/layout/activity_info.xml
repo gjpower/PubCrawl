@@ -2,8 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Info"
-    android:background="@drawable/mapinfo2" >
+    tools:context=".Info" >
 
     <TextView
         android:id="@+id/listPubs"
@@ -23,8 +22,7 @@
         android:id="@+id/eventPhoto"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_alignParentTop="true"
-        android:src="@drawable/ic_launcher" />
+        android:layout_alignParentTop="true" />
 
     <TextView
         android:id="@+id/eventName"
@@ -34,7 +32,8 @@
         android:layout_marginLeft="15dp"
         android:layout_marginTop="23dp"
         android:layout_toRightOf="@+id/eventPhoto"
-        android:text="Name" />
+        android:text="Name"
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/eventDescription"
@@ -43,7 +42,8 @@
         android:layout_alignLeft="@+id/eventTimeDate"
         android:layout_below="@+id/eventTimeDate"
         android:layout_marginTop="59dp"
-        android:text="Description" />
+        android:text="Description"
+        android:textSize="22sp" />
 
     <TextView
         android:id="@+id/eventTimeDate"
@@ -51,6 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/eventName"
         android:layout_below="@+id/eventPhoto"
-        android:text="Time and Date" />
+        android:text="Time and Date"
+        android:textSize="22sp" />
 
 </RelativeLayout>

@@ -1,9 +1,7 @@
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/background_main_small" >
+    android:layout_height="match_parent" >
 
     <Button
         android:id="@+id/bCurrentCrawls"
@@ -12,20 +10,16 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="100dp"
         android:layout_marginTop="150dp"
-        android:background="@drawable/buttongold"
         android:padding="15dp"
-        android:text="@string/current_crawl"
-        android:textColor="#FFD400" />
+        android:text="@string/current_crawl" />
 
     <Button
         android:id="@+id/bLogIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/loginCodeTV"
         android:layout_alignRight="@+id/bCurrentCrawls"
-        android:layout_alignTop="@id/loginCodeTV"
-        android:background="@drawable/returnbutton"
-        android:textColor="#FFD400" />
+        android:layout_marginTop="44dp"
+        android:text="submit" />
 
     <Button
         android:id="@+id/bGames"
@@ -35,10 +29,8 @@
         android:layout_alignRight="@+id/bCurrentCrawls"
         android:layout_below="@+id/bCurrentCrawls"
         android:layout_marginTop="25dp"
-        android:background="@drawable/buttongold"
         android:padding="15dp"
-        android:text="@string/games"
-        android:textColor="#FFD400" />
+        android:text="@string/games" />
 
     <Button
         android:id="@+id/bChangeName"
@@ -48,30 +40,23 @@
         android:layout_alignRight="@+id/bGames"
         android:layout_below="@+id/bGames"
         android:layout_marginTop="25dp"
-        android:background="@drawable/buttongold"
         android:padding="15dp"
-        android:text="@string/change_user_name"
-        android:textColor="#FFD400" />
+        android:text="@string/change_user_name" />
 
     <EditText
         android:id="@+id/loginCodeTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/bCurrentCrawls"
-        android:layout_alignParentEnd="false"
-        android:layout_marginTop="43dp"
+        android:layout_alignBottom="@+id/bLogIn"
         android:layout_toLeftOf="@+id/bLogIn"
-        android:background="@drawable/textentry"
         android:ems="10"
         android:hint="@string/enter_pin"
         android:imeOptions="actionGo"
         android:inputType="textVisiblePassword"
         android:maxLength="5"
-        android:textColor="#FFD400"
-        android:textColorHint="#F0F0F0"
         tools:context=".MainActivity" >
 
-        <requestFocus />
     </EditText>
 
     <TextView
@@ -83,6 +68,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         android:text="@string/hello_world"
-        android:textColor="#FFD400" />
+        android:textSize="18sp" />
 
 </RelativeLayout>
